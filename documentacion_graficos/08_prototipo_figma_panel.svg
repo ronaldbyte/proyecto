@@ -1,0 +1,117 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 720" width="1100" height="720">
+  <defs>
+    <style>
+      .figma-bg { fill: #e5e7eb; }
+      .figma-label { font-family: 'Inter', 'Segoe UI', sans-serif; font-size: 12px; font-weight: 600; fill: #6b7280; }
+      .frame-border { fill: #ffffff; stroke: #cbd5e1; stroke-width: 1; filter: drop-shadow(0 10px 25px rgba(0,0,0,0.1)); rx: 10; }
+      .sidebar-bg { fill: #1e293b; rx: 10; }
+      .topbar-bg { fill: #ffffff; stroke: #e2e8f0; stroke-width: 1; }
+      .stat-card { rx: 8; stroke-width: 1.2; }
+      .table-header { fill: #f1f5f9; font-family: 'Segoe UI', Arial; font-size: 11px; font-weight: bold; fill: #475569; }
+      .table-row { font-family: 'Segoe UI', Arial; font-size: 11px; fill: #334155; }
+    </style>
+  </defs>
+
+  <!-- Lienzo Figma -->
+  <rect width="1100" height="720" class="figma-bg" />
+
+  <!-- Etiqueta Frame -->
+  <text x="50" y="35" class="figma-label"># Desktop - Dashboard Docente [Figma Prototype]</text>
+
+  <!-- Marco de Pantalla Principal -->
+  <g transform="translate(50, 45)">
+    <rect width="1000" height="640" class="frame-border" />
+
+    <!-- Barra Lateral (Sidebar Wireframe) -->
+    <rect x="0" y="0" width="220" height="640" class="sidebar-bg" />
+    <rect x="200" y="0" width="20" height="640" fill="#1e293b" />
+    
+    <!-- Logo Sidebar -->
+    <circle cx="45" cy="40" r="14" fill="#3b82f6" />
+    <text x="70" y="45" font-family="'Segoe UI', Arial" font-size="13" font-weight="bold" fill="#ffffff">UNSXX Docentes</text>
+
+    <!-- Menú Items -->
+    <g transform="translate(20, 90)">
+      <!-- Item Activo: Panel -->
+      <rect x="0" y="0" width="180" height="34" rx="6" fill="#3b82f6" />
+      <text x="15" y="22" font-family="'Segoe UI', Arial" font-size="12" font-weight="bold" fill="#ffffff">📊 Inicio / Panel</text>
+
+      <text x="15" y="65" font-family="'Segoe UI', Arial" font-size="12" fill="#94a3b8">📄 Mis Solicitudes</text>
+      <text x="15" y="105" font-family="'Segoe UI', Arial" font-size="12" fill="#94a3b8">➕ Nueva Solicitud</text>
+      <text x="15" y="145" font-family="'Segoe UI', Arial" font-size="12" fill="#94a3b8">📜 Historial Propio</text>
+      <text x="15" y="185" font-family="'Segoe UI', Arial" font-size="12" fill="#94a3b8">🔔 Notificaciones</text>
+
+      <!-- Salir -->
+      <line x1="0" y1="460" x2="180" y2="460" stroke="#334155" stroke-width="1" />
+      <text x="15" y="490" font-family="'Segoe UI', Arial" font-size="12" fill="#ef4444">🚪 Cerrar Sesión</text>
+    </g>
+
+    <!-- Contenido Principal -->
+    <g transform="translate(240, 20)">
+      <!-- Topbar Header -->
+      <text x="10" y="30" font-family="'Segoe UI', Arial" font-size="18" font-weight="bold" fill="#0f172a">Panel de Control del Docente</text>
+      <text x="10" y="50" font-family="'Segoe UI', Arial" font-size="12" fill="#64748b">Bienvenido(a), Ing. Juan Pérez • Carrera de Ingeniería Informática</text>
+
+      <!-- 3 Tarjetas de Métricas de Vacaciones -->
+      <!-- Tarjeta 1: Días Asignados -->
+      <g transform="translate(10, 75)">
+        <rect width="220" height="95" rx="8" fill="#eff6ff" stroke="#bfdbfe" class="stat-card" />
+        <text x="18" y="32" font-family="'Segoe UI', Arial" font-size="12" font-weight="bold" fill="#1e40af">Días Asignados (Año)</text>
+        <text x="18" y="70" font-family="'Segoe UI', Arial" font-size="28" font-weight="bold" fill="#1e3a8a">20.0</text>
+        <text x="90" y="70" font-family="'Segoe UI', Arial" font-size="11" fill="#64748b">días reglamentarios</text>
+      </g>
+
+      <!-- Tarjeta 2: Días Utilizados -->
+      <g transform="translate(255, 75)">
+        <rect width="220" height="95" rx="8" fill="#fff7ed" stroke="#fed7aa" class="stat-card" />
+        <text x="18" y="32" font-family="'Segoe UI', Arial" font-size="12" font-weight="bold" fill="#c2410c">Días Utilizados</text>
+        <text x="18" y="70" font-family="'Segoe UI', Arial" font-size="28" font-weight="bold" fill="#9a3412">5.5</text>
+        <text x="75" y="70" font-family="'Segoe UI', Arial" font-size="11" fill="#64748b">días consumidos</text>
+      </g>
+
+      <!-- Tarjeta 3: Saldo Disponible -->
+      <g transform="translate(500, 75)">
+        <rect width="220" height="95" rx="8" fill="#f0fdf4" stroke="#bbf7d0" class="stat-card" />
+        <text x="18" y="32" font-family="'Segoe UI', Arial" font-size="12" font-weight="bold" fill="#15803d">Saldo Disponible</text>
+        <text x="18" y="70" font-family="'Segoe UI', Arial" font-size="28" font-weight="bold" fill="#166534">14.5</text>
+        <text x="85" y="70" font-family="'Segoe UI', Arial" font-size="11" fill="#15803d" font-weight="bold">días restantes</text>
+      </g>
+
+      <!-- Sección Tabla de Solicitudes Recientes -->
+      <g transform="translate(10, 205)">
+        <text x="0" y="20" font-family="'Segoe UI', Arial" font-size="14" font-weight="bold" fill="#1e293b">Últimas Solicitudes Registradas</text>
+        
+        <!-- Header Tabla -->
+        <rect x="0" y="35" width="715" height="32" fill="#f8fafc" stroke="#e2e8f0" rx="4" />
+        <text x="15" y="55" class="table-header">FECHA INICIO</text>
+        <text x="130" y="55" class="table-header">FECHA FIN</text>
+        <text x="245" y="55" class="table-header">JORNADA</text>
+        <text x="350" y="55" class="table-header">DÍAS</text>
+        <text x="440" y="55" class="table-header">ESTADO</text>
+        <text x="590" y="55" class="table-header">ACCIONES</text>
+
+        <!-- Fila 1 -->
+        <line x1="0" y1="102" x2="715" y2="102" stroke="#f1f5f9" />
+        <text x="15" y="90" class="table-row">10/11/2026</text>
+        <text x="130" y="90" class="table-row">12/11/2026</text>
+        <text x="245" y="90" class="table-row">Completa</text>
+        <text x="350" y="90" class="table-row">3.0</text>
+        <rect x="440" y="76" width="90" height="20" rx="10" fill="#fef3c7" />
+        <text x="455" y="90" font-family="'Segoe UI', Arial" font-size="10.5" font-weight="bold" fill="#b45309">Pendiente</text>
+        <rect x="590" y="76" width="70" height="20" rx="4" fill="#ef4444" />
+        <text x="605" y="90" font-family="'Segoe UI', Arial" font-size="10" font-weight="bold" fill="#ffffff">Cancelar</text>
+
+        <!-- Fila 2 -->
+        <line x1="0" y1="138" x2="715" y2="138" stroke="#f1f5f9" />
+        <text x="15" y="125" class="table-row">15/09/2026</text>
+        <text x="130" y="125" class="table-row">15/09/2026</text>
+        <text x="245" y="125" class="table-row">Mañana</text>
+        <text x="350" y="125" class="table-row">0.5</text>
+        <rect x="440" y="111" width="90" height="20" rx="10" fill="#dcfce7" />
+        <text x="455" y="125" font-family="'Segoe UI', Arial" font-size="10.5" font-weight="bold" fill="#15803d">Aprobada</text>
+        <rect x="590" y="111" width="70" height="20" rx="4" fill="#3b82f6" />
+        <text x="612" y="125" font-family="'Segoe UI', Arial" font-size="10" font-weight="bold" fill="#ffffff">Ver</text>
+      </g>
+    </g>
+  </g>
+</svg>

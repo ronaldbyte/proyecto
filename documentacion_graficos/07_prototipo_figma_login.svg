@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 650" width="960" height="650">
+  <defs>
+    <style>
+      .figma-bg { fill: #e5e7eb; }
+      .figma-label { font-family: 'Inter', 'Segoe UI', sans-serif; font-size: 12px; font-weight: 600; fill: #6b7280; }
+      .frame-border { fill: #ffffff; stroke: #cbd5e1; stroke-width: 1; filter: drop-shadow(0 10px 25px rgba(0,0,0,0.1)); rx: 10; }
+      .title-ui { font-family: 'Segoe UI', Arial, sans-serif; font-size: 20px; font-weight: bold; fill: #1e293b; text-anchor: middle; }
+      .sub-ui { font-family: 'Segoe UI', Arial, sans-serif; font-size: 12px; fill: #64748b; text-anchor: middle; }
+      .lbl-input { font-family: 'Segoe UI', Arial, sans-serif; font-size: 11px; font-weight: 600; fill: #475569; }
+      .input-box { fill: #f8fafc; stroke: #cbd5e1; stroke-width: 1.2; rx: 6; }
+      .input-ph { font-family: 'Segoe UI', Arial, sans-serif; font-size: 12px; fill: #94a3b8; }
+      .btn-primary { fill: #2563eb; rx: 6; }
+      .btn-txt { font-family: 'Segoe UI', Arial, sans-serif; font-size: 13px; font-weight: bold; fill: #ffffff; text-anchor: middle; }
+      .link-txt { font-family: 'Segoe UI', Arial, sans-serif; font-size: 11px; fill: #2563eb; text-anchor: middle; font-weight: 500; }
+    </style>
+  </defs>
+
+  <!-- Lienzo de Figma -->
+  <rect width="960" height="650" class="figma-bg" />
+
+  <!-- Etiqueta de Frame de Figma -->
+  <text x="140" y="55" class="figma-label"># Desktop - Login [Figma Prototype]</text>
+
+  <!-- Marco de Pantalla (Desktop Frame) -->
+  <rect x="140" y="65" width="680" height="520" class="frame-border" />
+
+  <!-- Tarjeta de Login Centrada -->
+  <g transform="translate(300, 110)">
+    <!-- Logo Placeholder -->
+    <circle cx="180" cy="50" r="32" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5" />
+    <text x="180" y="56" font-family="'Segoe UI', Arial" font-size="20" text-anchor="middle" fill="#1e40af">🎓</text>
+
+    <!-- Títulos -->
+    <text x="180" y="115" class="title-ui">Sistema de Licencias y Vacaciones</text>
+    <text x="180" y="135" class="sub-ui">Universidad Nacional "Siglo XX"</text>
+
+    <!-- Campo Código -->
+    <text x="20" y="175" class="lbl-input">Código de Usuario Institucional</text>
+    <rect x="20" y="185" width="320" height="38" class="input-box" />
+    <text x="35" y="209" class="input-ph">Ej. DOC001, JEF001</text>
+
+    <!-- Campo Contraseña -->
+    <text x="20" y="248" class="lbl-input">Contraseña de Acceso</text>
+    <rect x="20" y="258" width="320" height="38" class="input-box" />
+    <text x="35" y="282" class="input-ph">••••••••••••</text>
+    <text x="320" y="282" font-size="12" fill="#94a3b8">👁</text>
+
+    <!-- Botón Ingresar -->
+    <rect x="20" y="325" width="320" height="40" class="btn-primary" />
+    <text x="180" y="350" class="btn-txt">Iniciar Sesión</text>
+
+    <!-- Enlace Consultar Código con CI -->
+    <text x="180" y="395" class="link-txt">¿Olvidaste tu código? Consultar con Carnet de Identidad (C.I.)</text>
+  </g>
+
+</svg>

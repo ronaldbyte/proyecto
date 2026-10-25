@@ -1,0 +1,214 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 850 980" width="850" height="980">
+  <defs>
+    <style>
+      .main-title { font-family: 'Segoe UI', Arial, sans-serif; font-size: 20px; font-weight: bold; fill: #0f172a; text-anchor: middle; }
+      .main-subtitle { font-family: 'Segoe UI', Arial, sans-serif; font-size: 13px; fill: #64748b; text-anchor: middle; }
+      .layer-title { font-family: 'Segoe UI', Arial, sans-serif; font-size: 15px; font-weight: bold; fill: #1e293b; }
+      .layer-subtitle { font-family: 'Segoe UI', Arial, sans-serif; font-size: 12px; fill: #64748b; }
+      .card-title { font-family: 'Segoe UI', Arial, sans-serif; font-size: 13px; font-weight: bold; fill: #1e3a8a; }
+      .card-desc { font-family: 'Segoe UI', Arial, sans-serif; font-size: 11px; fill: #334155; }
+      .badge { font-family: 'Segoe UI', Arial, sans-serif; font-size: 10px; font-weight: 600; fill: #ffffff; }
+      .layer-box { rx: 14; stroke-width: 2; }
+      .card-box { fill: #ffffff; rx: 8; stroke: #cbd5e1; stroke-width: 1.2; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.05)); }
+      .flow-arrow { stroke: #2563eb; stroke-width: 2.2; fill: none; }
+      .flow-label { font-family: 'Segoe UI', Arial, sans-serif; font-size: 11px; font-weight: 600; fill: #1d4ed8; text-anchor: middle; }
+    </style>
+    <marker id="arrow-down" viewBox="0 0 10 10" refX="5" refY="8" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 1 1 L 5 8 L 9 1 z" fill="#2563eb" />
+    </marker>
+    <marker id="arrow-up" viewBox="0 0 10 10" refX="5" refY="2" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 1 9 L 5 2 L 9 9 z" fill="#2563eb" />
+    </marker>
+  </defs>
+
+  <!-- Fondo -->
+  <rect width="850" height="980" fill="#f8fafc" />
+
+  <!-- Título -->
+  <text x="425" y="35" class="main-title">DIAGRAMA DE ARQUITECTURA DEL SISTEMA EN 3 CAPAS</text>
+  <text x="425" y="55" class="main-subtitle">Arquitectura MVC con Capa de Servicios en Laravel y Persistencia Relacional MySQL</text>
+
+  <!-- ================= CAPA 1: PRESENTACIÓN ================= -->
+  <g transform="translate(60, 80)">
+    <rect width="730" height="190" fill="#eff6ff" stroke="#3b82f6" class="layer-box" />
+    <rect x="0" y="0" width="730" height="38" fill="#dbeafe" rx="14" />
+    <rect x="0" y="24" width="730" height="14" fill="#dbeafe" />
+    
+    <text x="25" y="25" class="layer-title">1. CAPA DE PRESENTACIÓN / CLIENTE (FRONTEND)</text>
+    <text x="500" y="24" class="layer-subtitle">Ejecución en Navegador Web (Chrome, Edge, Firefox)</text>
+
+    <!-- Subcomponentes -->
+    <g transform="translate(25, 55)">
+      <rect width="210" height="115" class="card-box" />
+      <rect x="0" y="0" width="210" height="26" fill="#1e3a8a" rx="8" />
+      <rect x="0" y="16" width="210" height="10" fill="#1e3a8a" />
+      <text x="15" y="18" font-family="'Segoe UI', Arial" font-size="12" font-weight="bold" fill="#ffffff">Motor Blade (Laravel)</text>
+      <text x="15" y="48" class="card-desc">• resources/views/layouts</text>
+      <text x="15" y="68" class="card-desc">• vistas modulares (acceso, paneles)</text>
+      <text x="15" y="88" class="card-desc">• parciales reusables (menú, tablas)</text>
+      <text x="15" y="108" class="card-desc">• directivas de control (@if, @foreach)</text>
+    </g>
+
+    <g transform="translate(260, 55)">
+      <rect width="210" height="115" class="card-box" />
+      <rect x="0" y="0" width="210" height="26" fill="#0284c7" rx="8" />
+      <rect x="0" y="16" width="210" height="10" fill="#0284c7" />
+      <text x="15" y="18" font-family="'Segoe UI', Arial" font-size="12" font-weight="bold" fill="#ffffff">Estilos y Diseño (CSS3)</text>
+      <text x="15" y="48" class="card-desc">• Diseño adaptable (Responsive)</text>
+      <text x="15" y="68" class="card-desc">• CSS específico para impresión</text>
+      <text x="15" y="88" class="card-desc">• Tarjetas de métricas y estados</text>
+      <text x="15" y="108" class="card-desc">• Paleta visual institucional UNSXX</text>
+    </g>
+
+    <g transform="translate(495, 55)">
+      <rect width="210" height="115" class="card-box" />
+      <rect x="0" y="0" width="210" height="26" fill="#0d9488" rx="8" />
+      <rect x="0" y="16" width="210" height="10" fill="#0d9488" />
+      <text x="15" y="18" font-family="'Segoe UI', Arial" font-size="12" font-weight="bold" fill="#ffffff">Interactividad (JavaScript)</text>
+      <text x="15" y="48" class="card-desc">• Validación de formularios cliente</text>
+      <text x="15" y="68" class="card-desc">• Cálculo inmediato de 0.5 días</text>
+      <text x="15" y="88" class="card-desc">• Ventanas modales y confirmaciones</text>
+      <text x="15" y="108" class="card-desc">• Consultas asíncronas vía fetch</text>
+    </g>
+  </g>
+
+  <!-- Flechas entre Capa 1 y 2 -->
+  <g transform="translate(425, 270)">
+    <line x1="-70" y1="5" x2="-70" y2="45" class="flow-arrow" marker-end="url(#arrow-down)" />
+    <text x="-140" y="28" class="flow-label">Petición HTTP (POST/GET)</text>
+
+    <line x1="70" y1="45" x2="70" y2="5" class="flow-arrow" marker-end="url(#arrow-up)" />
+    <text x="135" y="28" class="flow-label">Respuesta HTML / JSON</text>
+  </g>
+
+  <!-- ================= CAPA 2: LÓGICA DE NEGOCIO Y SERVICIOS ================= -->
+  <g transform="translate(60, 325)">
+    <rect width="730" height="395" fill="#f0fdf4" stroke="#16a34a" class="layer-box" />
+    <rect x="0" y="0" width="730" height="38" fill="#dcfce7" rx="14" />
+    <rect x="0" y="24" width="730" height="14" fill="#dcfce7" />
+
+    <text x="25" y="25" class="layer-title">2. CAPA DE APLICACIÓN Y LÓGICA DE NEGOCIO (BACKEND)</text>
+    <text x="490" y="24" class="layer-subtitle">PHP 8.3+ / Framework Laravel / Servidor Apache</text>
+
+    <!-- Nivel 1 Backend: Enrutador y Middleware -->
+    <g transform="translate(25, 52)">
+      <rect width="680" height="65" class="card-box" fill="#ffffff" stroke="#86efac" />
+      <text x="15" y="22" font-family="'Segoe UI', Arial" font-size="12" font-weight="bold" fill="#15803d">
+        ENRUTAMIENTO Y FILTROS DE SEGURIDAD (MIDDLEWARE)
+      </text>
+      <text x="15" y="42" class="card-desc">
+        • <tspan font-weight="bold">routes/web.php</tspan>: Definición de rutas protegidas y públicas | <tspan font-weight="bold">throttle</tspan>: Control anti fuerza bruta
+      </text>
+      <text x="15" y="57" class="card-desc">
+        • <tspan font-weight="bold">VerificarRol</tspan>: Control de acceso basado en roles | <tspan font-weight="bold">ForzarCambioContrasena</tspan>: Seguridad de primer ingreso
+      </text>
+    </g>
+
+    <!-- Nivel 2 Backend: Controladores -->
+    <g transform="translate(25, 128)">
+      <rect width="680" height="75" class="card-box" fill="#ffffff" stroke="#86efac" />
+      <text x="15" y="20" font-family="'Segoe UI', Arial" font-size="12" font-weight="bold" fill="#15803d">
+        CONTROLADORES HTTP (app/Http/Controllers)
+      </text>
+      <text x="15" y="40" class="card-desc">
+        • <tspan font-weight="bold">AccesoController</tspan>: Autenticación, sesión y cambio de clave | <tspan font-weight="bold">PanelController</tspan>: Dashboards según rol
+      </text>
+      <text x="15" y="55" class="card-desc">
+        • <tspan font-weight="bold">SolicitudController</tspan>: Gestión de licencias | <tspan font-weight="bold">AprobacionController</tspan>: Revisión de autoridades
+      </text>
+      <text x="15" y="70" class="card-desc">
+        • <tspan font-weight="bold">DocenteGestionController</tspan>: Padrón docente | <tspan font-weight="bold">ImpresionController</tspan>: Generación de reportes
+      </text>
+    </g>
+
+    <!-- Nivel 3 Backend: Capa de Servicios de Negocio -->
+    <g transform="translate(25, 215)">
+      <rect width="680" height="95" class="card-box" fill="#f8fafc" stroke="#16a34a" stroke-width="1.6" />
+      <rect x="0" y="0" width="680" height="24" fill="#16a34a" rx="8" />
+      <rect x="0" y="16" width="680" height="8" fill="#16a34a" />
+      <text x="15" y="17" font-family="'Segoe UI', Arial" font-size="12" font-weight="bold" fill="#ffffff">
+        CAPA DE SERVICIOS ESPECIALIZADOS (app/Services) - REGLAS DE NEGOCIO PURAS
+      </text>
+      <text x="15" y="44" class="card-desc">
+        • <tspan font-weight="bold" fill="#15803d">ServicioVacaciones</tspan>: Cómputo de antigüedad (15, 20, 30 días), cálculo de jornada (0.5 días) y elegibilidad por contrato.
+      </text>
+      <text x="15" y="60" class="card-desc">
+        • <tspan font-weight="bold" fill="#15803d">ServicioSolicitudes</tspan>: Validación de solapamientos temporales y control de transacciones atómicas de creación.
+      </text>
+      <text x="15" y="76" class="card-desc">
+        • <tspan font-weight="bold" fill="#15803d">ServicioAprobaciones</tspan>: Máquina de estados jerárquica (Pendiente → Jefatura → Aprobada/Rechazada) y descuento de saldo.
+      </text>
+      <text x="15" y="91" class="card-desc">
+        • <tspan font-weight="bold" fill="#15803d">ServicioCorreo &amp; Notificaciones</tspan>: Despacho de alertas SMTP TLS dinámicas y notificaciones en base de datos.
+      </text>
+    </g>
+
+    <!-- Nivel 4 Backend: Modelos y ORM Eloquent -->
+    <g transform="translate(25, 320)">
+      <rect width="680" height="62" class="card-box" fill="#ffffff" stroke="#86efac" />
+      <text x="15" y="20" font-family="'Segoe UI', Arial" font-size="12" font-weight="bold" fill="#15803d">
+        CAPA DE ACCESO A DATOS (ORM ELOQUENT / app/Models)
+      </text>
+      <text x="15" y="38" class="card-desc">
+        • Modelos: <tspan font-weight="bold">Usuario, Docente, Solicitud, Aprobacion, Area, Carrera, Rol, Notificacion, Auditoria</tspan>
+      </text>
+      <text x="15" y="53" class="card-desc">
+        • Consultas parametrizadas (Prepared Statements PDO) • Relaciones Eloquent (belongsTo, hasMany, hasOne)
+      </text>
+    </g>
+  </g>
+
+  <!-- Flechas entre Capa 2 y 3 -->
+  <g transform="translate(425, 720)">
+    <line x1="-70" y1="5" x2="-70" y2="45" class="flow-arrow" marker-end="url(#arrow-down)" />
+    <text x="-135" y="28" class="flow-label">Consultas SQL / Transacciones</text>
+
+    <line x1="70" y1="45" x2="70" y2="5" class="flow-arrow" marker-end="url(#arrow-up)" />
+    <text x="145" y="28" class="flow-label">Conjuntos de Datos / Tuplas</text>
+  </g>
+
+  <!-- ================= CAPA 3: PERSISTENCIA ================= -->
+  <g transform="translate(60, 775)">
+    <rect width="730" height="170" fill="#fff7ed" stroke="#ea580c" class="layer-box" />
+    <rect x="0" y="0" width="730" height="38" fill="#ffedd5" rx="14" />
+    <rect x="0" y="24" width="730" height="14" fill="#ffedd5" />
+
+    <text x="25" y="25" class="layer-title">3. CAPA DE PERSISTENCIA Y DATOS (BASE DE DATOS)</text>
+    <text x="500" y="24" class="layer-subtitle">Motor MariaDB / MySQL - Soporte Transaccional ACID</text>
+
+    <!-- Subcomponentes BD -->
+    <g transform="translate(25, 52)">
+      <rect width="210" height="102" class="card-box" />
+      <rect x="0" y="0" width="210" height="24" fill="#c2410c" rx="8" />
+      <rect x="0" y="16" width="210" height="8" fill="#c2410c" />
+      <text x="15" y="17" font-family="'Segoe UI', Arial" font-size="11" font-weight="bold" fill="#ffffff">Gestor y Motor</text>
+      <text x="15" y="44" class="card-desc">• MySQL / MariaDB (XAMPP)</text>
+      <text x="15" y="62" class="card-desc">• Motor de tablas: InnoDB</text>
+      <text x="15" y="80" class="card-desc">• Soporte de Transacciones ACID</text>
+      <text x="15" y="98" class="card-desc">• Bloqueo de registros concurr.</text>
+    </g>
+
+    <g transform="translate(260, 52)">
+      <rect width="210" height="102" class="card-box" />
+      <rect x="0" y="0" width="210" height="24" fill="#c2410c" rx="8" />
+      <rect x="0" y="16" width="210" height="8" fill="#c2410c" />
+      <text x="15" y="17" font-family="'Segoe UI', Arial" font-size="11" font-weight="bold" fill="#ffffff">Integridad Referencial</text>
+      <text x="15" y="44" class="card-desc">• Claves Primarias (PK)</text>
+      <text x="15" y="62" class="card-desc">• Claves Foráneas (FK) restrict</text>
+      <text x="15" y="80" class="card-desc">• Restricciones Unique (código, CI)</text>
+      <text x="15" y="98" class="card-desc">• Cascada segura en notificaciones</text>
+    </g>
+
+    <g transform="translate(495, 52)">
+      <rect width="210" height="102" class="card-box" />
+      <rect x="0" y="0" width="210" height="24" fill="#c2410c" rx="8" />
+      <rect x="0" y="16" width="210" height="8" fill="#c2410c" />
+      <text x="15" y="17" font-family="'Segoe UI', Arial" font-size="11" font-weight="bold" fill="#ffffff">Almacenamiento Estructurado</text>
+      <text x="15" y="44" class="card-desc">• 10 Tablas relacionales</text>
+      <text x="15" y="62" class="card-desc">• Índices en estados y fechas</text>
+      <text x="15" y="80" class="card-desc">• Formato decimal (5,1) para días</text>
+      <text x="15" y="98" class="card-desc">• Columnas JSON en auditorías</text>
+    </g>
+  </g>
+
+</svg>

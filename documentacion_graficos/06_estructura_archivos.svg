@@ -1,0 +1,187 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 910" width="1120" height="910">
+  <defs>
+    <style>
+      .main-title { font-family: 'Segoe UI', Arial, sans-serif; font-size: 22px; font-weight: bold; fill: #0f172a; text-anchor: middle; }
+      .root-folder { font-family: 'Consolas', 'Courier New', monospace; font-size: 14.5px; font-weight: bold; fill: #1e3a8a; }
+      .folder-name { font-family: 'Consolas', 'Courier New', monospace; font-size: 13px; font-weight: 600; fill: #1e293b; }
+      .file-name { font-family: 'Consolas', 'Courier New', monospace; font-size: 12.5px; font-weight: 600; fill: #0284c7; }
+      .desc-text { font-family: 'Segoe UI', Arial, sans-serif; font-size: 11.5px; fill: #475569; }
+      .tree-line { stroke: #cbd5e1; stroke-width: 1.5; fill: none; }
+      .card-box { fill: #ffffff; stroke: #3b82f6; stroke-width: 1.8; rx: 12; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.06)); }
+      .badge-bg { fill: #f1f5f9; stroke: #e2e8f0; stroke-width: 1; rx: 6; }
+    </style>
+  </defs>
+
+  <!-- Fondo -->
+  <rect width="1120" height="910" fill="#f8fafc" />
+
+  <!-- Título Superior -->
+  <text x="560" y="38" class="main-title">ESTRUCTURA DE ARCHIVOS Y CARPETAS DEL SISTEMA</text>
+
+  <!-- Tarjeta Contenedora Principal -->
+  <rect x="40" y="60" width="1040" height="820" class="card-box" />
+  
+  <!-- Barra de título de la ventana estilo explorador -->
+  <rect x="40" y="60" width="1040" height="36" fill="#1e293b" rx="12" />
+  <rect x="40" y="84" width="1040" height="12" fill="#1e293b" />
+  
+  <!-- Botones de ventana -->
+  <circle cx="65" cy="78" r="6" fill="#ef4444" />
+  <circle cx="85" cy="78" r="6" fill="#f59e0b" />
+  <circle cx="105" cy="78" r="6" fill="#10b981" />
+  
+  <text x="560" y="83" font-family="'Segoe UI', Arial" font-size="12.5" font-weight="600" fill="#94a3b8" text-anchor="middle">
+    Explorador de Arquitectura - Proyecto Laravel (UNSXX)
+  </text>
+
+  <g transform="translate(75, 120)">
+    <text x="0" y="15" font-size="16">📦</text>
+    <text x="26" y="15" class="root-folder">SISTEMA WEB DOCENTES/</text>
+    <rect x="235" y="-2" width="580" height="23" rx="6" fill="#dbeafe" stroke="#bfdbfe" />
+    <text x="246" y="13.5" font-family="'Segoe UI', Arial" font-size="11.5" font-weight="bold" fill="#1e40af">Directorio raíz del proyecto institucional</text>
+  </g>
+
+    <!-- Fila app/ -->
+    <g transform="translate(97, 159.5)">
+      <text x="0" y="14" font-size="14">📁</text>
+      <text x="22" y="14" class="folder-name">app/</text>
+    
+      <rect x="235" y="-2" width="580" height="23" class="badge-bg" />
+      <text x="246" y="13.5" class="desc-text">Núcleo de la aplicación (lógica, modelos, controladores y servicios)</text>
+        </g>
+    <!-- Fila Http/ -->
+    <g transform="translate(119, 199)">
+      <text x="0" y="14" font-size="14">📁</text>
+      <text x="22" y="14" class="folder-name">Http/</text>
+    
+      <rect x="235" y="-2" width="580" height="23" class="badge-bg" />
+      <text x="246" y="13.5" class="desc-text">Capa de comunicación HTTP, peticiones y middleware</text>
+        </g>
+    <!-- Fila Controllers/ -->
+    <g transform="translate(141, 238.5)">
+      <text x="0" y="14" font-size="14">📁</text>
+      <text x="22" y="14" class="folder-name">Controllers/</text>
+    
+      <rect x="235" y="-2" width="580" height="23" class="badge-bg" />
+      <text x="246" y="13.5" class="desc-text">Controladores de acceso, solicitudes, padrón de docentes y reportes</text>
+        </g>
+    <!-- Fila Middleware/ -->
+    <g transform="translate(141, 278)">
+      <text x="0" y="14" font-size="14">📁</text>
+      <text x="22" y="14" class="folder-name">Middleware/</text>
+    
+      <rect x="235" y="-2" width="580" height="23" class="badge-bg" />
+      <text x="246" y="13.5" class="desc-text">Filtros de verificación de roles (VerificarRol) y cambio de contraseña</text>
+        </g>
+    <!-- Fila Requests/ -->
+    <g transform="translate(141, 317.5)">
+      <text x="0" y="14" font-size="14">📁</text>
+      <text x="22" y="14" class="folder-name">Requests/</text>
+    
+      <rect x="235" y="-2" width="580" height="23" class="badge-bg" />
+      <text x="246" y="13.5" class="desc-text">Validaciones de formularios (Form Requests: GuardarSolicitud, Ingresar)</text>
+        </g>
+    <!-- Fila Models/ -->
+    <g transform="translate(119, 357)">
+      <text x="0" y="14" font-size="14">📁</text>
+      <text x="22" y="14" class="folder-name">Models/</text>
+    
+      <rect x="235" y="-2" width="580" height="23" class="badge-bg" />
+      <text x="246" y="13.5" class="desc-text">Modelos ORM Eloquent (Docente, Solicitud, Usuario, Rol, Area, Carrera)</text>
+        </g>
+    <!-- Fila Services/ -->
+    <g transform="translate(119, 396.5)">
+      <text x="0" y="14" font-size="14">📁</text>
+      <text x="22" y="14" class="folder-name">Services/</text>
+    
+      <rect x="235" y="-2" width="580" height="23" class="badge-bg" />
+      <text x="246" y="13.5" class="desc-text">Capa de Servicios de Negocio (Vacaciones, Aprobaciones, Correo, Auditoría)</text>
+        </g>
+    <!-- Fila Soporte/ -->
+    <g transform="translate(119, 436)">
+      <text x="0" y="14" font-size="14">📁</text>
+      <text x="22" y="14" class="folder-name">Soporte/</text>
+    
+      <rect x="235" y="-2" width="580" height="23" class="badge-bg" />
+      <text x="246" y="13.5" class="desc-text">Constantes de negocio, tipos de contrato y estados del sistema</text>
+        </g>
+    <!-- Fila config/ -->
+    <g transform="translate(97, 475.5)">
+      <text x="0" y="14" font-size="14">📁</text>
+      <text x="22" y="14" class="folder-name">config/</text>
+    
+      <rect x="235" y="-2" width="580" height="23" class="badge-bg" />
+      <text x="246" y="13.5" class="desc-text">Archivos de configuración global del framework</text>
+        </g>
+    <!-- Fila database/ -->
+    <g transform="translate(97, 515)">
+      <text x="0" y="14" font-size="14">📁</text>
+      <text x="22" y="14" class="folder-name">database/</text>
+    
+      <rect x="235" y="-2" width="580" height="23" class="badge-bg" />
+      <text x="246" y="13.5" class="desc-text">Estructura de la base de datos relacional MySQL</text>
+        </g>
+    <!-- Fila migrations/ -->
+    <g transform="translate(119, 554.5)">
+      <text x="0" y="14" font-size="14">📁</text>
+      <text x="22" y="14" class="folder-name">migrations/</text>
+    
+      <rect x="235" y="-2" width="580" height="23" class="badge-bg" />
+      <text x="246" y="13.5" class="desc-text">Migraciones estructuradas para la creación y alteración de tablas</text>
+        </g>
+    <!-- Fila seeders/ -->
+    <g transform="translate(119, 594)">
+      <text x="0" y="14" font-size="14">📁</text>
+      <text x="22" y="14" class="folder-name">seeders/</text>
+    
+      <rect x="235" y="-2" width="580" height="23" class="badge-bg" />
+      <text x="246" y="13.5" class="desc-text">Población inicial de roles, áreas académicas, carreras y usuarios</text>
+        </g>
+    <!-- Fila resources/ -->
+    <g transform="translate(97, 633.5)">
+      <text x="0" y="14" font-size="14">📁</text>
+      <text x="22" y="14" class="folder-name">resources/</text>
+    
+      <rect x="235" y="-2" width="580" height="23" class="badge-bg" />
+      <text x="246" y="13.5" class="desc-text">Recursos del frontend y capa de presentación</text>
+        </g>
+    <!-- Fila views/ -->
+    <g transform="translate(119, 673)">
+      <text x="0" y="14" font-size="14">📁</text>
+      <text x="22" y="14" class="folder-name">views/</text>
+    
+      <rect x="235" y="-2" width="580" height="23" class="badge-bg" />
+      <text x="246" y="13.5" class="desc-text">Plantillas y vistas Blade agrupadas por módulos (acceso, paneles, impresión)</text>
+        </g>
+    <!-- Fila routes/ -->
+    <g transform="translate(97, 712.5)">
+      <text x="0" y="14" font-size="14">📁</text>
+      <text x="22" y="14" class="folder-name">routes/</text>
+    
+      <rect x="235" y="-2" width="580" height="23" class="badge-bg" />
+      <text x="246" y="13.5" class="desc-text">Definición de rutas web protegidas</text>
+        </g>
+    <!-- Fila web.php -->
+    <g transform="translate(119, 752)">
+      <text x="0" y="14" font-size="14">📄</text>
+      <text x="22" y="14" class="file-name">web.php</text>
+    
+      <rect x="235" y="-2" width="580" height="23" class="badge-bg" />
+      <text x="246" y="13.5" class="desc-text">Enrutamiento central de la aplicación y asignación de middlewares</text>
+        </g>
+    <!-- Fila storage/ -->
+    <g transform="translate(97, 791.5)">
+      <text x="0" y="14" font-size="14">📁</text>
+      <text x="22" y="14" class="folder-name">storage/</text>
+    
+      <rect x="235" y="-2" width="580" height="23" class="badge-bg" />
+      <text x="246" y="13.5" class="desc-text">Almacenamiento de logs del sistema, sesiones y archivos temporales</text>
+        </g>
+  <line x1="84" y1="150" x2="84" y2="760" class="tree-line" stroke-dasharray="3,3" />
+  <line x1="106" y1="190" x2="106" y2="430" class="tree-line" stroke-dasharray="3,3" />
+  <line x1="128" y1="230" x2="128" y2="310" class="tree-line" stroke-dasharray="3,3" />
+  <line x1="106" y1="510" x2="106" y2="590" class="tree-line" stroke-dasharray="3,3" />
+  <line x1="106" y1="630" x2="106" y2="670" class="tree-line" stroke-dasharray="3,3" />
+  <line x1="106" y1="710" x2="106" y2="750" class="tree-line" stroke-dasharray="3,3" />
+
+</svg>

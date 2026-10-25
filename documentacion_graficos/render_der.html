@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body { margin: 0; padding: 20px; background: #ffffff; display: flex; justify-content: center; align-items: center; }
+  </style>
+</head>
+<body>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1650 1080" width="1650" height="1080">
+  <defs>
+    <style>
+      .main-title { font-family: 'Segoe UI', Arial, sans-serif; font-size: 24px; font-weight: bold; fill: #0f172a; text-anchor: middle; }
+      .main-subtitle { font-family: 'Segoe UI', Arial, sans-serif; font-size: 14px; fill: #64748b; text-anchor: middle; }
+      .ent-title { font-family: 'Segoe UI', Arial, sans-serif; font-size: 13.5px; font-weight: bold; fill: #ffffff; text-anchor: middle; }
+      .attr-pk { font-family: 'Segoe UI', Arial, sans-serif; font-size: 11px; font-weight: bold; fill: #1e3a8a; text-decoration: underline; }
+      .attr-fk { font-family: 'Segoe UI', Arial, sans-serif; font-size: 11px; fill: #b45309; font-weight: 600; }
+      .attr-txt { font-family: 'Segoe UI', Arial, sans-serif; font-size: 11px; fill: #1e293b; }
+      .attr-type { font-family: 'Courier New', monospace; font-size: 10px; fill: #64748b; }
+      .rel-text { font-family: 'Segoe UI', Arial, sans-serif; font-size: 10.5px; font-weight: bold; fill: #0f766e; text-anchor: middle; }
+      .card-lbl { font-family: 'Segoe UI', Arial, sans-serif; font-size: 12px; font-weight: bold; fill: #0284c7; }
+      .line { stroke: #475569; stroke-width: 2; fill: none; }
+      .line-accent { stroke: #2563eb; stroke-width: 2; fill: none; }
+      .rel-diamond { fill: #f0fdfa; stroke: #0d9488; stroke-width: 2; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.08)); }
+      .ent-box { fill: #ffffff; stroke: #3b82f6; stroke-width: 2; rx: 8; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.07)); }
+    </style>
+  </defs>
+
+  <!-- Fondo Limpio -->
+  <rect width="1650" height="1080" fill="#f8fafc" />
+
+  <!-- Título Superior -->
+  <text x="825" y="36" class="main-title">DIAGRAMA ENTIDAD-RELACIÓN (DER) CONCEPTUAL - MODELO COMPLETO</text>
+  <text x="825" y="58" class="main-subtitle">Universidad Nacional "Siglo XX" • Sistema Web para la Gestión de Licencias y Vacaciones del Personal Docente</text>
+
+  <!-- Leyenda Técnica -->
+  <g transform="translate(460, 72)">
+    <rect width="730" height="32" rx="6" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.2" />
+    <text x="20" y="21" font-family="'Segoe UI', Arial" font-size="12" fill="#1e3a8a" font-weight="bold">Convenciones:</text>
+    <text x="120" y="21" font-family="'Segoe UI', Arial" font-size="11.5" fill="#1e3a8a" font-weight="bold" text-decoration="underline">🔑 PK: Clave Primaria</text>
+    <text x="280" y="21" font-family="'Segoe UI', Arial" font-size="11.5" fill="#b45309" font-weight="bold">🔗 FK: Clave Foránea</text>
+    <text x="430" y="21" font-family="'Segoe UI', Arial" font-size="11.5" fill="#0f766e" font-weight="bold">◆ Rombo: Relación</text>
+    <text x="575" y="21" font-family="'Segoe UI', Arial" font-size="11.5" fill="#0284c7" font-weight="bold">1 : N Cardinalidad</text>
+  </g>
+
+    <!-- Entidad ROLES -->
+    <g transform="translate(420, 115)">
+      <rect width="230" height="112" class="ent-box" />
+      <rect width="230" height="28" fill="#3b82f6" rx="8" />
+      <rect y="20" width="230" height="8" fill="#3b82f6" />
+      <text x="115" y="19" class="ent-title">ROLES</text>
+      <g transform="translate(12, 41)">
+        <text x="0" y="0" class="attr-pk">🔑 id</text>
+        <text x="208" y="0" class="attr-type" text-anchor="end">BIGINT</text>
+        <text x="0" y="18" class="attr-txt">• nombre</text>
+        <text x="208" y="18" class="attr-type" text-anchor="end">VARCHAR</text>
+        <text x="0" y="36" class="attr-txt">• codigo</text>
+        <text x="208" y="36" class="attr-type" text-anchor="end">VARCHAR(UQ)</text>
+        <text x="0" y="54" class="attr-txt">• descripcion</text>
+        <text x="208" y="54" class="attr-type" text-anchor="end">VARCHAR</text>
+      </g>
+    </g>
+    <!-- Entidad USUARIOS -->
+    <g transform="translate(420, 310)">
+      <rect width="240" height="184" class="ent-box" />
+      <rect width="240" height="28" fill="#2563eb" rx="8" />
+      <rect y="20" width="240" height="8" fill="#2563eb" />
+      <text x="120" y="19" class="ent-title">USUARIOS</text>
+      <g transform="translate(12, 41)">
+        <text x="0" y="0" class="attr-pk">🔑 id</text>
+        <text x="218" y="0" class="attr-type" text-anchor="end">BIGINT</text>
+        <text x="0" y="18" class="attr-txt">• codigo</text>
+        <text x="218" y="18" class="attr-type" text-anchor="end">VARCHAR(UQ)</text>
+        <text x="0" y="36" class="attr-txt">• ci</text>
+        <text x="218" y="36" class="attr-type" text-anchor="end">VARCHAR</text>
+        <text x="0" y="54" class="attr-txt">• email</text>
+        <text x="218" y="54" class="attr-type" text-anchor="end">VARCHAR</text>
+        <text x="0" y="72" class="attr-txt">• contrasena</text>
+        <text x="218" y="72" class="attr-type" text-anchor="end">VARCHAR</text>
+        <text x="0" y="90" class="attr-fk">🔗 rol_id</text>
+        <text x="218" y="90" class="attr-type" text-anchor="end">BIGINT</text>
+        <text x="0" y="108" class="attr-txt">• activo</text>
+        <text x="218" y="108" class="attr-type" text-anchor="end">BOOLEAN</text>
+        <text x="0" y="126" class="attr-txt">• debe_cambiar_pass</text>
+        <text x="218" y="126" class="attr-type" text-anchor="end">BOOLEAN</text>
+      </g>
+    </g>
+    <!-- Entidad AREAS -->
+    <g transform="translate(50, 320)">
+      <rect width="220" height="112" class="ent-box" />
+      <rect width="220" height="28" fill="#0284c7" rx="8" />
+      <rect y="20" width="220" height="8" fill="#0284c7" />
+      <text x="110" y="19" class="ent-title">AREAS</text>
+      <g transform="translate(12, 41)">
+        <text x="0" y="0" class="attr-pk">🔑 id</text>
+        <text x="198" y="0" class="attr-type" text-anchor="end">BIGINT</text>
+        <text x="0" y="18" class="attr-txt">• nombre</text>
+        <text x="198" y="18" class="attr-type" text-anchor="end">VARCHAR</text>
+        <text x="0" y="36" class="attr-txt">• codigo</text>
+        <text x="198" y="36" class="attr-type" text-anchor="end">VARCHAR(UQ)</text>
+        <text x="0" y="54" class="attr-txt">• activo</text>
+        <text x="198" y="54" class="attr-type" text-anchor="end">BOOLEAN</text>
+      </g>
+    </g>
+    <!-- Entidad CARRERAS -->
+    <g transform="translate(50, 560)">
+      <rect width="220" height="130" class="ent-box" />
+      <rect width="220" height="28" fill="#0284c7" rx="8" />
+      <rect y="20" width="220" height="8" fill="#0284c7" />
+      <text x="110" y="19" class="ent-title">CARRERAS</text>
+      <g transform="translate(12, 41)">
+        <text x="0" y="0" class="attr-pk">🔑 id</text>
+        <text x="198" y="0" class="attr-type" text-anchor="end">BIGINT</text>
+        <text x="0" y="18" class="attr-fk">🔗 area_id</text>
+        <text x="198" y="18" class="attr-type" text-anchor="end">BIGINT</text>
+        <text x="0" y="36" class="attr-txt">• nombre</text>
+        <text x="198" y="36" class="attr-type" text-anchor="end">VARCHAR</text>
+        <text x="0" y="54" class="attr-txt">• codigo</text>
+        <text x="198" y="54" class="attr-type" text-anchor="end">VARCHAR(UQ)</text>
+        <text x="0" y="72" class="attr-txt">• activo</text>
+        <text x="198" y="72" class="attr-type" text-anchor="end">BOOLEAN</text>
+      </g>
+    </g>
+    <!-- Entidad DOCENTES -->
+    <g transform="translate(410, 600)">
+      <rect width="260" height="292" class="ent-box" />
+      <rect width="260" height="28" fill="#1d4ed8" rx="8" />
+      <rect y="20" width="260" height="8" fill="#1d4ed8" />
+      <text x="130" y="19" class="ent-title">DOCENTES</text>
+      <g transform="translate(12, 41)">
+        <text x="0" y="0" class="attr-pk">🔑 id</text>
+        <text x="238" y="0" class="attr-type" text-anchor="end">BIGINT</text>
+        <text x="0" y="18" class="attr-fk">🔗 usuario_id</text>
+        <text x="238" y="18" class="attr-type" text-anchor="end">BIGINT(UQ)</text>
+        <text x="0" y="36" class="attr-txt">• nombres</text>
+        <text x="238" y="36" class="attr-type" text-anchor="end">VARCHAR</text>
+        <text x="0" y="54" class="attr-txt">• apellidos</text>
+        <text x="238" y="54" class="attr-type" text-anchor="end">VARCHAR</text>
+        <text x="0" y="72" class="attr-txt">• nombre_completo</text>
+        <text x="238" y="72" class="attr-type" text-anchor="end">VARCHAR</text>
+        <text x="0" y="90" class="attr-txt">• telefono</text>
+        <text x="238" y="90" class="attr-type" text-anchor="end">VARCHAR</text>
+        <text x="0" y="108" class="attr-txt">• cargo</text>
+        <text x="238" y="108" class="attr-type" text-anchor="end">VARCHAR</text>
+        <text x="0" y="126" class="attr-txt">• tipo_contrato</text>
+        <text x="238" y="126" class="attr-type" text-anchor="end">VARCHAR</text>
+        <text x="0" y="144" class="attr-fk">🔗 carrera_id</text>
+        <text x="238" y="144" class="attr-type" text-anchor="end">BIGINT</text>
+        <text x="0" y="162" class="attr-fk">🔗 area_id</text>
+        <text x="238" y="162" class="attr-type" text-anchor="end">BIGINT</text>
+        <text x="0" y="180" class="attr-txt">• fecha_ingreso</text>
+        <text x="238" y="180" class="attr-type" text-anchor="end">DATE</text>
+        <text x="0" y="198" class="attr-txt">• antiguedad_anios</text>
+        <text x="238" y="198" class="attr-type" text-anchor="end">INT</text>
+        <text x="0" y="216" class="attr-txt">• dias_asignados</text>
+        <text x="238" y="216" class="attr-type" text-anchor="end">TINYINT</text>
+        <text x="0" y="234" class="attr-txt">• dias_utilizados</text>
+        <text x="238" y="234" class="attr-type" text-anchor="end">DECIMAL</text>
+      </g>
+    </g>
+    <!-- Entidad SOLICITUDES -->
+    <g transform="translate(830, 360)">
+      <rect width="250" height="238" class="ent-box" />
+      <rect width="250" height="28" fill="#0d9488" rx="8" />
+      <rect y="20" width="250" height="8" fill="#0d9488" />
+      <text x="125" y="19" class="ent-title">SOLICITUDES</text>
+      <g transform="translate(12, 41)">
+        <text x="0" y="0" class="attr-pk">🔑 id</text>
+        <text x="228" y="0" class="attr-type" text-anchor="end">BIGINT</text>
+        <text x="0" y="18" class="attr-fk">🔗 docente_id</text>
+        <text x="228" y="18" class="attr-type" text-anchor="end">BIGINT</text>
+        <text x="0" y="36" class="attr-txt">• fecha_inicio</text>
+        <text x="228" y="36" class="attr-type" text-anchor="end">DATE</text>
+        <text x="0" y="54" class="attr-txt">• fecha_fin</text>
+        <text x="228" y="54" class="attr-type" text-anchor="end">DATE</text>
+        <text x="0" y="72" class="attr-txt">• jornada</text>
+        <text x="228" y="72" class="attr-type" text-anchor="end">VARCHAR</text>
+        <text x="0" y="90" class="attr-txt">• dias_solicitados</text>
+        <text x="228" y="90" class="attr-type" text-anchor="end">DECIMAL</text>
+        <text x="0" y="108" class="attr-txt">• motivo</text>
+        <text x="228" y="108" class="attr-type" text-anchor="end">TEXT</text>
+        <text x="0" y="126" class="attr-txt">• estado</text>
+        <text x="228" y="126" class="attr-type" text-anchor="end">VARCHAR</text>
+        <text x="0" y="144" class="attr-fk">🔗 cancelada_por</text>
+        <text x="228" y="144" class="attr-type" text-anchor="end">BIGINT</text>
+        <text x="0" y="162" class="attr-txt">• cancelada_en</text>
+        <text x="228" y="162" class="attr-type" text-anchor="end">DATETIME</text>
+        <text x="0" y="180" class="attr-txt">• motivo_cancelacion</text>
+        <text x="228" y="180" class="attr-type" text-anchor="end">TEXT</text>
+      </g>
+    </g>
+    <!-- Entidad APROBACIONES -->
+    <g transform="translate(1260, 360)">
+      <rect width="250" height="202" class="ent-box" />
+      <rect width="250" height="28" fill="#0f766e" rx="8" />
+      <rect y="20" width="250" height="8" fill="#0f766e" />
+      <text x="125" y="19" class="ent-title">APROBACIONES</text>
+      <g transform="translate(12, 41)">
+        <text x="0" y="0" class="attr-pk">🔑 id</text>
+        <text x="228" y="0" class="attr-type" text-anchor="end">BIGINT</text>
+        <text x="0" y="18" class="attr-fk">🔗 solicitud_id</text>
+        <text x="228" y="18" class="attr-type" text-anchor="end">BIGINT</text>
+        <text x="0" y="36" class="attr-fk">🔗 usuario_id</text>
+        <text x="228" y="36" class="attr-type" text-anchor="end">BIGINT</text>
+        <text x="0" y="54" class="attr-txt">• rol_codigo</text>
+        <text x="228" y="54" class="attr-type" text-anchor="end">VARCHAR</text>
+        <text x="0" y="72" class="attr-txt">• etapa</text>
+        <text x="228" y="72" class="attr-type" text-anchor="end">VARCHAR</text>
+        <text x="0" y="90" class="attr-txt">• decision</text>
+        <text x="228" y="90" class="attr-type" text-anchor="end">VARCHAR</text>
+        <text x="0" y="108" class="attr-txt">• observacion</text>
+        <text x="228" y="108" class="attr-type" text-anchor="end">TEXT</text>
+        <text x="0" y="126" class="attr-txt">• estado_anterior</text>
+        <text x="228" y="126" class="attr-type" text-anchor="end">VARCHAR</text>
+        <text x="0" y="144" class="attr-txt">• estado_nuevo</text>
+        <text x="228" y="144" class="attr-type" text-anchor="end">VARCHAR</text>
+      </g>
+    </g>
+    <!-- Entidad NOTIFICACIONES -->
+    <g transform="translate(830, 115)">
+      <rect width="250" height="166" class="ent-box" />
+      <rect width="250" height="28" fill="#475569" rx="8" />
+      <rect y="20" width="250" height="8" fill="#475569" />
+      <text x="125" y="19" class="ent-title">NOTIFICACIONES</text>
+      <g transform="translate(12, 41)">
+        <text x="0" y="0" class="attr-pk">🔑 id</text>
+        <text x="228" y="0" class="attr-type" text-anchor="end">BIGINT</text>
+        <text x="0" y="18" class="attr-fk">🔗 usuario_id</text>
+        <text x="228" y="18" class="attr-type" text-anchor="end">BIGINT</text>
+        <text x="0" y="36" class="attr-fk">🔗 solicitud_id</text>
+        <text x="228" y="36" class="attr-type" text-anchor="end">BIGINT</text>
+        <text x="0" y="54" class="attr-txt">• tipo</text>
+        <text x="228" y="54" class="attr-type" text-anchor="end">VARCHAR</text>
+        <text x="0" y="72" class="attr-txt">• titulo</text>
+        <text x="228" y="72" class="attr-type" text-anchor="end">VARCHAR</text>
+        <text x="0" y="90" class="attr-txt">• mensaje</text>
+        <text x="228" y="90" class="attr-type" text-anchor="end">TEXT</text>
+        <text x="0" y="108" class="attr-txt">• leida</text>
+        <text x="228" y="108" class="attr-type" text-anchor="end">BOOLEAN</text>
+      </g>
+    </g>
+    <!-- Entidad AUDITORIAS -->
+    <g transform="translate(1260, 115)">
+      <rect width="240" height="184" class="ent-box" />
+      <rect width="240" height="28" fill="#475569" rx="8" />
+      <rect y="20" width="240" height="8" fill="#475569" />
+      <text x="120" y="19" class="ent-title">AUDITORIAS</text>
+      <g transform="translate(12, 41)">
+        <text x="0" y="0" class="attr-pk">🔑 id</text>
+        <text x="218" y="0" class="attr-type" text-anchor="end">BIGINT</text>
+        <text x="0" y="18" class="attr-fk">🔗 usuario_id</text>
+        <text x="218" y="18" class="attr-type" text-anchor="end">BIGINT</text>
+        <text x="0" y="36" class="attr-txt">• accion</text>
+        <text x="218" y="36" class="attr-type" text-anchor="end">VARCHAR</text>
+        <text x="0" y="54" class="attr-txt">• entidad</text>
+        <text x="218" y="54" class="attr-type" text-anchor="end">VARCHAR</text>
+        <text x="0" y="72" class="attr-txt">• entidad_id</text>
+        <text x="218" y="72" class="attr-type" text-anchor="end">BIGINT</text>
+        <text x="0" y="90" class="attr-txt">• datos_anteriores</text>
+        <text x="218" y="90" class="attr-type" text-anchor="end">JSON</text>
+        <text x="0" y="108" class="attr-txt">• datos_nuevos</text>
+        <text x="218" y="108" class="attr-type" text-anchor="end">JSON</text>
+        <text x="0" y="126" class="attr-txt">• ip</text>
+        <text x="218" y="126" class="attr-type" text-anchor="end">VARCHAR</text>
+      </g>
+    </g>
+    <!-- Entidad CONFIG_CORREO -->
+    <g transform="translate(830, 740)">
+      <rect width="250" height="184" class="ent-box" />
+      <rect width="250" height="28" fill="#d97706" rx="8" />
+      <rect y="20" width="250" height="8" fill="#d97706" />
+      <text x="125" y="19" class="ent-title">CONFIG_CORREO</text>
+      <g transform="translate(12, 41)">
+        <text x="0" y="0" class="attr-pk">🔑 id</text>
+        <text x="228" y="0" class="attr-type" text-anchor="end">BIGINT</text>
+        <text x="0" y="18" class="attr-txt">• activo</text>
+        <text x="228" y="18" class="attr-type" text-anchor="end">BOOLEAN</text>
+        <text x="0" y="36" class="attr-txt">• host</text>
+        <text x="228" y="36" class="attr-type" text-anchor="end">VARCHAR</text>
+        <text x="0" y="54" class="attr-txt">• puerto</text>
+        <text x="228" y="54" class="attr-type" text-anchor="end">INT</text>
+        <text x="0" y="72" class="attr-txt">• usuario</text>
+        <text x="228" y="72" class="attr-type" text-anchor="end">VARCHAR</text>
+        <text x="0" y="90" class="attr-txt">• contrasena</text>
+        <text x="228" y="90" class="attr-type" text-anchor="end">TEXT</text>
+        <text x="0" y="108" class="attr-txt">• nombre_remitente</text>
+        <text x="228" y="108" class="attr-type" text-anchor="end">VARCHAR</text>
+        <text x="0" y="126" class="attr-txt">• ultimo_error</text>
+        <text x="228" y="126" class="attr-type" text-anchor="end">TEXT</text>
+      </g>
+    </g>
+    <!-- 1. ROLES -> USUARIOS -->
+    <line x1="535" y1="225" x2="535" y2="250" class="line" />
+    
+    <g transform="translate(535, 268)">
+      <polygon points="0,-16 36,0 0,16 -36,0" class="rel-diamond" />
+      <text x="0" y="4" class="rel-text">tiene</text>
+    </g>
+    <line x1="535" y1="284" x2="535" y2="310" class="line" />
+    <text x="545" y="244" class="card-lbl">1</text>
+    <text x="545" y="303" class="card-lbl">N</text>
+    <!-- 2. AREAS -> CARRERAS -->
+    <line x1="160" y1="430" x2="160" y2="475" class="line" />
+    
+    <g transform="translate(160, 495)">
+      <polygon points="0,-16 36,0 0,16 -36,0" class="rel-diamond" />
+      <text x="0" y="4" class="rel-text">contiene</text>
+    </g>
+    <line x1="160" y1="511" x2="160" y2="560" class="line" />
+    <text x="170" y="450" class="card-lbl">1</text>
+    <text x="170" y="550" class="card-lbl">N</text>
+    <!-- 3. AREAS -> DOCENTES -->
+    <path d="M 270,380 L 330,380 L 330,650 L 410,650" class="line" />
+    
+    <g transform="translate(330, 480)">
+      <polygon points="0,-16 36,0 0,16 -36,0" class="rel-diamond" />
+      <text x="0" y="4" class="rel-text">agrupa</text>
+    </g>
+    <text x="280" y="372" class="card-lbl">1</text>
+    <text x="390" y="642" class="card-lbl">N</text>
+    <!-- 4. CARRERAS -> DOCENTES -->
+    <line x1="270" y1="690" x2="310" y2="690" class="line" />
+    
+    <g transform="translate(346, 690)">
+      <polygon points="0,-16 36,0 0,16 -36,0" class="rel-diamond" />
+      <text x="0" y="4" class="rel-text">adscribe</text>
+    </g>
+    <line x1="382" y1="690" x2="410" y2="690" class="line" />
+    <text x="278" y="682" class="card-lbl">1</text>
+    <text x="390" y="682" class="card-lbl">N</text>
+    <!-- 5. USUARIOS -> DOCENTES -->
+    <line x1="540" y1="505" x2="540" y2="535" class="line" />
+    
+    <g transform="translate(540, 553)">
+      <polygon points="0,-16 36,0 0,16 -36,0" class="rel-diamond" />
+      <text x="0" y="4" class="rel-text">asigna</text>
+    </g>
+    <line x1="540" y1="569" x2="540" y2="600" class="line" />
+    <text x="550" y="525" class="card-lbl">1</text>
+    <text x="550" y="593" class="card-lbl">1</text>
+    <!-- 6. DOCENTES -> SOLICITUDES -->
+    <path d="M 670,680 L 745,680 L 745,480 L 830,480" class="line" />
+    
+    <g transform="translate(745, 580)">
+      <polygon points="0,-16 36,0 0,16 -36,0" class="rel-diamond" />
+      <text x="0" y="4" class="rel-text">presenta</text>
+    </g>
+    <text x="680" y="672" class="card-lbl">1</text>
+    <text x="810" y="472" class="card-lbl">N</text>
+    <!-- 7. SOLICITUDES -> APROBACIONES -->
+    <line x1="1080" y1="460" x2="1140" y2="460" class="line" />
+    
+    <g transform="translate(1176, 460)">
+      <polygon points="0,-16 36,0 0,16 -36,0" class="rel-diamond" />
+      <text x="0" y="4" class="rel-text">genera</text>
+    </g>
+    <line x1="1212" y1="460" x2="1260" y2="460" class="line" />
+    <text x="1090" y="452" class="card-lbl">1</text>
+    <text x="1240" y="452" class="card-lbl">N</text>
+    <!-- 8. SOLICITUDES -> NOTIFICACIONES -->
+    <line x1="955" y1="360" x2="955" y2="320" class="line" />
+    
+    <g transform="translate(955, 304)">
+      <polygon points="0,-16 36,0 0,16 -36,0" class="rel-diamond" />
+      <text x="0" y="4" class="rel-text">vincula</text>
+    </g>
+    <line x1="955" y1="288" x2="955" y2="270" class="line" />
+    <text x="965" y="348" class="card-lbl">1</text>
+    <text x="965" y="282" class="card-lbl">N</text>
+    <!-- 9. USUARIOS -> NOTIFICACIONES -->
+    <path d="M 660,340 L 720,340 L 720,190 L 830,190" class="line" />
+    
+    <g transform="translate(720, 265)">
+      <polygon points="0,-16 36,0 0,16 -36,0" class="rel-diamond" />
+      <text x="0" y="4" class="rel-text">recibe</text>
+    </g>
+    <text x="670" y="332" class="card-lbl">1</text>
+    <text x="810" y="182" class="card-lbl">N</text>
+    <!-- 10. USUARIOS -> AUDITORIAS -->
+    <path d="M 590,310 L 590,60 L 1380,60 L 1380,115" class="line-accent" />
+    
+    <g transform="translate(1000, 60)">
+      <polygon points="0,-16 36,0 0,16 -36,0" class="rel-diamond" />
+      <text x="0" y="4" class="rel-text">audita</text>
+    </g>
+    <text x="600" y="295" class="card-lbl">1</text>
+    <text x="1390" y="110" class="card-lbl">N</text>
+    <!-- 11. USUARIOS -> APROBACIONES -->
+    <path d="M 660,420 L 760,420 L 760,325 L 1210,325 L 1210,390 L 1260,390" class="line" />
+    
+    <g transform="translate(1190, 325)">
+      <polygon points="0,-16 36,0 0,16 -36,0" class="rel-diamond" />
+      <text x="0" y="4" class="rel-text">dictamina</text>
+    </g>
+    <text x="670" y="412" class="card-lbl">1</text>
+    <text x="1240" y="382" class="card-lbl">N</text>
+</svg>
+</body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Visor de Diagramas Técnicos - UNSXX</title>
+  <style>
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f172a; color: #f8fafc; margin: 0; padding: 25px; }
+    h1 { text-align: center; color: #38bdf8; margin-bottom: 5px; font-size: 26px; }
+    p.sub { text-align: center; color: #94a3b8; font-size: 14px; margin-bottom: 35px; }
+    .container { max-width: 1400px; margin: 0 auto; display: flex; flex-direction: column; gap: 40px; }
+    .card { background: #1e293b; border-radius: 12px; padding: 24px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); border: 1px solid #334155; }
+    .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; border-bottom: 1px solid #334155; padding-bottom: 12px; }
+    .card-title { font-size: 18px; font-weight: bold; color: #e2e8f0; }
+    .btn-group { display: flex; gap: 10px; }
+    button, a.btn { background: #0284c7; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: bold; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+    button:hover, a.btn:hover { background: #0369a1; }
+    .btn-green { background: #16a34a; }
+    .btn-green:hover { background: #15803d; }
+    .diagram-view { background: #ffffff; border-radius: 8px; overflow: auto; padding: 15px; display: flex; justify-content: center; }
+    .diagram-view img, .diagram-view svg { max-width: 100%; height: auto; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .caption { margin-top: 15px; font-size: 13px; color: #cbd5e1; background: #0f172a; padding: 12px; border-radius: 6px; border-left: 4px solid #38bdf8; }
+  </style>
+</head>
+<body>
+  <h1>DIAGRAMAS TÉCNICOS PARA EL CAPÍTULO DE DESARROLLO</h1>
+  <p class="sub">Universidad Nacional "Siglo XX" • Sistema de Gestión de Licencias y Vacaciones Docentes</p>
+
+  <div class="container">
+
+    <!-- DIAGRAMA 1 -->
+    <div class="card" id="card-1">
+      <div class="card-header">
+        <div class="card-title">1. Diagrama de Casos de Uso General del Sistema</div>
+        <div class="btn-group">
+          <a class="btn" href="01_diagrama_casos_de_uso.svg" download="01_diagrama_casos_de_uso.svg">Descargar SVG (Vector)</a>
+          <button class="btn btn-green" onclick="exportPNG('01_diagrama_casos_de_uso.svg', '01_diagrama_casos_de_uso.png')">Descargar PNG (Alta Resolución)</button>
+        </div>
+      </div>
+      <div class="diagram-view">
+        <img id="img-1" src="01_diagrama_casos_de_uso.svg" alt="Diagrama de Casos de Uso">
+      </div>
+      <div class="caption">
+        <strong>Figura:</strong> Diagrama general de casos de uso del sistema de licencias y vacaciones.<br>
+        <strong>Fuente:</strong> Elaboración propia.<br>
+        <strong>Nota:</strong> Representa los 4 actores y la distribución funcional del sistema bajo el límite del software.
+      </div>
+    </div>
+
+    <!-- DIAGRAMA 2 -->
+    <div class="card" id="card-2">
+      <div class="card-header">
+        <div class="card-title">2. Diagrama Entidad-Relación (DER) Conceptual</div>
+        <div class="btn-group">
+          <a class="btn" href="02_diagrama_entidad_relacion.svg" download="02_diagrama_entidad_relacion.svg">Descargar SVG (Vector)</a>
+          <button class="btn btn-green" onclick="exportPNG('02_diagrama_entidad_relacion.svg', '02_diagrama_entidad_relacion.png')">Descargar PNG (Alta Resolución)</button>
+        </div>
+      </div>
+      <div class="diagram-view">
+        <img id="img-2" src="02_diagrama_entidad_relacion.svg" alt="Diagrama Entidad Relación">
+      </div>
+      <div class="caption">
+        <strong>Figura:</strong> Diagrama Entidad-Relación del sistema de licencias y vacaciones.<br>
+        <strong>Fuente:</strong> Elaboración propia.<br>
+        <strong>Nota:</strong> Entidades centrales con claves primarias, foráneas, rombos de relación y cardinalidades 1:1 y 1:N.
+      </div>
+    </div>
+
+    <!-- DIAGRAMA 3 -->
+    <div class="card" id="card-3">
+      <div class="card-header">
+        <div class="card-title">3. Modelo Relacional de la Base de Datos (Esquema Físico MySQL)</div>
+        <div class="btn-group">
+          <a class="btn" href="03_modelo_relacional_bd.svg" download="03_modelo_relacional_bd.svg">Descargar SVG (Vector)</a>
+          <button class="btn btn-green" onclick="exportPNG('03_modelo_relacional_bd.svg', '03_modelo_relacional_bd.png')">Descargar PNG (Alta Resolución)</button>
+        </div>
+      </div>
+      <div class="diagram-view">
+        <img id="img-3" src="03_modelo_relacional_bd.svg" alt="Modelo Relacional Base de Datos">
+      </div>
+      <div class="caption">
+        <strong>Figura:</strong> Modelo Relacional de la base de datos en MySQL.<br>
+        <strong>Fuente:</strong> Elaboración propia.<br>
+        <strong>Nota:</strong> Tablas físicas con formato de MySQL Workbench/phpMyAdmin, tipos de datos, PK, FK y líneas de relación.
+      </div>
+    </div>
+
+    <!-- DIAGRAMA 4 -->
+    <div class="card" id="card-4">
+      <div class="card-header">
+        <div class="card-title">4. Diagrama de Navegación del Sistema</div>
+        <div class="btn-group">
+          <a class="btn" href="04_diagrama_navegacion.svg" download="04_diagrama_navegacion.svg">Descargar SVG (Vector)</a>
+          <button class="btn btn-green" onclick="exportPNG('04_diagrama_navegacion.svg', '04_diagrama_navegacion.png')">Descargar PNG (Alta Resolución)</button>
+        </div>
+      </div>
+      <div class="diagram-view">
+        <img id="img-4" src="04_diagrama_navegacion.svg" alt="Diagrama de Navegación">
+      </div>
+      <div class="caption">
+        <strong>Figura:</strong> Diagrama de navegación general de la plataforma.<br>
+        <strong>Fuente:</strong> Elaboración propia.<br>
+        <strong>Nota:</strong> Mapeo completo de rutas (/ingresar, /panel, /solicitudes, /jefatura), decisiones y bifurcación por perfiles.
+      </div>
+    </div>
+
+    <!-- DIAGRAMA 5 -->
+    <div class="card" id="card-5">
+      <div class="card-header">
+        <div class="card-title">5. Diagrama de Arquitectura del Sistema en 3 Capas</div>
+        <div class="btn-group">
+          <a class="btn" href="05_diagrama_arquitectura.svg" download="05_diagrama_arquitectura.svg">Descargar SVG (Vector)</a>
+          <button class="btn btn-green" onclick="exportPNG('05_diagrama_arquitectura.svg', '05_diagrama_arquitectura.png')">Descargar PNG (Alta Resolución)</button>
+        </div>
+      </div>
+      <div class="diagram-view">
+        <img id="img-5" src="05_diagrama_arquitectura.svg" alt="Diagrama de Arquitectura">
+      </div>
+      <div class="caption">
+        <strong>Figura:</strong> Diagrama de arquitectura del sistema en Laravel.<br>
+        <strong>Fuente:</strong> Elaboración propia.<br>
+        <strong>Nota:</strong> Estructura en 3 capas (Presentación Blade, Lógica y Servicios Laravel, y Persistencia Relacional MySQL).
+      </div>
+    </div>
+
+  </div>
+
+  <canvas id="exportCanvas" style="display:none;"></canvas>
+
+  <script>
+    function exportPNG(svgUrl, fileName) {
+      const img = new Image();
+      img.onload = function() {
+        const canvas = document.getElementById('exportCanvas');
+        // Render at 2x resolution for high crispness
+        const scale = 2;
+        canvas.width = img.naturalWidth * scale;
+        canvas.height = img.naturalHeight * scale;
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+        const a = document.createElement('a');
+        a.download = fileName;
+        a.href = canvas.toDataURL('image/png');
+        a.click();
+      };
+      img.src = svgUrl;
+    }
+  </script>
+</body>
+</html>
