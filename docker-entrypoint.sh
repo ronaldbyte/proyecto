@@ -24,6 +24,7 @@ php artisan config:clear || true
 # Ejecutar migraciones y seeders en TiDB Cloud
 echo "Ejecutando migraciones de base de datos..."
 php artisan migrate --force || true
+php artisan db:seed --force || true
 
 # Reasignar permisos finales para que Apache (www-data) tenga control total de logs y sesiones
 chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
