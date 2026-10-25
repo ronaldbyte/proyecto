@@ -15,6 +15,11 @@ touch /var/www/html/storage/logs/laravel.log
 chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 chmod -R 777 /var/www/html/storage /var/www/html/bootstrap/cache
 
+# Crear archivo sqlite y asegurar permisos de base de datos
+touch /var/www/html/database/database.sqlite
+chown -R www-data:www-data /var/www/html/database
+chmod -R 777 /var/www/html/database
+
 # Crear enlace simbólico de storage si no existe
 php artisan storage:link || true
 
