@@ -49,23 +49,31 @@ class AvisosController extends Controller
         return back()->with('exito', 'Configuración guardada.');
     }
 
-    public function probar(ServicioCorreo $servicio)
+    public function probar(Request $request, ServicioCorreo $servicio)
     {
         abort_unless(Auth::user()->esJefatura(), 403);
 
         $configuracion = ConfiguracionCorreo::actual();
 
         if (! $configuracion->estaLista()) {
-            return back()->with('error', 'Active los avisos y complete los datos de envío.');
+            return back()->with('error', 'Active los avisos y guarde los datos de envío (Gmail y Contraseña de aplicación) antes de probar.');
+        }
+
+        $destino = trim((string) $request->input('correo_prueba'));
+        if ($destino === '') {
+            $destino = (string) Auth::user()->email;
+        }
+
+        if (! filter_var($destino, FILTER_VALIDATE_EMAIL)) {
+            return back()->with('error', 'Debe indicar un correo electrónico válido para recibir la prueba.');
         }
 
         $servicio->aplicarConfiguracion();
-        $destino = Auth::user()->email;
 
         try {
             Mail::to($destino)->send(new CorreoAviso(
-                'Prueba de aviso',
-                'Si recibió este mensaje en el celular, los avisos del sistema ya llegan aunque no esté dentro de la página.',
+                'Prueba de aviso UNSXX',
+                'Si recibió este mensaje en su celular o computador, los avisos del sistema ya funcionan correctamente.',
                 $servicio->enlaceIngreso()
             ));
             $configuracion->update(['ultimo_error' => null]);
@@ -75,20 +83,26 @@ class AvisosController extends Controller
             try {
                 $servicio->aplicarConfiguracion($puertoAlternativo);
                 Mail::to($destino)->send(new CorreoAviso(
-                    'Prueba de aviso',
-                    'Si recibió este mensaje en el celular, los avisos del sistema ya llegan aunque no esté dentro de la página.',
+                    'Prueba de aviso UNSXX',
+                    'Si recibió este mensaje en su celular o computador, los avisos del sistema ya funcionan correctamente.',
                     $servicio->enlaceIngreso()
                 ));
                 $configuracion->update(['puerto' => $puertoAlternativo, 'ultimo_error' => null]);
 
-                return back()->with('exito', 'Se envió una prueba a '.$destino.' (reintentado con éxito por el puerto seguro '.$puertoAlternativo.').');
+                return back()->with('exito', 'Se envió una prueba exitosa a '.$destino.' (reintentado con éxito por el puerto seguro '.$puertoAlternativo.').');
             } catch (\Throwable) {
-                $configuracion->update(['ultimo_error' => $excepcion->getMessage()]);
+                $mensajeError = $excepcion->getMessage();
+                $configuracion->update(['ultimo_error' => $mensajeError]);
 
-                return back()->with('error', 'No se pudo enviar la prueba: '.$excepcion->getMessage());
+                $sugerencia = '';
+                if (str_contains($mensajeError, '535') || str_contains($mensajeError, 'BadCredentials') || str_contains(strtolower($mensajeError), 'password not accepted')) {
+                    $sugerencia = ' (Google rechazó la contraseña. Verifique que esté usando una "Contraseña de aplicación" de 16 caracteres de Google y no su contraseña normal de Gmail).';
+                }
+
+                return back()->with('error', 'No se pudo enviar la prueba: '.$mensajeError.$sugerencia);
             }
         }
 
-        return back()->with('exito', 'Se envió una prueba a '.$destino.'.');
+        return back()->with('exito', '¡Prueba enviada con éxito a '.$destino.'! Revise su bandeja de entrada o spam en su celular o computador.');
     }
 }
