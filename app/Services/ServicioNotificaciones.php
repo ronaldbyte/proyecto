@@ -159,12 +159,12 @@ class ServicioNotificaciones
         }
 
         try {
-            Mail::to($destino)->send(new CorreoAviso($titulo, $mensaje, $this->correo->enlaceIngreso()));
+            Mail::mailer('smtp')->to($destino)->send(new CorreoAviso($titulo, $mensaje, $this->correo->enlaceIngreso()));
             $this->correo->registrarError(null);
         } catch (\Throwable $excepcion) {
             try {
                 $this->correo->aplicarConfiguracion(465);
-                Mail::to($destino)->send(new CorreoAviso($titulo, $mensaje, $this->correo->enlaceIngreso()));
+                Mail::mailer('smtp')->to($destino)->send(new CorreoAviso($titulo, $mensaje, $this->correo->enlaceIngreso()));
                 $this->correo->registrarError(null);
             } catch (\Throwable) {
                 $this->correo->registrarError($excepcion->getMessage());

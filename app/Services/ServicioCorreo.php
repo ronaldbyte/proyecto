@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\ConfiguracionCorreo;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Mail;
 
 class ServicioCorreo
 {
@@ -20,10 +21,12 @@ class ServicioCorreo
         }
 
         $puertoDestino = $puerto ?? ($configuracion->puerto ?: 587);
+        $scheme = ($puertoDestino === 465) ? 'smtps' : 'smtp';
         $encriptacion = ($puertoDestino === 465) ? 'ssl' : 'tls';
 
         Config::set('mail.default', 'smtp');
         Config::set('mail.mailers.smtp.transport', 'smtp');
+        Config::set('mail.mailers.smtp.scheme', $scheme);
         Config::set('mail.mailers.smtp.host', 'smtp.gmail.com');
         Config::set('mail.mailers.smtp.port', $puertoDestino);
         Config::set('mail.mailers.smtp.username', $configuracion->usuario);
@@ -33,6 +36,14 @@ class ServicioCorreo
         Config::set('mail.mailers.smtp.local_domain', 'localhost');
         Config::set('mail.from.address', $configuracion->usuario);
         Config::set('mail.from.name', $configuracion->nombre_remitente ?: 'Licencias UNSXX');
+
+        if (app()->bound('mail.manager')) {
+            try {
+                Mail::purge('smtp');
+            } catch (\Throwable) {
+                //
+            }
+        }
 
         app()->forgetInstance('mail.manager');
         app()->forgetInstance('mailer');

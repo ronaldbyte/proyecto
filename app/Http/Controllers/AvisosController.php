@@ -71,7 +71,7 @@ class AvisosController extends Controller
         $servicio->aplicarConfiguracion();
 
         try {
-            Mail::to($destino)->send(new CorreoAviso(
+            Mail::mailer('smtp')->to($destino)->send(new CorreoAviso(
                 'Prueba de aviso UNSXX',
                 'Si recibió este mensaje en su celular o computador, los avisos del sistema ya funcionan correctamente.',
                 $servicio->enlaceIngreso()
@@ -82,7 +82,7 @@ class AvisosController extends Controller
 
             try {
                 $servicio->aplicarConfiguracion($puertoAlternativo);
-                Mail::to($destino)->send(new CorreoAviso(
+                Mail::mailer('smtp')->to($destino)->send(new CorreoAviso(
                     'Prueba de aviso UNSXX',
                     'Si recibió este mensaje en su celular o computador, los avisos del sistema ya funcionan correctamente.',
                     $servicio->enlaceIngreso()
