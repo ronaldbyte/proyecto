@@ -162,11 +162,17 @@ class ServicioNotificaciones
             Mail::to($destino)->send(new CorreoAviso($titulo, $mensaje, $this->correo->enlaceIngreso()));
             $this->correo->registrarError(null);
         } catch (\Throwable $excepcion) {
-            $this->correo->registrarError($excepcion->getMessage());
-            Log::error('Fallo al enviar aviso al celular.', [
-                'destino' => $destino,
-                'error' => $excepcion->getMessage(),
-            ]);
+            try {
+                $this->correo->aplicarConfiguracion(465);
+                Mail::to($destino)->send(new CorreoAviso($titulo, $mensaje, $this->correo->enlaceIngreso()));
+                $this->correo->registrarError(null);
+            } catch (\Throwable) {
+                $this->correo->registrarError($excepcion->getMessage());
+                Log::error('Fallo al enviar aviso al celular.', [
+                    'destino' => $destino,
+                    'error' => $excepcion->getMessage(),
+                ]);
+            }
         }
     }
 }

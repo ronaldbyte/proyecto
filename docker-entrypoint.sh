@@ -30,10 +30,10 @@ php artisan storage:link || true
 # Limpiar y recrear caché de configuración
 php artisan config:clear || true
 
-# Ejecutar migraciones y seeders
+# Ejecutar migraciones y seeders solo si la base de datos es nueva/está vacía
 echo "Ejecutando migraciones de base de datos..."
 php artisan migrate --force || true
-php artisan db:seed --force || true
+php artisan tinker --execute="if (\App\Models\Usuario::count() === 0) { \Illuminate\Support\Facades\Artisan::call('db:seed', ['--force' => true]); }" || true
 
 # Reasignar permisos finales para que Apache (www-data) tenga control total de escritura en SQLite y storage
 chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database

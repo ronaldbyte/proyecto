@@ -35,7 +35,7 @@ class AvisosController extends Controller
         $configuracion = ConfiguracionCorreo::actual();
         $configuracion->activo = $request->boolean('activo');
         $configuracion->host = 'smtp.gmail.com';
-        $configuracion->puerto = 587;
+        $configuracion->puerto = $configuracion->puerto ?: 587;
         $configuracion->usuario = $datos['usuario'];
         $configuracion->nombre_remitente = 'Licencias UNSXX';
 
@@ -70,9 +70,23 @@ class AvisosController extends Controller
             ));
             $configuracion->update(['ultimo_error' => null]);
         } catch (\Throwable $excepcion) {
-            $configuracion->update(['ultimo_error' => $excepcion->getMessage()]);
+            $puertoAlternativo = ($configuracion->puerto == 465) ? 587 : 465;
 
-            return back()->with('error', 'No se pudo enviar la prueba: '.$excepcion->getMessage());
+            try {
+                $servicio->aplicarConfiguracion($puertoAlternativo);
+                Mail::to($destino)->send(new CorreoAviso(
+                    'Prueba de aviso',
+                    'Si recibió este mensaje en el celular, los avisos del sistema ya llegan aunque no esté dentro de la página.',
+                    $servicio->enlaceIngreso()
+                ));
+                $configuracion->update(['puerto' => $puertoAlternativo, 'ultimo_error' => null]);
+
+                return back()->with('exito', 'Se envió una prueba a '.$destino.' (reintentado con éxito por el puerto seguro '.$puertoAlternativo.').');
+            } catch (\Throwable) {
+                $configuracion->update(['ultimo_error' => $excepcion->getMessage()]);
+
+                return back()->with('error', 'No se pudo enviar la prueba: '.$excepcion->getMessage());
+            }
         }
 
         return back()->with('exito', 'Se envió una prueba a '.$destino.'.');

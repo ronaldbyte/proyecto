@@ -181,10 +181,9 @@ class Solicitud extends Model
             return $this->estaPendienteJefatura();
         }
 
-        // Director de carrera: aprueba en pendiente → va a pendiente_jefatura
-        // Solo puede cancelar mientras está pendiente (antes de que alguien la revise)
+        // Director de carrera: su solicitud inicia en pendiente_area
         if ($solicitante?->esDirectorCarrera()) {
-            return $this->estaPendiente();
+            return $this->estaPendienteArea();
         }
 
         // Docente regular: puede cancelar mientras esté pendiente de carrera/área
