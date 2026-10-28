@@ -30,29 +30,29 @@
     <div class="rejilla rejilla-3" style="gap: 12px; margin-bottom: 12px;">
         <div class="tarjeta" style="display:flex; flex-direction:column; gap:4px; padding:12px;">
             <span style="font-size:12px; color:var(--gris);">Gestión</span>
-            <input type="text" id="inp-gestion" value="{{ (int) date('Y') - 1 }}-{{ date('Y') }}" style="padding:6px; border:1px solid var(--borde); border-radius:6px; font-size:14px; text-align:center;" oninput="calcularVacaciones()">
+            <input type="text" id="inp-gestion" value="{{ (int) date('Y') - 1 }}-{{ date('Y') }}" onfocus="this.select()" style="padding:6px; border:1px solid var(--borde); border-radius:6px; font-size:14px; text-align:center;" oninput="calcularVacaciones()">
         </div>
         <div class="tarjeta" style="display:flex; flex-direction:column; gap:4px; padding:12px;">
             <span style="font-size:12px; color:var(--gris);">A partir de</span>
-            <input type="date" id="inp-fecha-inicio" value="{{ date('Y-01-01') }}" style="padding:6px; border:1px solid var(--borde); border-radius:6px; font-size:14px; text-align:center;" oninput="calcularVacaciones()">
+            <input type="date" id="inp-fecha-inicio" value="{{ (int) date('Y') + 1 }}-01-01" style="padding:6px; border:1px solid var(--borde); border-radius:6px; font-size:14px; text-align:center;" oninput="calcularVacaciones()">
         </div>
         <div class="tarjeta" style="display:flex; flex-direction:column; gap:4px; padding:12px;">
             <span style="font-size:12px; color:var(--gris);">Días Acumulados</span>
-            <input type="number" step="0.5" id="inp-acumulados" min="0" max="100" value="0" style="padding:6px; border:1px solid var(--borde); border-radius:6px; font-size:14px; text-align:center; font-weight:bold; color:var(--azul-marino);" oninput="calcularVacaciones()">
+            <input type="number" step="0.5" id="inp-acumulados" min="0" max="100" value="0" placeholder="0" onfocus="this.select()" oninput="limpiarCero(this); calcularVacaciones()" style="padding:6px; border:1px solid var(--borde); border-radius:6px; font-size:14px; text-align:center; font-weight:bold; color:var(--azul-marino);">
         </div>
     </div>
     <div class="rejilla rejilla-3" style="gap: 12px;">
         <div class="tarjeta" style="display:flex; flex-direction:column; gap:4px; padding:12px;">
             <span style="font-size:12px; color:var(--gris);">Licencias pasadas</span>
-            <input type="number" step="1" id="inp-licencias-pasadas" min="0" max="100" value="0" style="padding:6px; border:1px solid var(--borde); border-radius:6px; font-size:14px; text-align:center; font-weight:bold; color:var(--azul-marino);" oninput="calcularVacaciones()">
+            <input type="number" step="1" id="inp-licencias-pasadas" min="0" max="100" value="0" placeholder="0" onfocus="this.select()" oninput="limpiarCero(this); calcularVacaciones()" style="padding:6px; border:1px solid var(--borde); border-radius:6px; font-size:14px; text-align:center; font-weight:bold; color:var(--azul-marino);">
         </div>
         <div class="tarjeta" style="display:flex; flex-direction:column; gap:4px; padding:12px;">
             <span style="font-size:12px; color:var(--gris);">Descanso Pedagógico</span>
-            <input type="number" step="0.5" id="inp-descanso" min="0" max="60" value="5" style="padding:6px; border:1px solid var(--borde); border-radius:6px; font-size:14px; text-align:center; font-weight:bold; color:var(--azul-marino);" oninput="calcularVacaciones()">
+            <input type="number" step="0.5" id="inp-descanso" min="0" max="60" value="5" placeholder="0" onfocus="this.select()" oninput="limpiarCero(this); calcularVacaciones()" style="padding:6px; border:1px solid var(--borde); border-radius:6px; font-size:14px; text-align:center; font-weight:bold; color:var(--azul-marino);">
         </div>
         <div class="tarjeta" style="display:flex; flex-direction:column; gap:4px; padding:12px;">
             <span style="font-size:12px; color:var(--gris);">Receso Fin de Año</span>
-            <input type="number" step="0.5" id="inp-receso" min="0" max="60" value="3" style="padding:6px; border:1px solid var(--borde); border-radius:6px; font-size:14px; text-align:center; font-weight:bold; color:var(--azul-marino);" oninput="calcularVacaciones()">
+            <input type="number" step="0.5" id="inp-receso" min="0" max="60" value="3" placeholder="0" onfocus="this.select()" oninput="limpiarCero(this); calcularVacaciones()" style="padding:6px; border:1px solid var(--borde); border-radius:6px; font-size:14px; text-align:center; font-weight:bold; color:var(--azul-marino);">
         </div>
     </div>
     <div style="margin-top: 16px; text-align: right;">
@@ -245,6 +245,13 @@
 <script>
     const diasAsignadosOriginal = {{ $docente->dias_asignados }};
     const diasUtilizadosOriginal = {{ $docente->dias_utilizados }};
+    
+    function limpiarCero(input) {
+        if (!input) return;
+        if (input.value.length > 1 && input.value.startsWith('0') && !input.value.startsWith('0.')) {
+            input.value = parseFloat(input.value) || 0;
+        }
+    }
     
     function sumarDiasHabilesOCalendario(fechaStr, dias) {
         if (!fechaStr) return null;
