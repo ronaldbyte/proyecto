@@ -9,6 +9,7 @@ use App\Http\Controllers\ImpresionController;
 use App\Http\Controllers\JefaturaPersonalController;
 use App\Http\Controllers\NotificacionController;
 use App\Http\Controllers\PanelController;
+use App\Http\Controllers\RespaldoController;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\SolicitudController;
 use Illuminate\Support\Facades\Route;
@@ -78,5 +79,8 @@ Route::middleware(['auth', 'cambiar.contrasena'])->group(function () {
         Route::post('/avisos/probar', [AvisosController::class, 'probar'])->name('jefatura.avisos.probar');
         Route::get('/imprimir/docente/{docente}', [ImpresionController::class, 'docente'])->name('jefatura.imprimir.docente');
         Route::get('/imprimir/solicitudes', [ImpresionController::class, 'solicitudes'])->name('jefatura.imprimir.solicitudes');
+        Route::get('/respaldo', [RespaldoController::class, 'index'])->name('jefatura.respaldo');
+        Route::get('/respaldo/descargar', [RespaldoController::class, 'descargar'])->name('jefatura.respaldo.descargar');
+        Route::post('/respaldo/restaurar', [RespaldoController::class, 'restaurar'])->name('jefatura.respaldo.restaurar');
     });
 });

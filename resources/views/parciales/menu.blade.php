@@ -24,6 +24,7 @@
         <a href="{{ route('jefatura.roles') }}" class="{{ request()->routeIs('jefatura.roles') ? 'activo' : '' }}">Roles</a>
         <a href="{{ route('jefatura.avisos') }}" class="{{ request()->routeIs('jefatura.avisos*') ? 'activo' : '' }}">Avisos al celular</a>
         <a href="{{ route('jefatura.imprimir.solicitudes') }}" class="{{ request()->routeIs('jefatura.imprimir.*') ? 'activo' : '' }}">Imprimir solicitudes</a>
+        <a href="{{ route('jefatura.respaldo') }}" class="{{ request()->routeIs('jefatura.respaldo*') ? 'activo' : '' }}">Copia de seguridad</a>
     @endif
 
     <div class="grupo">MI CUENTA</div>
