@@ -58,7 +58,7 @@ class RespaldoController extends Controller
         $request->validate([
             'archivo_respaldo' => ['required', 'file', 'max:51200'], // máx 50MB
         ], [
-            'archivo_respaldo.required' => 'Seleccione un archivo de respaldo .sqlite para restaurar.',
+            'archivo_respaldo.required' => 'Seleccione un archivo de respaldo para restaurar.',
             'archivo_respaldo.max' => 'El archivo no debe superar los 50 MB.',
         ]);
 
