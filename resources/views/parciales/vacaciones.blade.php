@@ -12,7 +12,7 @@
     </div>
     <div class="tarjeta metrica">
         <span>Licencias</span>
-        <strong>{{ $docente->dias_utilizados }}</strong>
+        <strong id="lbl-dias-licencias">{{ $docente->dias_utilizados }}</strong>
     </div>
     <div class="tarjeta metrica">
         <span>Días disponibles</span>
@@ -24,13 +24,13 @@
     </div>
 </div>
 
-@if(Auth::user()->esJefatura())
+@if(Auth::user()->esJefatura() || Auth::user()->puedeSolicitarLicencia())
 <div class="no-imprimir" style="margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--borde);">
     <h3 style="margin-bottom: 12px; font-size: 16px;">Configuración para Boleta de Impresión</h3>
     <div class="rejilla rejilla-3" style="gap: 12px; margin-bottom: 12px;">
         <div class="tarjeta" style="display:flex; flex-direction:column; gap:4px; padding:12px;">
             <span style="font-size:12px; color:var(--gris);">Gestión</span>
-            <input type="text" id="inp-gestion" value="{{ date('Y') }}-{{ date('Y')+1 }}" style="padding:6px; border:1px solid var(--borde); border-radius:6px; font-size:14px; text-align:center;" oninput="calcularVacaciones()">
+            <input type="text" id="inp-gestion" value="{{ (int) date('Y') - 1 }}-{{ date('Y') }}" style="padding:6px; border:1px solid var(--borde); border-radius:6px; font-size:14px; text-align:center;" oninput="calcularVacaciones()">
         </div>
         <div class="tarjeta" style="display:flex; flex-direction:column; gap:4px; padding:12px;">
             <span style="font-size:12px; color:var(--gris);">A partir de</span>
@@ -41,7 +41,11 @@
             <input type="number" step="0.5" id="inp-acumulados" min="0" max="100" value="0" style="padding:6px; border:1px solid var(--borde); border-radius:6px; font-size:14px; text-align:center; font-weight:bold; color:var(--azul-marino);" oninput="calcularVacaciones()">
         </div>
     </div>
-    <div class="rejilla rejilla-2" style="gap: 12px;">
+    <div class="rejilla rejilla-3" style="gap: 12px;">
+        <div class="tarjeta" style="display:flex; flex-direction:column; gap:4px; padding:12px;">
+            <span style="font-size:12px; color:var(--gris);">Licencias pasadas</span>
+            <input type="number" step="1" id="inp-licencias-pasadas" min="0" max="100" value="0" style="padding:6px; border:1px solid var(--borde); border-radius:6px; font-size:14px; text-align:center; font-weight:bold; color:var(--azul-marino);" oninput="calcularVacaciones()">
+        </div>
         <div class="tarjeta" style="display:flex; flex-direction:column; gap:4px; padding:12px;">
             <span style="font-size:12px; color:var(--gris);">Descanso Pedagógico</span>
             <input type="number" step="0.5" id="inp-descanso" min="0" max="60" value="5" style="padding:6px; border:1px solid var(--borde); border-radius:6px; font-size:14px; text-align:center; font-weight:bold; color:var(--azul-marino);" oninput="calcularVacaciones()">
@@ -100,7 +104,7 @@
                         <td style="font-weight: bold; border-bottom: 1px dotted #888; padding: 2px 3px;">Cargo:</td>
                         <td style="border-bottom: 1px dotted #888; padding: 2px 3px;">{{ $docente->cargo ?? 'Docente' }}</td>
                         <td style="font-weight: bold; width: 16%; border-bottom: 1px dotted #888; padding: 2px 3px;">Gestión:</td>
-                        <td style="border-bottom: 1px dotted #888; padding: 2px 3px; font-weight: bold;" class="boleta-gestion">{{ date('Y') }}-{{ date('Y')+1 }}</td>
+                        <td style="border-bottom: 1px dotted #888; padding: 2px 3px; font-weight: bold;" class="boleta-gestion">{{ (int) date('Y') - 1 }}-{{ date('Y') }}</td>
                     </tr>
                     <tr>
                         <td style="font-weight: bold; border-bottom: 1px dotted #888; padding: 2px 3px;">Carrera / Área:</td>
@@ -144,6 +148,10 @@
                         <tr>
                             <td style="border: 1px solid #000; padding: 2px 4px;">Licencias a la fecha:</td>
                             <td style="border: 1px solid #000; padding: 2px 4px; text-align: right;"><span class="boleta-utilizados">{{ $docente->dias_utilizados }}</span> d</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000; padding: 2px 4px;">Licencias pasadas:</td>
+                            <td style="border: 1px solid #000; padding: 2px 4px; text-align: right;"><span class="boleta-licencias-pasadas">0</span> d</td>
                         </tr>
                         <tr>
                             <td style="border: 1px solid #000; padding: 2px 4px;">Descanso Pedag. / Receso:</td>
@@ -270,21 +278,31 @@
     }
 
     function calcularVacaciones() {
-        let gestion = document.getElementById('inp-gestion').value || '';
-        let acumulados = parseFloat(document.getElementById('inp-acumulados').value) || 0;
+        let gestion = document.getElementById('inp-gestion') ? document.getElementById('inp-gestion').value : '';
+        let acumulados = document.getElementById('inp-acumulados') ? (parseFloat(document.getElementById('inp-acumulados').value) || 0) : 0;
+        let licenciasPasadas = document.getElementById('inp-licencias-pasadas') ? (parseInt(document.getElementById('inp-licencias-pasadas').value) || 0) : 0;
+        if (licenciasPasadas < 0) licenciasPasadas = 0;
+        if (licenciasPasadas > 100) licenciasPasadas = 100;
         let utilizados = diasUtilizadosOriginal;
-        let descanso = parseFloat(document.getElementById('inp-descanso').value) || 0;
-        let receso = parseFloat(document.getElementById('inp-receso').value) || 0;
-        let fechaInicioStr = document.getElementById('inp-fecha-inicio').value;
+        let descanso = document.getElementById('inp-descanso') ? (parseFloat(document.getElementById('inp-descanso').value) || 0) : 0;
+        let receso = document.getElementById('inp-receso') ? (parseFloat(document.getElementById('inp-receso').value) || 0) : 0;
+        let fechaInicioStr = document.getElementById('inp-fecha-inicio') ? document.getElementById('inp-fecha-inicio').value : '';
         
         // Actualizar UI general de datos impresos
         actualizarClases('boleta-gestion', gestion);
         actualizarClases('boleta-acumulados', acumulados);
         actualizarClases('boleta-utilizados', utilizados);
+        actualizarClases('boleta-licencias-pasadas', licenciasPasadas);
         actualizarClases('boleta-descanso', descanso);
         actualizarClases('boleta-receso', receso);
         
-        let balance = (diasAsignadosOriginal + acumulados) - utilizados - descanso - receso;
+        let totalLicencias = utilizados + licenciasPasadas;
+        let balance = (diasAsignadosOriginal + acumulados) - totalLicencias - descanso - receso;
+        
+        let elemLicencias = document.getElementById('lbl-dias-licencias');
+        if (elemLicencias) {
+            elemLicencias.textContent = totalLicencias;
+        }
         let totalAusenta = 0;
         
         if (balance > 0) {
