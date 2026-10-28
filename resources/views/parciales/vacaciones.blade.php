@@ -55,8 +55,15 @@
             <input type="number" step="0.5" id="inp-receso" min="0" max="60" value="3" placeholder="0" onfocus="this.select()" oninput="limpiarCero(this); calcularVacaciones()" style="padding:6px; border:1px solid var(--borde); border-radius:6px; font-size:14px; text-align:center; font-weight:bold; color:var(--azul-marino);">
         </div>
     </div>
-    <div style="margin-top: 16px; text-align: right;">
-        <button class="boton boton-principal" type="button" onclick="imprimirBoleta()">Imprimir Boleta de Vacaciones</button>
+    <div style="margin-top: 16px; display:flex; justify-content:flex-end; gap:10px; flex-wrap:wrap;">
+        <button class="boton boton-azul" type="button" id="btn-descargar-img" onclick="descargarImagenBoleta()" style="display:inline-flex; align-items:center; gap:6px;">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            Descargar en imagen
+        </button>
+        <button class="boton boton-principal" type="button" onclick="imprimirBoleta()" style="display:inline-flex; align-items:center; gap:6px;">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4H7v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+            Imprimir Boleta de Vacaciones
+        </button>
     </div>
 </div>
 
@@ -392,7 +399,67 @@
     window.addEventListener('afterprint', function () {
         document.title = tituloPrevioImpresion;
     });
+
+    function descargarImagenBoleta() {
+        if (typeof html2canvas === 'undefined') {
+            alert('Cargando componente de imagen, intente de nuevo en un segundo.');
+            return;
+        }
+
+        var btn = document.getElementById('btn-descargar-img');
+        var textoOriginal = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = 'Generando imagen...';
+
+        actualizarFechaImpresion();
+
+        var boletaOriginal = document.querySelector('.copia-boleta');
+        if (!boletaOriginal) {
+            btn.disabled = false;
+            btn.innerHTML = textoOriginal;
+            return;
+        }
+
+        var contenedorClon = document.createElement('div');
+        contenedorClon.style.position = 'fixed';
+        contenedorClon.style.left = '-9999px';
+        contenedorClon.style.top = '0';
+        contenedorClon.style.width = '750px';
+        contenedorClon.style.backgroundColor = '#ffffff';
+        contenedorClon.style.padding = '18px 16px';
+        contenedorClon.style.zIndex = '-1000';
+
+        var clon = boletaOriginal.cloneNode(true);
+        clon.style.height = 'auto';
+        clon.style.display = 'block';
+        clon.style.borderBottom = 'none';
+        clon.style.padding = '0';
+        contenedorClon.appendChild(clon);
+        document.body.appendChild(contenedorClon);
+
+        html2canvas(contenedorClon, {
+            scale: 2,
+            useCORS: true,
+            backgroundColor: '#ffffff'
+        }).then(function (canvas) {
+            var enlace = document.createElement('a');
+            var nombreDocente = '{{ Str::slug($docente->nombre_completo ?? "docente") }}';
+            enlace.download = 'boleta_vacaciones_' + nombreDocente + '.png';
+            enlace.href = canvas.toDataURL('image/png');
+            enlace.click();
+        }).catch(function (err) {
+            console.error(err);
+            alert('No se pudo generar la imagen.');
+        }).finally(function () {
+            if (document.body.contains(contenedorClon)) {
+                document.body.removeChild(contenedorClon);
+            }
+            btn.disabled = false;
+            btn.innerHTML = textoOriginal;
+        });
+    }
 </script>
+<script src="{{ asset('js/html2canvas.min.js') }}"></script>
 @endif
     @endif
 @endif
