@@ -5,9 +5,19 @@ set -e
 PORT=${PORT:-80}
 sed -i "s/80/$PORT/g" /etc/apache2/sites-available/000-default.conf /etc/apache2/ports.conf
 
-# Si se usa SQLite y DB_DATABASE quedó como "test" en las variables de Render, corregirlo
-if [ "$DB_CONNECTION" = "sqlite" ] && [ "$DB_DATABASE" = "test" ]; then
+# Determinar ruta de base de datos SQLite (Disco persistente /var/data si existe, o local)
+if [ -d "/var/data" ]; then
+    echo "Disco persistente detectado en /var/data"
+    export DB_DATABASE=/var/data/database.sqlite
+    touch /var/data/database.sqlite
+    chown -R www-data:www-data /var/data
+    chmod -R 777 /var/data
+else
     export DB_DATABASE=/var/www/html/database/database.sqlite
+    mkdir -p /var/www/html/database
+    touch /var/www/html/database/database.sqlite
+    chown -R www-data:www-data /var/www/html/database
+    chmod -R 777 /var/www/html/database
 fi
 
 # Asegurar directorios de storage y permisos
@@ -17,12 +27,8 @@ mkdir -p /var/www/html/storage/framework/views
 mkdir -p /var/www/html/storage/framework/cache
 touch /var/www/html/storage/logs/laravel.log
 
-# Asegurar carpeta database y archivo sqlite con permisos completos
-mkdir -p /var/www/html/database
-touch /var/www/html/database/database.sqlite
-
-chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database
-chmod -R 777 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database
+chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+chmod -R 777 /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Crear enlace simbólico de storage si no existe
 php artisan storage:link || true
@@ -38,6 +44,10 @@ php artisan tinker --execute="if (\App\Models\Usuario::count() === 0) { \Illumin
 # Reasignar permisos finales para que Apache (www-data) tenga control total de escritura en SQLite y storage
 chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database
 chmod -R 777 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database
+if [ -d "/var/data" ]; then
+    chown -R www-data:www-data /var/data
+    chmod -R 777 /var/data
+fi
 
 # Iniciar Apache en primer plano
 echo "Iniciando servidor web Apache en puerto $PORT..."

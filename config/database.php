@@ -35,7 +35,9 @@ return [
         'sqlite' => [
             'driver' => 'sqlite',
             'url' => env('DB_URL'),
-            'database' => database_path('database.sqlite'),
+            'database' => (is_dir('/var/data') || str_starts_with((string) env('DB_DATABASE'), '/var/data'))
+                ? '/var/data/database.sqlite'
+                : database_path('database.sqlite'),
             'prefix' => '',
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
             'busy_timeout' => null,
