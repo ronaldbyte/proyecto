@@ -5,6 +5,23 @@ set -e
 PORT=${PORT:-80}
 sed -i "s/80/$PORT/g" /etc/apache2/sites-available/000-default.conf /etc/apache2/ports.conf
 
+# Configurar archivo de entorno .env y APP_KEY si no existen
+if [ ! -f /var/www/html/.env ]; then
+    if [ -f /var/www/html/.env.example ]; then
+        cp /var/www/html/.env.example /var/www/html/.env
+    else
+        touch /var/www/html/.env
+    fi
+fi
+
+if [ -z "$APP_KEY" ] && ! grep -q "^APP_KEY=base64:" /var/www/html/.env 2>/dev/null; then
+    php artisan key:generate --force || true
+fi
+
+if ! grep -q "^DB_CONNECTION=sqlite" /var/www/html/.env 2>/dev/null; then
+    sed -i "s/^DB_CONNECTION=.*/DB_CONNECTION=sqlite/g" /var/www/html/.env 2>/dev/null || echo "DB_CONNECTION=sqlite" >> /var/www/html/.env
+fi
+
 # Determinar ruta de base de datos SQLite (Disco persistente /var/data si existe, o local)
 if [ -d "/var/data" ]; then
     echo "Disco persistente detectado en /var/data"
