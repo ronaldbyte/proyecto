@@ -68,9 +68,14 @@
                         @endif
                     </td>
                     <td>{{ $docente->usuario->activo ? 'Activo' : 'Inactivo' }}</td>
-                    <td class="acciones">
+                    <td class="acciones" style="white-space: nowrap;">
                         <a class="boton boton-suave" href="{{ route('jefatura.docentes.ver', $docente) }}">Ver</a>
                         <a class="boton boton-suave" href="{{ route('jefatura.docentes.editar', $docente) }}">Editar</a>
+                        <form method="POST" action="{{ route('jefatura.docentes.eliminar', $docente) }}" style="display:inline; margin:0;" onsubmit="return confirm('¿Está seguro de eliminar a {{ addslashes($docente->nombre_completo) }} ({{ $docente->usuario->codigo }}) definitivamente de la base de datos?\n\nEsta acción borrará todos sus datos y solicitudes asociadas.')">
+                            @csrf
+                            @method('DELETE')
+                            <button class="boton boton-peligro" type="submit" style="padding: 4px 8px; font-size: 12px; font-weight: 600;">Eliminar</button>
+                        </form>
                     </td>
                 </tr>
             @endforeach

@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\GuardarDocenteRequest;
+use App\Models\Aprobacion;
 use App\Models\Area;
 use App\Models\Carrera;
 use App\Models\Docente;
+use App\Models\Notificacion;
 use App\Models\Rol;
 use App\Models\Usuario;
 use App\Services\ServicioAuditoria;
@@ -201,6 +203,44 @@ class DocenteGestionController extends Controller
         $solicitudes = $docente->solicitudes()->with('aprobaciones.usuario')->latest()->get();
 
         return view('jefatura.docentes.ver', compact('docente', 'solicitudes'));
+    }
+
+    public function eliminar(Docente $docente)
+    {
+        $this->asegurarNoEsJefatura($docente);
+        $nombre = $docente->nombre_completo;
+        $codigo = $docente->usuario?->codigo;
+
+        DB::transaction(function () use ($docente) {
+            $usuario = $docente->usuario;
+            $solicitudesIds = $docente->solicitudes()->pluck('id');
+
+            // 1. Limpiar aprobaciones y notificaciones de las solicitudes de este docente
+            Aprobacion::whereIn('solicitud_id', $solicitudesIds)->delete();
+            Notificacion::whereIn('solicitud_id', $solicitudesIds)->delete();
+
+            // 2. Si este usuario aprobó solicitudes de otros docentes (ej. director)
+            if ($usuario) {
+                Aprobacion::where('usuario_id', $usuario->id)->delete();
+                Notificacion::where('usuario_id', $usuario->id)->delete();
+            }
+
+            // 3. Eliminar solicitudes de este docente
+            $docente->solicitudes()->delete();
+
+            // 4. Auditoría
+            $this->auditoria->registrar('eliminar_docente', 'docente', $docente->id, $docente->toArray(), null);
+
+            // 5. Eliminar perfil docente y cuenta de usuario
+            $docente->delete();
+
+            if ($usuario) {
+                $usuario->delete();
+            }
+        });
+
+        return redirect()->route('jefatura.docentes.listar')
+            ->with('exito', "El docente {$nombre} ({$codigo}) fue eliminado permanentemente de la base de datos.");
     }
 
     private function asegurarNoEsJefatura(Docente $docente): void

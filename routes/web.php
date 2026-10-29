@@ -65,6 +65,7 @@ Route::middleware(['auth', 'cambiar.contrasena'])->group(function () {
         Route::get('/docentes/{docente}/editar', [DocenteGestionController::class, 'editar'])->name('jefatura.docentes.editar');
         Route::put('/docentes/{docente}', [DocenteGestionController::class, 'actualizar'])->name('jefatura.docentes.actualizar');
         Route::post('/docentes/{docente}/estado', [DocenteGestionController::class, 'desactivar'])->name('jefatura.docentes.estado');
+        Route::delete('/docentes/{docente}', [DocenteGestionController::class, 'eliminar'])->name('jefatura.docentes.eliminar');
 
         Route::get('/solicitudes', [AprobacionController::class, 'listarJefatura'])->name('jefatura.solicitudes.listar');
         Route::get('/solicitudes/pendientes', [AprobacionController::class, 'pendientesJefatura'])->name('jefatura.solicitudes.pendientes');

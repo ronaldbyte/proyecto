@@ -143,7 +143,8 @@ img { max-width: 100%; }
 .boton-azul:hover { background: var(--azul-marino); }
 .boton-dorado { background: var(--dorado); color: #1b2433; }
 .boton-suave { background: #e9eef8; color: var(--azul-marino); }
-.boton-peligro { background: #fde8ec; color: var(--rojo-unsxx); }
+.boton-peligro { background: #fde8ec; color: var(--rojo-unsxx); transition: all 0.2s ease; }
+.boton-peligro:hover { background: var(--rojo-unsxx); color: #ffffff; }
 .boton-ok { background: #e5f6ec; color: var(--ok); }
 .errores, .alerta, .exito {
     border-radius: 10px;
