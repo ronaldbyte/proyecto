@@ -58,7 +58,7 @@
     <div style="margin-top: 16px; display:flex; justify-content:flex-end; gap:10px; flex-wrap:wrap;">
         <button class="boton boton-azul" type="button" id="btn-descargar-img" onclick="descargarImagenBoleta()" style="display:inline-flex; align-items:center; gap:6px;">
             <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-            Descargar en imagen
+            Descargar en imagen (3 copias)
         </button>
         <button class="boton boton-principal" type="button" onclick="imprimirBoleta()" style="display:inline-flex; align-items:center; gap:6px;">
             <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4H7v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
@@ -125,10 +125,10 @@
                     </tr>
                 </table>
 
-                <div id="parrafo-vacaciones" style="font-size: 9px; text-align: justify; line-height: 1.35; margin-top: 5px; padding: 4px 6px; border: 1px solid #cbd5e1; background-color: #f8fafc; -webkit-print-color-adjust: exact; print-color-adjust: exact;">
+                <div class="parrafo-vacaciones" id="parrafo-vacaciones" style="font-size: 9px; text-align: justify; line-height: 1.35; margin-top: 5px; padding: 4px 6px; border: 1px solid #cbd5e1; background-color: #f8fafc; -webkit-print-color-adjust: exact; print-color-adjust: exact;">
                     El/la docente hará uso de sus descansos y vacaciones <strong>a partir del <span class="boleta-fecha-inicio">{{ date('d/m/Y') }}</span></strong>, debiendo retornar a sus funciones el <strong><span class="boleta-fecha-retorno">--/--/----</span></strong> en modalidad de <strong><span class="boleta-jornada">Jornada Completa</span></strong>.
                 </div>
-                <div id="parrafo-no-vacaciones" style="font-size: 9px; text-align: center; line-height: 1.3; color: #b91c1c; font-weight: bold; display: none; margin-top: 5px; padding: 4px 6px; border: 1px solid #fca5a5; background-color: #fef2f2; -webkit-print-color-adjust: exact; print-color-adjust: exact;">
+                <div class="parrafo-no-vacaciones" id="parrafo-no-vacaciones" style="font-size: 9px; text-align: center; line-height: 1.3; color: #b91c1c; font-weight: bold; display: none; margin-top: 5px; padding: 4px 6px; border: 1px solid #fca5a5; background-color: #fef2f2; -webkit-print-color-adjust: exact; print-color-adjust: exact;">
                     EL DOCENTE NO GOZA DE VACACIONES POR TENER SALDO EN CONTRA (DEUDOR) O SALDO CERO.
                 </div>
             </div>
@@ -189,9 +189,16 @@
             </div>
         </div>
 
+        @php
+            $destinatariosCopias = [
+                'ORIGINAL: JEFATURA DE PERSONAL',
+                '1ra. COPIA: DIRECCIÓN DE ÁREA / CARRERA',
+                '2da. COPIA: INTERESADO(A)'
+            ];
+        @endphp
         <!-- Pie de Boleta con Fecha de Impresión -->
         <div style="display: flex; justify-content: space-between; align-items: center; font-size: 8px; color: #475569; margin-top: 6px; padding-top: 2px;">
-            <span>Llallagua · Potosí · Bolivia</span>
+            <span>Llallagua · Potosí · Bolivia &nbsp;·&nbsp; <strong style="color: #0f172a; letter-spacing: 0.3px;">{{ $destinatariosCopias[$i] ?? '' }}</strong></span>
             <span>Fecha de impresión: <strong class="boleta-fecha-impresion">{{ now()->format('d/m/Y H:i') }}</strong></span>
         </div>
     </div>
@@ -441,8 +448,8 @@
             
             totalAusenta = balance;
             
-            document.querySelectorAll('#parrafo-vacaciones').forEach(el => el.style.display = 'block');
-            document.querySelectorAll('#parrafo-no-vacaciones').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('.parrafo-vacaciones, #parrafo-vacaciones').forEach(el => el.style.display = 'block');
+            document.querySelectorAll('.parrafo-no-vacaciones, #parrafo-no-vacaciones').forEach(el => el.style.display = 'none');
         } else {
             let excedidos = Math.abs(balance);
             actualizarClases('boleta-etiqueta-saldo', 'DÍAS EXCEDIDOS:');
@@ -458,8 +465,8 @@
             
             totalAusenta = 0;
             
-            document.querySelectorAll('#parrafo-vacaciones').forEach(el => el.style.display = 'none');
-            document.querySelectorAll('#parrafo-no-vacaciones').forEach(el => el.style.display = 'block');
+            document.querySelectorAll('.parrafo-vacaciones, #parrafo-vacaciones').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('.parrafo-no-vacaciones, #parrafo-no-vacaciones').forEach(el => el.style.display = 'block');
         }
         
         // El total de días que el docente se ausenta es exactamente su saldo a favor
@@ -519,32 +526,46 @@
         var btn = document.getElementById('btn-descargar-img');
         var textoOriginal = btn.innerHTML;
         btn.disabled = true;
-        btn.innerHTML = 'Generando imagen...';
+        btn.innerHTML = 'Generando imagen (3 copias)...';
 
         actualizarFechaImpresion();
 
-        var boletaOriginal = document.querySelector('.copia-boleta');
-        if (!boletaOriginal) {
+        var copias = document.querySelectorAll('#boleta-impresion .copia-boleta');
+        if (!copias || copias.length === 0) {
             btn.disabled = false;
             btn.innerHTML = textoOriginal;
             return;
         }
 
         var contenedorClon = document.createElement('div');
+        contenedorClon.id = 'hoja-descarga-3copias-temp';
         contenedorClon.style.position = 'fixed';
         contenedorClon.style.left = '-9999px';
         contenedorClon.style.top = '0';
-        contenedorClon.style.width = '750px';
+        contenedorClon.style.width = '800px';
         contenedorClon.style.backgroundColor = '#ffffff';
-        contenedorClon.style.padding = '18px 16px';
+        contenedorClon.style.padding = '16px 20px';
+        contenedorClon.style.boxSizing = 'border-box';
         contenedorClon.style.zIndex = '-1000';
+        contenedorClon.style.fontFamily = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif';
+        contenedorClon.style.color = '#000000';
 
-        var clon = boletaOriginal.cloneNode(true);
-        clon.style.height = 'auto';
-        clon.style.display = 'block';
-        clon.style.borderBottom = 'none';
-        clon.style.padding = '0';
-        contenedorClon.appendChild(clon);
+        copias.forEach(function (copiaOriginal, index) {
+            var clon = copiaOriginal.cloneNode(true);
+            clon.style.height = 'auto';
+            clon.style.display = 'block';
+            clon.style.boxSizing = 'border-box';
+            clon.style.padding = '8px 4px 12px 4px';
+            if (index < copias.length - 1) {
+                clon.style.borderBottom = '1.8px dashed #475569';
+                clon.style.marginBottom = '14px';
+            } else {
+                clon.style.borderBottom = 'none';
+                clon.style.marginBottom = '0';
+            }
+            contenedorClon.appendChild(clon);
+        });
+
         document.body.appendChild(contenedorClon);
 
         html2canvas(contenedorClon, {
@@ -554,12 +575,12 @@
         }).then(function (canvas) {
             var enlace = document.createElement('a');
             var nombreDocente = '{{ Str::slug($docente->nombre_completo ?? "docente") }}';
-            enlace.download = 'boleta_vacaciones_' + nombreDocente + '.png';
+            enlace.download = 'boleta_vacaciones_3copias_' + nombreDocente + '.png';
             enlace.href = canvas.toDataURL('image/png');
             enlace.click();
         }).catch(function (err) {
             console.error(err);
-            alert('No se pudo generar la imagen.');
+            alert('No se pudo generar la imagen con las 3 copias.');
         }).finally(function () {
             if (document.body.contains(contenedorClon)) {
                 document.body.removeChild(contenedorClon);
