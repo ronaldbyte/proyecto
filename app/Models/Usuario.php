@@ -17,6 +17,7 @@ class Usuario extends Authenticatable
         'ci',
         'codigo',
         'email',
+        'foto',
         'contrasena',
         'rol_id',
         'activo',

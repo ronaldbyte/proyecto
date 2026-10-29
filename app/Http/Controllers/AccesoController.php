@@ -111,4 +111,44 @@ class AccesoController extends Controller
 
         return redirect()->route('panel')->with('exito', 'Contraseña actualizada correctamente.');
     }
+
+    public function editarPerfil()
+    {
+        $usuario = Auth::user()->load(['rol', 'docente.carrera', 'docente.area']);
+
+        return view('acceso.perfil', compact('usuario'));
+    }
+
+    public function actualizarFoto(Request $request)
+    {
+        $request->validate([
+            'foto' => ['required', 'image', 'mimes:jpeg,png,jpg,webp', 'max:3072'],
+        ], [
+            'foto.required' => 'Seleccione una imagen para su foto de perfil.',
+            'foto.image' => 'El archivo debe ser una imagen válida.',
+            'foto.mimes' => 'La imagen debe ser de formato JPG, PNG o WEBP.',
+            'foto.max' => 'La imagen no debe pesar más de 3 MB.',
+        ]);
+
+        $usuario = $request->user();
+        $archivo = $request->file('foto');
+
+        $mime = $archivo->getMimeType() ?: 'image/jpeg';
+        $contenido = file_get_contents($archivo->getRealPath());
+        $base64 = 'data:'.$mime.';base64,'.base64_encode($contenido);
+
+        $usuario->foto = $base64;
+        $usuario->save();
+
+        return back()->with('exito', 'Foto de perfil actualizada correctamente.');
+    }
+
+    public function eliminarFoto(Request $request)
+    {
+        $usuario = $request->user();
+        $usuario->foto = null;
+        $usuario->save();
+
+        return back()->with('exito', 'Se restableció la silueta de perfil por defecto.');
+    }
 }

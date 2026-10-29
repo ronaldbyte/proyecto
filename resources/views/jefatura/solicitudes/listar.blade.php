@@ -25,8 +25,6 @@
             <option value="{{ $area->id }}" @selected(request('area_id')==$area->id)>{{ $area->nombre }}</option>
         @endforeach
     </select>
-    <input type="date" name="desde" value="{{ request('desde') }}">
-    <input type="date" name="hasta" value="{{ request('hasta') }}">
     <button class="boton boton-azul" type="submit">Filtrar</button>
     <a class="boton boton-suave" href="{{ route('jefatura.imprimir.solicitudes') }}" target="_blank">Imprimir</a>
 </form>

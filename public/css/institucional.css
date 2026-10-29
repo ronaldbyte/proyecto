@@ -229,20 +229,55 @@ img { max-width: 100%; }
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: var(--rojo-unsxx);
+    background: #e11d48;
     color: #fff;
     font-size: 11px;
     font-weight: 800;
+    width: 22px;
+    height: 22px;
     min-width: 22px;
-    height: 20px;
-    padding: 0 6px;
-    border-radius: 10px;
+    border-radius: 50%;
     line-height: 1;
-    box-shadow: 0 2px 4px rgba(0,0,0,.2);
+    box-shadow: 0 0 0 2px rgba(225, 29, 72, 0.35), 0 2px 4px rgba(0,0,0,.25);
+    text-align: center;
+    margin-left: auto;
+    flex-shrink: 0;
 }
 .menu a.activo .insignia-menu {
-    background: #fff;
-    color: var(--rojo-unsxx);
+    background: #dc2626;
+    color: #ffffff;
+    box-shadow: 0 0 0 2px #ffffff, 0 2px 5px rgba(0,0,0,.35);
+}
+.avatar-enlace {
+    display: inline-block;
+    text-decoration: none;
+    border-radius: 50%;
+    transition: transform .15s ease, box-shadow .15s ease;
+    flex-shrink: 0;
+}
+.avatar-enlace:hover {
+    transform: scale(1.05);
+}
+.avatar-img {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--azul-medio);
+    display: block;
+    box-shadow: 0 2px 6px rgba(0,0,0,.15);
+}
+.avatar-silueta {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #e8eef8;
+    color: var(--azul-marino);
+    border: 2px solid #cbdcf5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,.08);
 }
 .menu .grupo { margin: 14px 12px 6px; font-size: 11px; letter-spacing: 1px; color: var(--dorado-claro); font-weight: 700; }
 .salir-caja { margin-top: auto; padding: 16px; }

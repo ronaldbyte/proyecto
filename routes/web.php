@@ -28,6 +28,9 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware(['auth', 'cambiar.contrasena'])->group(function () {
     Route::post('/salir', [AccesoController::class, 'salir'])->name('salir');
+    Route::get('/perfil', [AccesoController::class, 'editarPerfil'])->name('perfil.editar');
+    Route::post('/perfil/foto', [AccesoController::class, 'actualizarFoto'])->name('perfil.foto.actualizar');
+    Route::post('/perfil/foto/eliminar', [AccesoController::class, 'eliminarFoto'])->name('perfil.foto.eliminar');
     Route::get('/contrasena', [AccesoController::class, 'editarContrasena'])->name('contrasena.editar');
     Route::post('/contrasena', [AccesoController::class, 'actualizarContrasena'])->name('contrasena.actualizar');
 

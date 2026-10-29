@@ -70,6 +70,9 @@
     @endif
 
     <div class="grupo">MI CUENTA</div>
+    <a href="{{ route('perfil.editar') }}" class="{{ request()->routeIs('perfil.*') ? 'activo' : '' }}">
+        <span>Mi perfil y foto</span>
+    </a>
     <a href="{{ route('contrasena.editar') }}" class="{{ request()->routeIs('contrasena.editar') ? 'activo' : '' }}">
         <span>Cambiar contraseña</span>
     </a>
