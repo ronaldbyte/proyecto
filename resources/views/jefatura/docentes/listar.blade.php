@@ -74,7 +74,7 @@
                         <form method="POST" action="{{ route('jefatura.docentes.eliminar', $docente) }}" style="display:inline; margin:0;" onsubmit="return confirm('¿Está seguro de eliminar a {{ addslashes($docente->nombre_completo) }} ({{ $docente->usuario->codigo }}) definitivamente de la base de datos?\n\nEsta acción borrará todos sus datos y solicitudes asociadas.')">
                             @csrf
                             @method('DELETE')
-                            <button class="boton boton-peligro" type="submit" style="padding: 4px 8px; font-size: 12px; font-weight: 600;">Eliminar</button>
+                            <button class="boton boton-peligro" type="submit">Eliminar</button>
                         </form>
                     </td>
                 </tr>
