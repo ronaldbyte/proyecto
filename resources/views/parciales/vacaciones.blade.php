@@ -24,7 +24,7 @@
     </div>
 </div>
 
-@if(Auth::user()->esJefatura() || Auth::user()->puedeSolicitarLicencia())
+@if(Auth::user()->esJefatura())
 <div class="no-imprimir" style="margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--borde);">
     <h3 style="margin-bottom: 12px; font-size: 16px;">Configuración para Boleta de Impresión</h3>
     <div class="rejilla rejilla-3" style="gap: 12px; margin-bottom: 12px;">
@@ -260,23 +260,135 @@
         }
     }
     
-    function sumarDiasHabilesOCalendario(fechaStr, dias) {
-        if (!fechaStr) return null;
-        let [y, m, d] = fechaStr.split('-');
-        let fecha = new Date(y, m - 1, d);
-        let diasEnteros = Math.floor(dias);
-        
-        // Sumar dias calendario
-        fecha.setDate(fecha.getDate() + diasEnteros);
-        
-        // Si cae fin de semana (sábado=6, domingo=0), pasar al lunes
-        if (fecha.getDay() === 6) {
-            fecha.setDate(fecha.getDate() + 2);
-        } else if (fecha.getDay() === 0) {
-            fecha.setDate(fecha.getDate() + 1);
+    function calcularPascua(year) {
+        let a = year % 19;
+        let b = Math.floor(year / 100);
+        let c = year % 100;
+        let d = Math.floor(b / 4);
+        let e = b % 4;
+        let f = Math.floor((b + 8) / 25);
+        let g = Math.floor((b - f + 1) / 3);
+        let h = (19 * a + b - d - g + 15) % 30;
+        let i = Math.floor(c / 4);
+        let k = c % 4;
+        let l = (32 + 2 * e + 2 * i - h - k) % 7;
+        let m = Math.floor((a + 11 * h + 22 * l) / 451);
+        let mes = Math.floor((h + l - 7 * m + 114) / 31);
+        let dia = ((h + l - 7 * m + 114) % 31) + 1;
+        return new Date(year, mes - 1, dia);
+    }
+
+    function claveFecha(fecha) {
+        let y = fecha.getFullYear();
+        let m = String(fecha.getMonth() + 1).padStart(2, '0');
+        let d = String(fecha.getDate()).padStart(2, '0');
+        return `${y}-${m}-${d}`;
+    }
+
+    const cacheFeriadosBolivia = {};
+    function obtenerFeriadosBolivia(year) {
+        if (cacheFeriadosBolivia[year]) {
+            return cacheFeriadosBolivia[year];
         }
-        
-        return fecha;
+
+        let feriados = {};
+        // Feriados fijos nacionales de Bolivia + Aniversario Cívico de Potosí (10 de Noviembre)
+        let fijos = [
+            '01-01', // Año Nuevo
+            '01-22', // Día del Estado Plurinacional
+            '05-01', // Día del Trabajo
+            '06-21', // Año Nuevo Andino (Willkakuti)
+            '08-06', // Día de la Independencia de Bolivia
+            '11-02', // Todos los Santos
+            '11-10', // Aniversario Cívico de Potosí
+            '12-25'  // Navidad
+        ];
+
+        fijos.forEach(function (md) {
+            let [m, d] = md.split('-').map(Number);
+            let f = new Date(year, m - 1, d);
+            feriados[claveFecha(f)] = true;
+
+            // D.S. 2750: Si el feriado cae en domingo, se traslada al día lunes
+            if (f.getDay() === 0) {
+                let lunesTraslado = new Date(year, m - 1, d + 1);
+                feriados[claveFecha(lunesTraslado)] = true;
+            }
+        });
+
+        // Feriados móviles religiosos (según Pascua)
+        let pascua = calcularPascua(year);
+
+        // Carnaval: Lunes y Martes (-48 y -47 días)
+        let lunesCarnaval = new Date(pascua.getFullYear(), pascua.getMonth(), pascua.getDate() - 48);
+        let martesCarnaval = new Date(pascua.getFullYear(), pascua.getMonth(), pascua.getDate() - 47);
+        feriados[claveFecha(lunesCarnaval)] = true;
+        feriados[claveFecha(martesCarnaval)] = true;
+
+        // Viernes Santo (-2 días)
+        let viernesSanto = new Date(pascua.getFullYear(), pascua.getMonth(), pascua.getDate() - 2);
+        feriados[claveFecha(viernesSanto)] = true;
+
+        // Corpus Christi (+60 días)
+        let corpusChristi = new Date(pascua.getFullYear(), pascua.getMonth(), pascua.getDate() + 60);
+        feriados[claveFecha(corpusChristi)] = true;
+
+        cacheFeriadosBolivia[year] = feriados;
+        return feriados;
+    }
+
+    function esDiaHabilBolivia(fecha) {
+        let dia = fecha.getDay();
+        // 0 = Domingo, 6 = Sábado
+        if (dia === 0 || dia === 6) {
+            return false;
+        }
+        let feriados = obtenerFeriadosBolivia(fecha.getFullYear());
+        if (feriados[claveFecha(fecha)]) {
+            return false;
+        }
+        return true;
+    }
+
+    function calcularRangoVacacionesBolivia(fechaStr, dias) {
+        if (!fechaStr) return { inicio: null, retorno: null };
+        let [y, m, d] = fechaStr.split('-').map(Number);
+        let cursor = new Date(y, m - 1, d);
+
+        // Si la fecha elegida cae fin de semana o feriado, avanzar al primer día hábil
+        while (!esDiaHabilBolivia(cursor)) {
+            cursor.setDate(cursor.getDate() + 1);
+        }
+
+        let fechaInicio = new Date(cursor.getTime());
+        let diasEnteros = Math.floor(dias);
+
+        if (diasEnteros <= 0) {
+            return { inicio: fechaInicio, retorno: fechaInicio };
+        }
+
+        // Consumir únicamente los días hábiles laborales de vacación
+        let diasConsumidos = 0;
+        while (diasConsumidos < diasEnteros) {
+            if (esDiaHabilBolivia(cursor)) {
+                diasConsumidos++;
+                if (diasConsumidos === diasEnteros) {
+                    break;
+                }
+            }
+            cursor.setDate(cursor.getDate() + 1);
+        }
+
+        // La fecha de retorno laboral es el primer día hábil siguiente
+        cursor.setDate(cursor.getDate() + 1);
+        while (!esDiaHabilBolivia(cursor)) {
+            cursor.setDate(cursor.getDate() + 1);
+        }
+
+        return {
+            inicio: fechaInicio,
+            retorno: new Date(cursor.getTime())
+        };
     }
 
     function formatearFecha(fecha) {
@@ -353,13 +465,11 @@
         // El total de días que el docente se ausenta es exactamente su saldo a favor
         actualizarClases('boleta-total', totalAusenta);
         
-        // Calcular fecha
+        // Calcular fechas hábiles (excluyendo sábados, domingos y feriados oficiales de Bolivia)
         if (totalAusenta > 0) {
-            let fechaInicio = sumarDiasHabilesOCalendario(fechaInicioStr, 0);
-            actualizarClases('boleta-fecha-inicio', formatearFecha(fechaInicio));
-            
-            let fechaRetorno = sumarDiasHabilesOCalendario(fechaInicioStr, totalAusenta);
-            actualizarClases('boleta-fecha-retorno', formatearFecha(fechaRetorno));
+            let rango = calcularRangoVacacionesBolivia(fechaInicioStr, totalAusenta);
+            actualizarClases('boleta-fecha-inicio', formatearFecha(rango.inicio));
+            actualizarClases('boleta-fecha-retorno', formatearFecha(rango.retorno));
             
             let tieneMedioDia = (totalAusenta - Math.floor(totalAusenta)) > 0;
             actualizarClases('boleta-jornada', tieneMedioDia ? 'Medio Día (Tarde)' : 'Jornada Completa');

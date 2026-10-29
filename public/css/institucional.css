@@ -217,8 +217,33 @@ img { max-width: 100%; }
     width: 100%;
     cursor: pointer;
     font-family: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-decoration: none;
+    box-sizing: border-box;
+    transition: background-color .15s ease, color .15s ease;
 }
 .menu a:hover, .menu a.activo { background: rgba(201,162,39,.18); color: #fff; }
+.insignia-menu {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--rojo-unsxx);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 800;
+    min-width: 22px;
+    height: 20px;
+    padding: 0 6px;
+    border-radius: 10px;
+    line-height: 1;
+    box-shadow: 0 2px 4px rgba(0,0,0,.2);
+}
+.menu a.activo .insignia-menu {
+    background: #fff;
+    color: var(--rojo-unsxx);
+}
 .menu .grupo { margin: 14px 12px 6px; font-size: 11px; letter-spacing: 1px; color: var(--dorado-claro); font-weight: 700; }
 .salir-caja { margin-top: auto; padding: 16px; }
 .contenido { flex: 1; min-width: 0; }
