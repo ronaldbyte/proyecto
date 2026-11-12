@@ -80,6 +80,33 @@ class RespaldoController extends Controller
         }
     }
 
+    public function limpiarDatosPrueba()
+    {
+        abort_unless(Auth::user()->esJefatura(), 403);
+
+        \Illuminate\Support\Facades\DB::transaction(function () {
+            \App\Models\Aprobacion::query()->delete();
+            \App\Models\Notificacion::query()->delete();
+            \App\Models\Solicitud::query()->delete();
+
+            $docentesAEliminar = Docente::whereHas('usuario.rol', fn ($q) => $q->where('codigo', '!=', \App\Soporte\Constantes::ROL_JEFATURA))->get();
+            foreach ($docentesAEliminar as $docente) {
+                $usuario = $docente->usuario;
+                $docente->delete();
+                $usuario?->delete();
+            }
+
+            Usuario::whereHas('rol', fn ($q) => $q->where('codigo', '!=', \App\Soporte\Constantes::ROL_JEFATURA))->delete();
+
+            $jefaturaDocente = Auth::user()->docente;
+            if ($jefaturaDocente) {
+                $jefaturaDocente->update(['dias_utilizados' => 0]);
+            }
+        });
+
+        return redirect()->route('panel')->with('exito', 'Base de datos limpia e impecable. Se han eliminado todos los datos de prueba y se mantiene únicamente la cuenta de Jefatura de Personal para comenzar el registro oficial.');
+    }
+
     private function formatearTamano(int $bytes): string
     {
         if ($bytes >= 1048576) {

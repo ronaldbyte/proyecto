@@ -22,4 +22,17 @@
     </form>
 </div>
 
+<div class="tarjeta" style="margin-top:24px; border:1px solid #fecaca; background:#fff7f7;">
+    <h3 style="margin-top:0;margin-bottom:10px; color:var(--rojo-unsxx);">Limpiar datos de prueba (Puesta en marcha)</h3>
+    <p style="font-size:13.5px; color:#475569; margin:0 0 16px; line-height:1.45;">
+        Esta acción elimina permanentemente todos los docentes, directores y solicitudes de prueba cargados en el sistema, dejando <strong>únicamente la cuenta de Jefatura de Personal</strong> (y el catálogo oficial de carreras/áreas) para que pueda iniciar el registro oficial desde cero.
+    </p>
+    <form method="POST" action="{{ route('jefatura.respaldo.limpiar') }}" onsubmit="return confirm('¿CONFIRMA LIMPIAR LA BASE DE DATOS?\n\nSe eliminarán todos los docentes, directores y solicitudes de prueba.\nÚnicamente se mantendrá la cuenta de Jefatura de Personal para comenzar el registro oficial.');">
+        @csrf
+        <button type="submit" class="boton boton-peligro" style="font-weight:700;">
+            🧹 Limpiar sistema y dejar solo Jefatura
+        </button>
+    </form>
+</div>
+
 @endsection

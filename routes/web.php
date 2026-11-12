@@ -86,5 +86,6 @@ Route::middleware(['auth', 'cambiar.contrasena'])->group(function () {
         Route::get('/respaldo', [RespaldoController::class, 'index'])->name('jefatura.respaldo');
         Route::get('/respaldo/descargar', [RespaldoController::class, 'descargar'])->name('jefatura.respaldo.descargar');
         Route::post('/respaldo/restaurar', [RespaldoController::class, 'restaurar'])->name('jefatura.respaldo.restaurar');
+        Route::post('/respaldo/limpiar', [RespaldoController::class, 'limpiarDatosPrueba'])->name('jefatura.respaldo.limpiar');
     });
 });

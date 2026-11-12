@@ -7,7 +7,7 @@
     <style>
         body { background: #fff; }
         .membrete { display:flex; gap:16px; align-items:center; border-bottom:4px solid #c41e3a; padding-bottom:12px; margin-bottom:18px; }
-        .membrete img { width:78px; height:78px; border-radius:50%; background:#000; }
+        .membrete img { width:68px; height:68px; object-fit:contain; }
         h1 { margin:0; font-size:20px; color:#0b2a5b; }
         @media print { .no-imprimir { display:none !important; } }
     </style>

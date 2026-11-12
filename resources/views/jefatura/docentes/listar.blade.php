@@ -51,7 +51,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($docentes as $docente)
+            @forelse($docentes as $docente)
                 <tr>
                     <td>{{ $docente->usuario->codigo }}</td>
                     <td>{{ $docente->nombre_completo }}</td>
@@ -78,7 +78,13 @@
                         </form>
                     </td>
                 </tr>
-            @endforeach
+            @empty
+                <tr>
+                    <td colspan="10" class="vacio" style="padding: 30px; text-align: center; color: var(--gris);">
+                        No hay docentes registrados aún. Utilice el botón superior <strong>"Registrar docente"</strong> para dar de alta al personal.
+                    </td>
+                </tr>
+            @endforelse
         </tbody>
     </table>
     <div class="paginacion">{{ $docentes->links() }}</div>
