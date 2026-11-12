@@ -1,6 +1,8 @@
 @extends('layouts.principal')
-@section('titulo', 'Avisos al celular')
+@section('titulo', 'Configuración')
+@section('subtitulo', 'Avisos al celular')
 @section('contenido')
+@include('parciales.pestanas-configuracion')
 <div class="tarjeta">
     @if($configuracion->ultimo_error)
         <div class="errores">Último error de envío: {{ $configuracion->ultimo_error }}</div>

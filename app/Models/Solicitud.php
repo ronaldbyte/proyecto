@@ -137,7 +137,9 @@ class Solicitud extends Model
             : number_format((float) $this->dias_solicitados, 1, '.', '');
 
         if ($this->esMedioDia()) {
-            return $dias.' ('.$this->etiquetaJornada().')';
+            return $this->jornada === Constantes::JORNADA_MANANA
+                ? 'Medio día (mañana)'
+                : 'Medio día (tarde)';
         }
 
         return $dias;

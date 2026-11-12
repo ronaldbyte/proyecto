@@ -17,7 +17,7 @@
 </div>
 
 <div class="acciones" style="margin:16px 0;">
-    <a class="boton boton-principal" href="{{ route('jefatura.solicitudes.pendientes') }}">Decisión final</a>
+    <a class="boton boton-principal" href="{{ route('jefatura.solicitudes.pendientes') }}">Solicitudes pendientes</a>
     <a class="boton boton-azul" href="{{ route('jefatura.docentes.crear') }}">Registrar docente</a>
     <a class="boton boton-suave" href="{{ route('jefatura.docentes.listar') }}">Buscar docentes</a>
 </div>

@@ -1,6 +1,8 @@
 @extends('layouts.principal')
-@section('titulo', 'Todas las solicitudes')
+@section('titulo', 'Solicitudes')
+@section('subtitulo', 'Historial general de solicitudes')
 @section('contenido')
+@include('parciales.pestanas-solicitudes-jefatura')
 <form class="filtros" method="GET">
     <input name="buscar" value="{{ request('buscar') }}" placeholder="Docente o código">
     <select name="estado">

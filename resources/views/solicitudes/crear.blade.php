@@ -15,7 +15,7 @@
         <div class="alerta">Tiene {{ $docente->dias_excedidos }} día(s) excedido(s).</div>
     @endif
 
-    <form method="POST" action="{{ route('solicitudes.guardar') }}" data-confirmar="¿Confirma el envío de esta solicitud?">
+    <form method="POST" action="{{ route('solicitudes.guardar') }}">
         @csrf
         <div class="campo">
             <label>Jornada</label>

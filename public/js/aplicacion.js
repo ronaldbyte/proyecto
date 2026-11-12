@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (fin) {
                 fin.value = inicio.value;
             }
-            dias.value = '0.5 día (medio día)';
+            dias.value = 'Medio día';
             if (aviso) {
                 aviso.hidden = 0.5 <= disponibles;
             }
@@ -138,6 +138,7 @@ document.addEventListener('DOMContentLoaded', function () {
         var inicio = new Date(fecha + 'T00:00:00');
         var hoy = new Date();
         hoy.setHours(0, 0, 0, 0);
+        hoy.setDate(hoy.getDate() - 1);
         var anios = hoy.getFullYear() - inicio.getFullYear();
         var mes = hoy.getMonth() - inicio.getMonth();
         if (mes < 0 || (mes === 0 && hoy.getDate() < inicio.getDate())) {
@@ -150,13 +151,16 @@ document.addEventListener('DOMContentLoaded', function () {
         if (tipo === 'consultor') {
             return 0;
         }
-        if (anios > 10) {
+        if (anios >= 10) {
             return 30;
         }
         if (anios >= 5) {
             return 20;
         }
-        return 15;
+        if (anios >= 1) {
+            return 15;
+        }
+        return 0;
     }
 
     function dos(n) {

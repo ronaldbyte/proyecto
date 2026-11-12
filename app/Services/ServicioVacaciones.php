@@ -25,13 +25,19 @@ class ServicioVacaciones
         return (float) ($inicio->diffInDays($fin) + 1);
     }
 
+    /**
+     * Años de servicio cumplidos y un día: el tramo nuevo empieza al día siguiente del aniversario.
+     */
     public function calcularAntiguedad(?string $fechaIngreso): int
     {
         if (! $fechaIngreso) {
             return 0;
         }
 
-        return Carbon::parse($fechaIngreso)->diffInYears(now());
+        $ingreso = Carbon::parse($fechaIngreso)->startOfDay();
+        $referencia = now()->startOfDay()->subDay();
+
+        return (int) max(0, floor($ingreso->diffInYears($referencia)));
     }
 
     public function diasAsignadosSegunAntiguedad(string $tipoContrato, int $anios): int
@@ -40,7 +46,7 @@ class ServicioVacaciones
             return 0;
         }
 
-        if ($anios > 10) {
+        if ($anios >= 10) {
             return 30;
         }
 
@@ -48,7 +54,11 @@ class ServicioVacaciones
             return 20;
         }
 
-        return 15;
+        if ($anios >= 1) {
+            return 15;
+        }
+
+        return 0;
     }
 
     public function periodoContrato(?string $fechaIngreso): array

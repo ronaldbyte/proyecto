@@ -38,7 +38,7 @@ class ServicioNotificaciones
         $titulo = 'Nueva solicitud de licencia';
         $mensaje = $solicitud->docente->nombre_completo.' presentó una solicitud del '
             .$solicitud->fecha_inicio->format('d/m/Y').' al '.$solicitud->fecha_fin->format('d/m/Y')
-            .' ('.$solicitud->textoDias().' día(s)).';
+            .' ('.($solicitud->esMedioDia() ? $solicitud->textoDias() : $solicitud->textoDias().' día(s)').').';
 
         if ($solicitud->estado === Constantes::ESTADO_PENDIENTE) {
             $destinatarios = $this->directoresCarrera($solicitud)

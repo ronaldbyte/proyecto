@@ -1,6 +1,8 @@
 @extends('layouts.principal')
-@section('titulo', 'Cambiar contraseña')
+@section('titulo', 'Configuración')
+@section('subtitulo', 'Seguridad de su cuenta')
 @section('contenido')
+@include('parciales.pestanas-configuracion')
 <div class="tarjeta" style="max-width:480px;">
     <form method="POST" action="{{ route('contrasena.actualizar') }}">
         @csrf

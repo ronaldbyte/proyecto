@@ -1,8 +1,9 @@
 @extends('layouts.principal')
-@section('titulo', 'Mi Perfil')
+@section('titulo', 'Configuración')
 @section('subtitulo', 'Información de su cuenta y personalización de foto de perfil')
 @section('contenido')
-<div class="tarjeta" style="max-width: 640px; margin: 0 auto;">
+@include('parciales.pestanas-configuracion')
+<div class="tarjeta" style="max-width: 640px;">
     <div style="display: flex; align-items: center; gap: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--borde); margin-bottom: 20px;">
         <div style="position: relative; flex-shrink: 0;">
             @if($usuario->foto)

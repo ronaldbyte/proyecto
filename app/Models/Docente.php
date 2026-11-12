@@ -42,11 +42,11 @@ class Docente extends Model
     {
         static::saving(function (Docente $docente) {
             $docente->nombre_completo = trim($docente->nombres.' '.$docente->apellidos);
+            $vacaciones = app(ServicioVacaciones::class);
             if ($docente->fecha_ingreso) {
-                $docente->antiguedad_anios = $docente->fecha_ingreso->diffInYears(now());
+                $docente->antiguedad_anios = $vacaciones->calcularAntiguedad($docente->fecha_ingreso->toDateString());
             }
 
-            $vacaciones = app(ServicioVacaciones::class);
             $docente->dias_asignados = $vacaciones->diasAsignadosSegunAntiguedad(
                 $docente->tipo_contrato ?: Constantes::CONTRATO_TITULAR,
                 (int) $docente->antiguedad_anios

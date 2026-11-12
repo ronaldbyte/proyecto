@@ -37,16 +37,10 @@
 
     @if(auth()->user()->esJefatura())
         <div class="grupo">JEFATURA DE PERSONAL</div>
-        <a href="{{ route('jefatura.solicitudes.pendientes') }}" class="{{ request()->routeIs('jefatura.solicitudes.pendientes') ? 'activo' : '' }}">
-            <span>Decisión final</span>
+        <a href="{{ route('jefatura.solicitudes.pendientes') }}" class="{{ request()->routeIs('jefatura.solicitudes.*') ? 'activo' : '' }}">
+            <span>Solicitudes</span>
             @if(($pendientesJefaturaCount ?? 0) > 0)
                 <span class="insignia-menu">{{ $pendientesJefaturaCount }}</span>
-            @endif
-        </a>
-        <a href="{{ route('jefatura.solicitudes.listar') }}" class="{{ request()->routeIs('jefatura.solicitudes.listar') ? 'activo' : '' }}">
-            <span>Todas las solicitudes</span>
-            @if(($todasPendientesJefaturaCount ?? 0) > 0)
-                <span class="insignia-menu">{{ $todasPendientesJefaturaCount }}</span>
             @endif
         </a>
         <a href="{{ route('jefatura.docentes.listar') }}" class="{{ request()->routeIs('jefatura.docentes.*') ? 'activo' : '' }}">
@@ -58,22 +52,14 @@
         <a href="{{ route('jefatura.roles') }}" class="{{ request()->routeIs('jefatura.roles') ? 'activo' : '' }}">
             <span>Roles</span>
         </a>
-        <a href="{{ route('jefatura.avisos') }}" class="{{ request()->routeIs('jefatura.avisos*') ? 'activo' : '' }}">
-            <span>Avisos al celular</span>
-        </a>
-        <a href="{{ route('jefatura.imprimir.solicitudes') }}" target="_blank" class="{{ request()->routeIs('jefatura.imprimir.*') ? 'activo' : '' }}">
-            <span>Imprimir solicitudes</span>
-        </a>
-        <a href="{{ route('jefatura.respaldo') }}" class="{{ request()->routeIs('jefatura.respaldo*') ? 'activo' : '' }}">
-            <span>Copia de seguridad</span>
-        </a>
     @endif
 
     <div class="grupo">MI CUENTA</div>
-    <a href="{{ route('perfil.editar') }}" class="{{ request()->routeIs('perfil.*') ? 'activo' : '' }}">
-        <span>Mi perfil y foto</span>
+    <a href="{{ route('perfil.editar') }}" class="{{ request()->routeIs('perfil.*', 'contrasena.*', 'jefatura.avisos*') ? 'activo' : '' }}">
+        <span>Configuración</span>
     </a>
-    <a href="{{ route('contrasena.editar') }}" class="{{ request()->routeIs('contrasena.editar') ? 'activo' : '' }}">
-        <span>Cambiar contraseña</span>
-    </a>
-</nav>
+    @if(auth()->user()->esJefatura())
+        <a href="{{ route('jefatura.respaldo') }}" class="{{ request()->routeIs('jefatura.respaldo*') ? 'activo' : '' }}">
+            <span>Copia de seguridad</span>
+        </a>
+    @endif</nav>
