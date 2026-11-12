@@ -16,7 +16,7 @@ class ImpresionController extends Controller
         abort_unless($docente !== null, 404);
 
         $docente->load(['usuario.rol', 'carrera', 'area']);
-        $solicitudes = $docente->solicitudes()->with('aprobaciones.usuario')->latest()->get();
+        $solicitudes = $docente->solicitudes()->with(['aprobaciones.usuario.docente'])->latest()->get();
 
         return view('impresion.docente', compact('docente', 'solicitudes'));
     }
@@ -26,7 +26,7 @@ class ImpresionController extends Controller
         abort_unless(Auth::user()->esJefatura(), 403);
 
         $docente->load(['usuario.rol', 'carrera', 'area']);
-        $solicitudes = $docente->solicitudes()->with('aprobaciones.usuario')->latest()->get();
+        $solicitudes = $docente->solicitudes()->with(['aprobaciones.usuario.docente'])->latest()->get();
 
         return view('impresion.docente', compact('docente', 'solicitudes'));
     }

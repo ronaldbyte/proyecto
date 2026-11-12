@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Aprobacion;
 use App\Models\Solicitud;
 use App\Models\Usuario;
 use App\Soporte\Constantes;
@@ -122,11 +123,43 @@ class MenuYPantallasProfesionalesTest extends TestCase
 
     public function test_el_docente_puede_imprimir_su_historial_oficial_de_licencias(): void
     {
-        $docente = Usuario::where('codigo', 'DOC001')->firstOrFail();
+        $docenteUsuario = Usuario::where('codigo', 'DOC001')->firstOrFail();
+        $docente = $docenteUsuario->docente;
 
-        $this->actingAs($docente)->get('/historial/imprimir')
+        // Crear una solicitud aprobada con aprobación
+        $solicitud = Solicitud::create([
+            'docente_id' => $docente->id,
+            'fecha_inicio' => now()->subDays(10)->toDateString(),
+            'fecha_fin' => now()->subDays(8)->toDateString(),
+            'jornada' => Constantes::JORNADA_COMPLETA,
+            'dias_solicitados' => 3,
+            'motivo' => 'Licencia académica aprobada',
+            'estado' => Constantes::ESTADO_APROBADA,
+        ]);
+
+        $jefatura = Usuario::where('codigo', 'JEF001')->firstOrFail();
+        Aprobacion::create([
+            'solicitud_id' => $solicitud->id,
+            'usuario_id' => $jefatura->id,
+            'rol_codigo' => Constantes::ROL_JEFATURA,
+            'etapa' => 'jefatura',
+            'decision' => 'aprobada',
+            'observacion' => 'Aprobado conforme a norma',
+            'estado_anterior' => Constantes::ESTADO_PENDIENTE_JEFATURA,
+            'estado_nuevo' => Constantes::ESTADO_APROBADA,
+        ]);
+
+        $this->actingAs($docenteUsuario)->get('/historial/imprimir')
             ->assertOk()
-            ->assertSee('HISTORIAL DE LICENCIAS Y PERMISOS')
-            ->assertSee('Pedro Condori López');
+            ->assertSee('HISTORIAL DE LICENCIAS')
+            ->assertSee('Pedro Condori López')
+            ->assertSee('Licencia académica aprobada')
+            ->assertSee('Jefatura de Personal')
+            ->assertSee('Decidido por')
+            ->assertSee('Fecha y Hora')
+            ->assertDontSee('Firma del Docente')
+            ->assertDontSee('Firma y Sello')
+            ->assertDontSee('C.I. / Código')
+            ->assertDontSee('Tipo Contrato');
     }
 }

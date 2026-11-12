@@ -43,7 +43,7 @@
     </form>
 
     @if($usuario->foto)
-        <form method="POST" action="{{ route('perfil.foto.eliminar') }}" data-confirmar="¿Está seguro de quitar su foto y volver a la silueta por defecto?" style="margin-top: 10px; padding-top: 10px; border-top: 1px dotted var(--borde);">
+        <form method="POST" action="{{ route('perfil.foto.eliminar') }}" style="margin-top: 10px; padding-top: 10px; border-top: 1px dotted var(--borde);">
             @csrf
             <button class="boton boton-suave" type="submit" style="color: var(--rojo-unsxx);">
                 ✕ Quitar foto y usar silueta por defecto

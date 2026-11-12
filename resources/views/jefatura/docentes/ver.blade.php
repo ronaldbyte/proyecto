@@ -4,7 +4,7 @@
 <div class="acciones" style="margin-bottom:16px;">
     <a class="boton boton-azul" href="{{ route('jefatura.docentes.editar', $docente) }}">Editar</a>
     <a class="boton boton-dorado" href="{{ route('jefatura.historial.docente', $docente) }}">Historial</a>
-    <form method="POST" action="{{ route('jefatura.docentes.estado', $docente) }}" data-confirmar="¿Cambiar el estado de este docente?">
+    <form method="POST" action="{{ route('jefatura.docentes.estado', $docente) }}">
         @csrf
         <button class="boton boton-suave" type="submit">{{ $docente->usuario->activo ? 'Desactivar' : 'Activar' }}</button>
     </form>
