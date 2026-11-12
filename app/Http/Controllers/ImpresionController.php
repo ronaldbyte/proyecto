@@ -8,6 +8,19 @@ use Illuminate\Support\Facades\Auth;
 
 class ImpresionController extends Controller
 {
+    public function propio()
+    {
+        $usuario = Auth::user();
+        abort_unless($usuario->puedeSolicitarLicencia(), 403);
+        $docente = $usuario->docente;
+        abort_unless($docente !== null, 404);
+
+        $docente->load(['usuario.rol', 'carrera', 'area']);
+        $solicitudes = $docente->solicitudes()->with('aprobaciones.usuario')->latest()->get();
+
+        return view('impresion.docente', compact('docente', 'solicitudes'));
+    }
+
     public function docente(Docente $docente)
     {
         abort_unless(Auth::user()->esJefatura(), 403);

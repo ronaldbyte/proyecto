@@ -1,4 +1,4 @@
-<form method="POST" action="{{ $ruta }}" data-confirmar="¿Confirma esta decisión?" style="margin-top:24px;">
+<form method="POST" action="{{ $ruta }}" style="margin-top:24px;">
     @csrf
     <div class="acciones">
         <button class="boton boton-ok" type="submit" name="decision" value="aprobada">Aprobar</button>

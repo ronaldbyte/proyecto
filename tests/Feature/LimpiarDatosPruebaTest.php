@@ -50,3 +50,4 @@ class LimpiarDatosPruebaTest extends TestCase
         $respuesta->assertForbidden();
     }
 }
+

@@ -42,7 +42,7 @@
     @endforelse
 
     @if($solicitud->puedeCancelarsePor($usuario))
-        <form method="POST" action="{{ route('solicitudes.cancelar', $solicitud) }}" data-confirmar="¿Cancelar esta solicitud?" style="margin-top:16px;">
+        <form method="POST" action="{{ route('solicitudes.cancelar', $solicitud) }}" style="margin-top:16px;">
             @csrf
             <div class="campo">
                 <label>Motivo de cancelación</label>

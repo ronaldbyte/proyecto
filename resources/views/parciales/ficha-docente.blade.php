@@ -22,7 +22,7 @@
         $pendientes = $solicitudes->whereIn('estado', ['pendiente', 'pendiente_area', 'pendiente_jefatura']);
     @endphp
 
-    <div class="no-imprimir">
+    <div>
         <h3 style="margin-top:20px;">Solicitudes pendientes</h3>
         @include('parciales.tabla-solicitudes', ['solicitudes' => $pendientes, 'mostrarDocente' => false])
         <h3 style="margin-top:20px;">Solicitudes aprobadas</h3>

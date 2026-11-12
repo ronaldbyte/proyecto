@@ -44,6 +44,7 @@ Route::middleware(['auth', 'cambiar.contrasena'])->group(function () {
     Route::post('/solicitudes/{solicitud}/cancelar', [SolicitudController::class, 'cancelar'])->name('solicitudes.cancelar');
 
     Route::get('/historial', [HistorialController::class, 'propio'])->name('historial.propio');
+    Route::get('/historial/imprimir', [ImpresionController::class, 'propio'])->name('historial.imprimir');
 
     Route::get('/notificaciones', [NotificacionController::class, 'listar'])->name('notificaciones.listar');
     Route::get('/notificaciones/estado', [NotificacionController::class, 'estado'])->name('notificaciones.estado');

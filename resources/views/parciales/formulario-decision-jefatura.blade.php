@@ -1,4 +1,4 @@
-<form method="POST" action="{{ $ruta }}" data-confirmar="¿Confirma registrar esta decisión final sobre la solicitud?" style="margin-top:24px; padding:20px; border:1px solid var(--borde); border-radius:12px; background:#fbfcfe;">
+<form method="POST" action="{{ $ruta }}" style="margin-top:24px; padding:20px; border:1px solid var(--borde); border-radius:12px; background:#fbfcfe;">
     @csrf
     <h4 style="margin:0 0 14px; font-size:15px; color:var(--azul-marino);">Decisión final de Jefatura de Personal</h4>
     <div class="campo" style="margin-bottom:16px;">

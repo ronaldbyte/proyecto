@@ -96,4 +96,37 @@ class MenuYPantallasProfesionalesTest extends TestCase
             ->assertOk()
             ->assertDontSee('data-confirmar', false);
     }
+
+    public function test_los_formularios_de_decision_se_procesan_directamente_sin_dialogos_de_confirmacion(): void
+    {
+        $jefatura = Usuario::where('codigo', 'JEF001')->firstOrFail();
+        $solicitud = Solicitud::where('estado', Constantes::ESTADO_PENDIENTE_JEFATURA)->first();
+
+        if (! $solicitud) {
+            $docente = Usuario::where('codigo', 'DOC001')->firstOrFail()->docente;
+            $solicitud = Solicitud::create([
+                'docente_id' => $docente->id,
+                'fecha_inicio' => now()->addDays(5)->toDateString(),
+                'fecha_fin' => now()->addDays(6)->toDateString(),
+                'jornada' => Constantes::JORNADA_COMPLETA,
+                'dias_solicitados' => 2,
+                'motivo' => 'Motivo de prueba',
+                'estado' => Constantes::ESTADO_PENDIENTE_JEFATURA,
+            ]);
+        }
+
+        $this->actingAs($jefatura)->get('/solicitudes/'.$solicitud->id)
+            ->assertOk()
+            ->assertDontSee('data-confirmar', false);
+    }
+
+    public function test_el_docente_puede_imprimir_su_historial_oficial_de_licencias(): void
+    {
+        $docente = Usuario::where('codigo', 'DOC001')->firstOrFail();
+
+        $this->actingAs($docente)->get('/historial/imprimir')
+            ->assertOk()
+            ->assertSee('HISTORIAL DE LICENCIAS Y PERMISOS')
+            ->assertSee('Pedro Condori López');
+    }
 }
