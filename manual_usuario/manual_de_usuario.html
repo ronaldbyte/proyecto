@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual de Usuario — Sistema Web de Licencias y Vacaciones UNSXX</title>
+    <style>
+        :root {
+            --azul-unsxx: #0b2a5b;
+            --azul-marino: #0f172a;
+            --rojo-unsxx: #c41e3a;
+            --dorado: #b45309;
+            --dorado-suave: #fef3c7;
+            --verde: #047857;
+            --verde-suave: #d1fae5;
+            --gris-fondo: #f8fafc;
+            --gris-borde: #cbd5e1;
+            --texto-principal: #1e293b;
+            --texto-secundario: #64748b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: var(--texto-principal);
+            background-color: var(--gris-fondo);
+            line-height: 1.6;
+            font-size: 15px;
+        }
+
+        .contenedor {
+            max-width: 900px;
+            margin: 30px auto;
+            background: #ffffff;
+            padding: 50px 60px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border-radius: 8px;
+        }
+
+        /* PORTADA */
+        .portada {
+            text-align: center;
+            padding: 40px 0 60px 0;
+            border-bottom: 4px solid var(--rojo-unsxx);
+            margin-bottom: 40px;
+        }
+
+        .portada-logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 25px;
+        }
+
+        .portada-logos img {
+            max-height: 90px;
+            object-fit: contain;
+        }
+
+        .portada-universidad {
+            font-size: 24px;
+            font-weight: 900;
+            color: var(--azul-unsxx);
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .portada-departamento {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--texto-secundario);
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
+
+        .portada-titulo {
+            font-size: 28px;
+            font-weight: 900;
+            color: var(--azul-unsxx);
+            background: #f1f5f9;
+            padding: 16px 24px;
+            border-left: 6px solid var(--rojo-unsxx);
+            border-radius: 4px;
+            margin: 20px 0;
+            display: inline-block;
+        }
+
+        .portada-subtitulo {
+            font-size: 16px;
+            color: var(--rojo-unsxx);
+            font-weight: 800;
+            margin-bottom: 40px;
+        }
+
+        .portada-meta {
+            font-size: 13px;
+            color: var(--texto-secundario);
+            display: flex;
+            justify-content: space-around;
+            border-top: 1px solid var(--gris-borde);
+            padding-top: 20px;
+            margin-top: 30px;
+        }
+
+        /* BOTÓN IMPRIMIR FLOTANTE */
+        .barra-impresion {
+            position: sticky;
+            top: 20px;
+            z-index: 100;
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: -40px;
+        }
+
+        .boton-imprimir {
+            background: var(--azul-unsxx);
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            transition: all 0.2s ease;
+        }
+
+        .boton-imprimir:hover {
+            background: #081f44;
+            transform: translateY(-1px);
+        }
+
+        /* ÍNDICE */
+        .indice {
+            background: #f8fafc;
+            border: 1px solid var(--gris-borde);
+            border-radius: 8px;
+            padding: 24px 30px;
+            margin-bottom: 50px;
+        }
+
+        .indice h3 {
+            color: var(--azul-unsxx);
+            margin-bottom: 16px;
+            font-size: 18px;
+            border-bottom: 2px solid var(--azul-unsxx);
+            padding-bottom: 8px;
+        }
+
+        .indice ul {
+            list-style: none;
+        }
+
+        .indice li {
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .indice a {
+            color: var(--azul-unsxx);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .indice a:hover {
+            text-decoration: underline;
+            color: var(--rojo-unsxx);
+        }
+
+        /* SECCIONES Y ENCABEZADOS */
+        h2.seccion-titulo {
+            font-size: 20px;
+            color: var(--azul-unsxx);
+            border-left: 5px solid var(--rojo-unsxx);
+            padding-left: 14px;
+            margin-top: 50px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        h3.subseccion-titulo {
+            font-size: 16px;
+            color: var(--azul-marino);
+            margin-top: 25px;
+            margin-bottom: 12px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid var(--gris-borde);
+        }
+
+        p {
+            margin-bottom: 14px;
+            text-align: justify;
+        }
+
+        /* TABLAS */
+        table.tabla-manual {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+
+        table.tabla-manual th, 
+        table.tabla-manual td {
+            border: 1px solid var(--gris-borde);
+            padding: 10px 14px;
+            text-align: left;
+        }
+
+        table.tabla-manual th {
+            background-color: #f1f5f9;
+            color: var(--azul-unsxx);
+            font-weight: 700;
+        }
+
+        table.tabla-manual tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+
+        /* ALERTAS / CAJAS DE INFORMACIÓN */
+        .caja-info {
+            background-color: #eff6ff;
+            border-left: 4px solid #3b82f6;
+            padding: 14px 18px;
+            border-radius: 4px;
+            margin: 18px 0;
+            font-size: 14px;
+        }
+
+        .caja-nota {
+            background-color: #fefce8;
+            border-left: 4px solid #ca8a04;
+            padding: 14px 18px;
+            border-radius: 4px;
+            margin: 18px 0;
+            font-size: 14px;
+        }
+
+        .caja-exito {
+            background-color: var(--verde-suave);
+            border-left: 4px solid var(--verde);
+            padding: 14px 18px;
+            border-radius: 4px;
+            margin: 18px 0;
+            font-size: 14px;
+        }
+
+        /* PASOS NUMERADOS */
+        .paso-contenedor {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+            align-items: flex-start;
+        }
+
+        .paso-numero {
+            background-color: var(--azul-unsxx);
+            color: #ffffff;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .paso-contenido {
+            flex: 1;
+        }
+
+        .paso-titulo {
+            font-weight: bold;
+            color: var(--azul-marino);
+            margin-bottom: 4px;
+        }
+
+        /* ETIQUETAS BADGE */
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .badge-aprobada { background-color: #d1fae5; color: #065f46; }
+        .badge-rechazada { background-color: #fee2e2; color: #991b1b; }
+        .badge-pendiente { background-color: #fef3c7; color: #92400e; }
+
+        /* PIE DE PÁGINA */
+        .pie-pagina {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 2px solid var(--azul-unsxx);
+            text-align: center;
+            font-size: 12px;
+            color: var(--texto-secundario);
+        }
+
+        /* ESTILOS PARA IMPRESIÓN (PDF) */
+        @media print {
+            body {
+                background: #ffffff;
+            }
+            .contenedor {
+                box-shadow: none;
+                margin: 0;
+                padding: 0;
+                max-width: 100%;
+            }
+            .barra-impresion, .boton-imprimir {
+                display: none !important;
+            }
+            .salto-pagina {
+                page-break-before: always;
+            }
+            h2.seccion-titulo {
+                page-break-after: avoid;
+            }
+            table.tabla-manual {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="contenedor">
+
+    <!-- BOTÓN DE IMPRESIÓN -->
+    <div class="barra-impresion">
+        <button class="boton-imprimir" onclick="window.print()">🖨️ Imprimir / Guardar en PDF</button>
+    </div>
+
+    <!-- PORTADA -->
+    <div class="portada">
+        <div class="portada-logos">
+            <img src="../public/imagenes/escudo.png" alt="Escudo UNSXX" onerror="this.style.display='none'">
+            <img src="../public/imagenes/logo-personal.jpg" alt="Logo Personal" onerror="this.style.display='none'">
+        </div>
+        <div class="portada-universidad">Universidad Nacional "Siglo XX"</div>
+        <div class="portada-departamento">Dirección de Personal · Llallagua, Potosí — Bolivia</div>
+        <div class="portada-titulo">MANUAL DE USUARIO OFICIAL</div>
+        <div class="portada-subtitulo">SISTEMA WEB DE GESTIÓN DE LICENCIAS Y VACACIONES DOCENTES</div>
+        <div class="portada-meta">
+            <span><strong>Versión:</strong> 2.0 (Oficial)</span>
+            <span><strong>Fecha:</strong> Gestión 2026</span>
+            <span><strong>Soporte:</strong> Plataforma en la Nube y Local</span>
+        </div>
+    </div>
+
+    <!-- ÍNDICE -->
+    <div class="indice">
+        <h3>Índice de Contenido</h3>
+        <ul>
+            <li><a href="#sec1">1. Información General y Base Normativa</a> <span>Pág. 1</span></li>
+            <li><a href="#sec2">2. Roles de Usuario y Flujo de Aprobación</a> <span>Pág. 2</span></li>
+            <li><a href="#sec3">3. Acceso al Sistema y Gestión de Cuenta</a> <span>Pág. 3</span></li>
+            <li><a href="#sec4">4. Guía del Docente: Trámite de Licencias</a> <span>Pág. 4</span></li>
+            <li><a href="#sec5">5. Guía para Directores (Carrera y Área)</a> <span>Pág. 6</span></li>
+            <li><a href="#sec6">6. Guía para Jefatura de Personal (Administración)</a> <span>Pág. 7</span></li>
+            <li><a href="#sec7">7. Preguntas Frecuentes (FAQ) y Soporte</a> <span>Pág. 9</span></li>
+        </ul>
+    </div>
+
+    <!-- SECCIÓN 1 -->
+    <div id="sec1">
+        <h2 class="seccion-titulo">1. Información General y Base Normativa</h2>
+        <p>
+            El <strong>Sistema Web de Gestión de Licencias y Vacaciones Docentes</strong> de la <strong>Universidad Nacional "Siglo XX" (UNSXX)</strong> es una plataforma informática institucional creada para sistematizar, digitalizar y transparentar la solicitud, revisión jerárquica y aprobación final de permisos y licencias del personal docente universitario.
+        </p>
+
+        <h3 class="subseccion-titulo">1.1. Escala Legal de Vacaciones por Antigüedad</h3>
+        <p>
+            En estricto cumplimiento del reglamento universitario y la normativa laboral vigente, el sistema calcula de forma automática y transparente el derecho a vacaciones según los años cumplidos de antigüedad laboral a partir de la <strong>Fecha de Ingreso</strong> oficial del docente:
+        </p>
+
+        <table class="tabla-manual">
+            <thead>
+                <tr>
+                    <th>Tiempo de Servicio en la Institución</th>
+                    <th>Días Hábiles Asignados</th>
+                    <th>Observación Reglamentaria</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>De 0 a 1 año cumplido</strong></td>
+                    <td><strong>0 días</strong></td>
+                    <td>Periodo de acumulación de antigüedad laboral reglamentaria.</td>
+                </tr>
+                <tr>
+                    <td><strong>De 1 año y 1 día a 5 años cumplidos</strong></td>
+                    <td><strong>15 días hábiles</strong></td>
+                    <td>Primer escalafón de vacación anual.</td>
+                </tr>
+                <tr>
+                    <td><strong>De 5 años y 1 día a 10 años cumplidos</strong></td>
+                    <td><strong>20 días hábiles</strong></td>
+                    <td>Segundo escalafón de vacación anual.</td>
+                </tr>
+                <tr>
+                    <td><strong>Más de 10 años cumplidos y 1 día</strong></td>
+                    <td><strong>30 días hábiles</strong></td>
+                    <td>Escalafón máximo de vacación anual para personal docente titular.</td>
+                </tr>
+                <tr>
+                    <td><strong>Personal a Contrato (Plazo Fijo)</strong></td>
+                    <td><strong>0 días</strong></td>
+                    <td>Los contratos eventuales no acumulan saldo de vacación anual regular.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="caja-nota">
+            <strong>📌 Cómputo de Medios Días:</strong> El sistema permite registrar licencias por media jornada en el turno matutino (<strong>Medio día mañana</strong>) o vespertino (<strong>Medio día tarde</strong>). Cada medio día representa exactamente <strong>0.5 días</strong> en el cómputo del saldo vacacional.
+        </div>
+    </div>
+
+    <div class="salto-pagina"></div>
+
+    <!-- SECCIÓN 2 -->
+    <div id="sec2">
+        <h2 class="seccion-titulo">2. Roles de Usuario y Flujo de Aprobación</h2>
+        <p>
+            El sistema implementa una jerarquía institucional organizada en cuatro niveles de acceso:
+        </p>
+
+        <table class="tabla-manual">
+            <thead>
+                <tr>
+                    <th>Rol</th>
+                    <th>Prefijo de Código</th>
+                    <th>Funciones y Responsabilidades</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Docente</strong></td>
+                    <td><code>DOC...</code></td>
+                    <td>Consulta su saldo de vacaciones, registra solicitudes de licencia de jornada completa o medio día, cancela solicitudes no atendidas e imprime su historial oficial de licencias.</td>
+                </tr>
+                <tr>
+                    <td><strong>Director de Carrera</strong></td>
+                    <td><code>DRC...</code></td>
+                    <td>Revisa y resuelve en primera instancia las solicitudes de los docentes de su carrera. Sus propias licencias pasan a conocimiento de Dirección de Área.</td>
+                </tr>
+                <tr>
+                    <td><strong>Director de Área</strong></td>
+                    <td><code>DRA...</code></td>
+                    <td>Revisa solicitudes de directores de carrera y docentes de carreras directamente dependientes del área. Sus solicitudes propias van a Jefatura.</td>
+                </tr>
+                <tr>
+                    <td><strong>Jefatura de Personal</strong></td>
+                    <td><code>JEF...</code></td>
+                    <td>Administrador supremo. Gestiona el padrón docente, emite la <strong>decisión final</strong> con descuento automático de saldo, genera copias de seguridad y administra la base de datos.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="caja-info">
+            <strong>🔄 Flujo Institucional:</strong><br>
+            <strong>Docente</strong> formula solicitud ➔ <strong>Director de Carrera</strong> emite visto bueno ➔ <strong>Director de Área</strong> valida (si corresponde) ➔ <strong>Jefatura de Personal</strong> otorga la Aprobación Definitiva (descontando los días del saldo).
+        </div>
+    </div>
+
+    <!-- SECCIÓN 3 -->
+    <div id="sec3">
+        <h2 class="seccion-titulo">3. Acceso al Sistema y Gestión de Cuenta</h2>
+
+        <div class="paso-contenedor">
+            <div class="paso-numero">1</div>
+            <div class="paso-contenido">
+                <div class="paso-titulo">Ingreso a la Plataforma</div>
+                <p>Abra el navegador web (Google Chrome, Microsoft Edge, Firefox) e ingrese a la dirección: <strong>https://licencias-unsxx26.onrender.com</strong>.</p>
+            </div>
+        </div>
+
+        <div class="paso-contenedor">
+            <div class="paso-numero">2</div>
+            <div class="paso-contenido">
+                <div class="paso-titulo">Credenciales de Acceso</div>
+                <p>Ingrese su <strong>Código Único</strong> (ej. <code>DOC001</code>, <code>JEF001</code>) o su correo electrónico institucional, acompañado de su contraseña personal.</p>
+            </div>
+        </div>
+
+        <div class="paso-contenedor">
+            <div class="paso-numero">3</div>
+            <div class="paso-contenido">
+                <div class="paso-titulo">Foto de Perfil y Personalización</div>
+                <p>Desde la pestaña <strong>"Mi perfil"</strong>, puede subir una fotografía en formato JPG o PNG (máximo 2 MB). Si desea eliminar su fotografía, presione el botón <em>"✕ Quitar foto y usar silueta por defecto"</em> de forma directa.</p>
+            </div>
+        </div>
+
+        <div class="paso-contenedor">
+            <div class="paso-numero">4</div>
+            <div class="paso-contenido">
+                <div class="paso-titulo">Cambio de Contraseña</div>
+                <p>En <strong>"Configuración"</strong> ➔ <strong>"Cambiar contraseña"</strong>, puede actualizar su clave de acceso ingresando su contraseña actual y la nueva contraseña (mínimo 6 caracteres).</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="salto-pagina"></div>
+
+    <!-- SECCIÓN 4 -->
+    <div id="sec4">
+        <h2 class="seccion-titulo">4. Guía del Docente: Trámite de Licencias</h2>
+        
+        <h3 class="subseccion-titulo">4.1. Visualización del Saldo de Vacaciones</h3>
+        <p>
+            Al ingresar al panel de inicio, el docente encontrará la tarjeta oficial de vacaciones:
+        </p>
+        <ul style="margin-left: 24px; margin-bottom: 16px;">
+            <li><strong>Días Asignados:</strong> Días totales según su antigüedad reglamentaria cumplida.</li>
+            <li><strong>Días Utilizados:</strong> Suma de licencias aprobadas previamente en la gestión.</li>
+            <li><strong>Días Disponibles:</strong> Saldo exacto con el que cuenta para nuevas solicitudes.</li>
+        </ul>
+
+        <h3 class="subseccion-titulo">4.2. Cómo Crear una Solicitud de Licencia Paso a Paso</h3>
+
+        <div class="paso-contenedor">
+            <div class="paso-numero">1</div>
+            <div class="paso-contenido">
+                <div class="paso-titulo">Iniciar la Solicitud</div>
+                <p>Presione el botón dorado <strong>"Nueva solicitud"</strong> en la parte superior o desde el menú lateral.</p>
+            </div>
+        </div>
+
+        <div class="paso-contenedor">
+            <div class="paso-numero">2</div>
+            <div class="paso-contenido">
+                <div class="paso-titulo">Selección de Fechas y Jornada</div>
+                <p>
+                    • <strong>Fecha de inicio</strong> y <strong>Fecha de fin</strong>.<br>
+                    • <strong>Jornada:</strong> Seleccione <em>Jornada completa</em> (días enteros), <em>Solo la mañana</em> o <em>Solo la tarde</em> (medio día).
+                </p>
+            </div>
+        </div>
+
+        <div class="paso-contenedor">
+            <div class="paso-numero">3</div>
+            <div class="paso-contenido">
+                <div class="paso-titulo">Justificación y Envío Directo</div>
+                <p>
+                    Escriba el motivo claro de la solicitud y presione <strong>"Enviar solicitud"</strong>. El registro se efectúa inmediatamente sin diálogos emergentes ni demoras.
+                </p>
+            </div>
+        </div>
+
+        <h3 class="subseccion-titulo">4.3. Pestañas de Solicitudes y Cancelación</h3>
+        <p>
+            El módulo de solicitudes está organizado en dos pestañas claras:
+        </p>
+        <ul style="margin-left: 24px; margin-bottom: 16px;">
+            <li><strong>Pestaña "Pendientes":</strong> Muestra las solicitudes en curso de evaluación. Si el docente cometió un error o ya no precisa el permiso, puede ingresar a la solicitud y cancelarla directamente con el botón <strong>"Cancelar solicitud"</strong>.</li>
+            <li><strong>Pestaña "Historial":</strong> Muestra todas las solicitudes resueltas (<span class="badge badge-aprobada">Aprobada</span> o <span class="badge badge-rechazada">Rechazada</span>).</li>
+        </ul>
+
+        <h3 class="subseccion-titulo">4.4. Impresión del Historial de Licencias</h3>
+        <p>
+            Dentro de la pestaña <strong>"Historial"</strong>, el docente cuenta con el botón <strong>"Imprimir historial de licencias"</strong>.
+        </p>
+        <div class="caja-exito">
+            <strong>📄 Formato Limpio y Directo:</strong><br>
+            • <strong>Parte Superior:</strong> Escudo institucional y el <strong>Nombre del Docente</strong>.<br>
+            • <strong>Contenido:</strong> Lista directa de todas las solicitudes resueltas indicando Periodo, Días (o Medio día), Motivo, Estado, la autoridad que resolvió (<strong>"Decidido por"</strong>) y la <strong>Fecha y Hora</strong> exacta.<br>
+            • <strong>Sin Firmas:</strong> No requiere espacios de firmas físicas para agilizar la entrega e inspección.
+        </div>
+    </div>
+
+    <div class="salto-pagina"></div>
+
+    <!-- SECCIÓN 5 -->
+    <div id="sec5">
+        <h2 class="seccion-titulo">5. Guía para Directores (Carrera y Área)</h2>
+
+        <h3 class="subseccion-titulo">5.1. Atención de Solicitudes Pendientes</h3>
+        <p>
+            Los directores de carrera y de área tienen la potestad de revisar las solicitudes del cuerpo docente bajo su dependencia:
+        </p>
+        <div class="paso-contenedor">
+            <div class="paso-numero">1</div>
+            <div class="paso-contenido">
+                <div class="paso-titulo">Notificación de Pendientes</div>
+                <p>En el menú lateral <strong>"Solicitudes"</strong> verá un número con las solicitudes pendientes de su carrera o área.</p>
+            </div>
+        </div>
+
+        <div class="paso-contenedor">
+            <div class="paso-numero">2</div>
+            <div class="paso-contenido">
+                <div class="paso-titulo">Evaluación Académica</div>
+                <p>Al hacer clic en la solicitud, visualice las fechas solicitadas, el motivo expresado y el saldo disponible del docente.</p>
+            </div>
+        </div>
+
+        <div class="paso-contenedor">
+            <div class="paso-numero">3</div>
+            <div class="paso-contenido">
+                <div class="paso-titulo">Decisión Inmediata</div>
+                <p>
+                    • <strong>Aprobar:</strong> Seleccione "Aprobar solicitud" y presione <em>"Registrar decisión"</em>. La solicitud pasa a la siguiente instancia.<br>
+                    • <strong>Rechazar:</strong> Seleccione "Rechazar solicitud", ingrese la fundamentación del rechazo y presione <em>"Registrar decisión"</em>.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECCIÓN 6 -->
+    <div id="sec6">
+        <h2 class="seccion-titulo">6. Guía para Jefatura de Personal (Administración)</h2>
+        <p>
+            La Jefatura de Personal es el administrador general del sistema y la autoridad competente para otorgar la aprobación definitiva de licencias y el descuento de vacaciones.
+        </p>
+
+        <h3 class="subseccion-titulo">6.1. Gestión del Padrón Docente</h3>
+        <p>Desde el módulo <strong>"Docentes"</strong> se realizan las operaciones de personal:</p>
+        <ul style="margin-left: 24px; margin-bottom: 16px;">
+            <li><strong>Nuevo Docente:</strong> Permite dar de alta a un docente. Es fundamental registrar la <strong>Fecha de Ingreso</strong> laboral correcta, ya que a partir de ella el sistema calculará en tiempo real los años de antigüedad y los días de vacación anual.</li>
+            <li><strong>Tipo de Contrato:</strong> Se define si es <em>Docente Titular</em>, <em>Docente Interino</em> o <em>Docente a Contrato</em>.</li>
+            <li><strong>Código de Acceso:</strong> Al guardar, el sistema genera automáticamente el código institucional único (ej: <code>DOC005</code>).</li>
+            <li><strong>Activar / Desactivar:</strong> Permite suspender o habilitar temporalmente el acceso de un docente.</li>
+            <li><strong>Eliminar:</strong> Opción para depurar registros no deseados con confirmación explícita de seguridad.</li>
+        </ul>
+
+        <h3 class="subseccion-titulo">6.2. Decisión Final y Descuento de Vacaciones</h3>
+        <p>
+            En la pestaña <strong>"Pendientes de Jefatura"</strong> se encuentran las solicitudes listas para resolución:
+        </p>
+        <ul style="margin-left: 24px; margin-bottom: 16px;">
+            <li><strong>Aprobar Definitivamente:</strong> Al hacer clic en este botón, la solicitud cambia al estado <span class="badge badge-aprobada">Aprobada</span> y el sistema <strong>descuenta automáticamente los días del saldo</strong> del docente.</li>
+            <li><strong>Rechazar Solicitud:</strong> Registra la observación institucional y pasa la solicitud al estado <span class="badge badge-rechazada">Rechazada</span> sin tocar el saldo de vacaciones.</li>
+        </ul>
+
+        <h3 class="subseccion-titulo">6.3. Avisos al Celular (WhatsApp / SMS)</h3>
+        <p>
+            En <strong>"Configuración"</strong> ➔ <strong>"Avisos al celular"</strong>, la Jefatura puede registrar su número telefónico para recibir notificaciones inmediatas de solicitudes docentes entrantes.
+        </p>
+
+        <h3 class="subseccion-titulo">6.4. Copias de Seguridad y Puesta a Punto Oficial</h3>
+        <p>
+            En el menú <strong>"MI CUENTA"</strong> ➔ <strong>"Copia de seguridad"</strong>:
+        </p>
+        <div class="caja-info">
+            <strong>💾 Respaldo y Restauración:</strong> Permite descargar un archivo completo con toda la base de datos para custodia periódica y restaurar respaldos previos en caso de contingencia.
+        </div>
+        <div class="caja-nota">
+            <strong>🧹 Herramienta "Limpiar Datos de Prueba":</strong> Para iniciar el periodo académico oficial en limpio, este botón elimina los docentes y solicitudes de prueba generadas durante la capacitación, **dejando intacta la cuenta de Jefatura de Personal** para ingresar el padrón oficial desde cero.
+        </div>
+    </div>
+
+    <div class="salto-pagina"></div>
+
+    <!-- SECCIÓN 7 -->
+    <div id="sec7">
+        <h2 class="seccion-titulo">7. Preguntas Frecuentes (FAQ) y Soporte</h2>
+
+        <p><strong>1. ¿Qué sucede si solicito una licencia de medio día en la mañana y otra en la tarde?</strong><br>
+        Cada medio día resta 0.5 días. Al completarse dos solicitudes aprobadas de medio día, el sistema habrá descontado exactamente 1.0 día entero de su saldo.</p>
+
+        <p><strong>2. ¿Por qué mi usuario figura con 0 días disponibles?</strong><br>
+        Puede ocurrir si su antigüedad es menor a 1 año cumplido más 1 día, si ya consumió todos sus días asignados de la gestión, o si su tipo de contrato es a plazo fijo ("Docente a Contrato").</p>
+
+        <p><strong>3. ¿Cómo exporto el historial de licencias a PDF?</strong><br>
+        En la pantalla de impresión, presione <code>Ctrl + P</code> (o el botón Imprimir) y seleccione como destino <em>"Guardar como PDF"</em>.</p>
+
+        <p><strong>4. ¿El sistema muestra ventanas emergentes molestas?</strong><br>
+        No. Todas las acciones de envío, cancelación, aprobación y rechazo están configuradas para ejecutarse de forma **directa e inmediata**.</p>
+    </div>
+
+    <!-- PIE DE PÁGINA -->
+    <div class="pie-pagina">
+        <strong>UNIVERSIDAD NACIONAL "SIGLO XX" — DIRECCIÓN DE PERSONAL</strong><br>
+        Sistema Web de Gestión de Licencias y Vacaciones Docentes · Llallagua · Potosí · Bolivia<br>
+        Manual de Usuario Oficial · Gestión 2026
+    </div>
+
+</div>
+
+</body>
+</html>
