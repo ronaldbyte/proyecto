@@ -5,3 +5,6 @@
 vendor
 node_modules
 storage/logs/*.log
+manual_usuario
+documentacion_graficos
+
