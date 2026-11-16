@@ -303,4 +303,32 @@ class VerificacionCalculosYNotificacionesTest extends TestCase
             'tipo' => 'aprobada',
         ]);
     }
+
+    public function test_registro_de_usuario_genera_codigo_segun_rol_seleccionado(): void
+    {
+        $jefe = Usuario::where('codigo', 'JEF001')->firstOrFail();
+        $rolDirectorCarrera = Rol::where('codigo', Constantes::ROL_DIRECTOR_CARRERA)->firstOrFail();
+        $rolDirectorArea = Rol::where('codigo', Constantes::ROL_DIRECTOR_AREA)->firstOrFail();
+        $rolDocente = Rol::where('codigo', Constantes::ROL_DOCENTE)->firstOrFail();
+
+        // 1. Probar que sugerir-codigo sin rol devuelve vacío
+        $this->actingAs($jefe)->getJson('/jefatura/docentes/codigo')
+            ->assertOk()
+            ->assertJson(['codigo' => '']);
+
+        // 2. Probar que sugerir-codigo con Director de Carrera devuelve prefijo DIRC
+        $respuestaDirC = $this->actingAs($jefe)->getJson('/jefatura/docentes/codigo?rol_id='.$rolDirectorCarrera->id)
+            ->assertOk();
+        $this->assertStringStartsWith('DIRC', $respuestaDirC->json('codigo'));
+
+        // 3. Probar que sugerir-codigo con Director de Área devuelve prefijo DIRA
+        $respuestaDirA = $this->actingAs($jefe)->getJson('/jefatura/docentes/codigo?rol_id='.$rolDirectorArea->id)
+            ->assertOk();
+        $this->assertStringStartsWith('DIRA', $respuestaDirA->json('codigo'));
+
+        // 4. Probar que sugerir-codigo con Docente devuelve prefijo DOC
+        $respuestaDoc = $this->actingAs($jefe)->getJson('/jefatura/docentes/codigo?rol_id='.$rolDocente->id)
+            ->assertOk();
+        $this->assertStringStartsWith('DOC', $respuestaDoc->json('codigo'));
+    }
 }

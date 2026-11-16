@@ -12,6 +12,7 @@ use App\Models\Rol;
 use App\Models\Usuario;
 use App\Services\ServicioAuditoria;
 use App\Services\ServicioVacaciones;
+use App\Soporte\Constantes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -56,30 +57,39 @@ class DocenteGestionController extends Controller
         }
 
         $docentes = $consulta
-            ->whereHas('usuario.rol', fn ($q) => $q->where('codigo', '!=', \App\Soporte\Constantes::ROL_JEFATURA))
+            ->whereHas('usuario.rol', fn ($q) => $q->where('codigo', '!=', Constantes::ROL_JEFATURA))
             ->orderBy('apellidos')->paginate(12)->withQueryString();
         $carreras = Carrera::with('area')->orderBy('nombre')->get();
         $areas = Area::with(['carreras' => fn ($q) => $q->orderBy('nombre')])->orderBy('nombre')->get();
-        $roles = Rol::where('codigo', '!=', \App\Soporte\Constantes::ROL_JEFATURA)->orderBy('nombre')->get();
-        $tiposContrato = \App\Soporte\Constantes::tiposContrato();
+        $roles = Rol::where('codigo', '!=', Constantes::ROL_JEFATURA)->orderBy('nombre')->get();
+        $tiposContrato = Constantes::tiposContrato();
 
         return view('jefatura.docentes.listar', compact('docentes', 'carreras', 'areas', 'roles', 'tiposContrato'));
     }
 
     public function crear()
     {
+        $codigoGenerado = '';
+        if (old('rol_id') && ($rol = Rol::find(old('rol_id')))) {
+            $codigoGenerado = $this->codigoEnSesion('codigo_nuevo_docente', $rol->codigo);
+        }
+
         return view('jefatura.docentes.formulario', [
             'docente' => null,
-            'codigoGenerado' => $this->codigoEnSesion('codigo_nuevo_docente', \App\Soporte\Constantes::ROL_DOCENTE),
+            'codigoGenerado' => $codigoGenerado,
             'carreras' => Carrera::with('area')->orderBy('nombre')->get(),
             'areas' => Area::with(['carreras' => fn ($q) => $q->orderBy('nombre')])->orderBy('nombre')->get(),
-            'roles' => Rol::where('codigo', '!=', \App\Soporte\Constantes::ROL_JEFATURA)->orderBy('nombre')->get(),
-            'tiposContrato' => \App\Soporte\Constantes::tiposContrato(),
+            'roles' => Rol::where('codigo', '!=', Constantes::ROL_JEFATURA)->orderBy('nombre')->get(),
+            'tiposContrato' => Constantes::tiposContrato(),
         ]);
     }
 
     public function sugerirCodigo(Request $request)
     {
+        if (! $request->filled('rol_id')) {
+            return response()->json(['codigo' => '']);
+        }
+
         $rol = Rol::find($request->rol_id);
         $codigo = Usuario::generarCodigoUnico($rol?->codigo);
         session(['codigo_nuevo_docente' => $codigo]);
@@ -93,7 +103,7 @@ class DocenteGestionController extends Controller
     {
         $carrera = Carrera::findOrFail($request->carrera_id);
         $rol = Rol::findOrFail($request->rol_id);
-        abort_if($rol->codigo === \App\Soporte\Constantes::ROL_JEFATURA, 403);
+        abort_if($rol->codigo === Constantes::ROL_JEFATURA, 403);
 
         $codigo = $this->codigoDesdeSesion('codigo_nuevo_docente', $rol->codigo);
 
@@ -138,8 +148,8 @@ class DocenteGestionController extends Controller
             'docente' => $docente,
             'carreras' => Carrera::with('area')->orderBy('nombre')->get(),
             'areas' => Area::with(['carreras' => fn ($q) => $q->orderBy('nombre')])->orderBy('nombre')->get(),
-            'roles' => Rol::where('codigo', '!=', \App\Soporte\Constantes::ROL_JEFATURA)->orderBy('nombre')->get(),
-            'tiposContrato' => \App\Soporte\Constantes::tiposContrato(),
+            'roles' => Rol::where('codigo', '!=', Constantes::ROL_JEFATURA)->orderBy('nombre')->get(),
+            'tiposContrato' => Constantes::tiposContrato(),
         ]);
     }
 
@@ -148,7 +158,7 @@ class DocenteGestionController extends Controller
         $this->asegurarNoEsJefatura($docente);
         $carrera = Carrera::findOrFail($request->carrera_id);
         $rol = Rol::findOrFail($request->rol_id);
-        abort_if($rol->codigo === \App\Soporte\Constantes::ROL_JEFATURA, 403);
+        abort_if($rol->codigo === Constantes::ROL_JEFATURA, 403);
         $anterior = $docente->toArray();
 
         DB::transaction(function () use ($request, $docente, $carrera) {
@@ -266,7 +276,14 @@ class DocenteGestionController extends Controller
     {
         $codigo = (string) session($clave, '');
 
-        if ($codigo !== '' && ! Usuario::where('codigo', $codigo)->exists()) {
+        $prefijoEsperado = match ($rolCodigo) {
+            Constantes::ROL_DIRECTOR_CARRERA => 'DIRC',
+            Constantes::ROL_DIRECTOR_AREA => 'DIRA',
+            Constantes::ROL_JEFATURA => 'JEF',
+            default => 'DOC',
+        };
+
+        if ($codigo !== '' && str_starts_with($codigo, $prefijoEsperado) && ! Usuario::where('codigo', $codigo)->exists()) {
             return $codigo;
         }
 

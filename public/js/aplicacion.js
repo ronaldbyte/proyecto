@@ -234,14 +234,19 @@ document.addEventListener('DOMContentLoaded', function () {
     var rolCodigo = document.getElementById('rol_id');
     if (codigoInput && rolCodigo && !codigoInput.getAttribute('data-fijo')) {
         rolCodigo.addEventListener('change', function () {
+            var rolId = rolCodigo.value;
+            if (!rolId) {
+                codigoInput.value = '';
+                return;
+            }
             var url = codigoInput.getAttribute('data-url');
             if (!url) {
                 return;
             }
-            fetch(url + '?rol_id=' + encodeURIComponent(rolCodigo.value), { headers: { Accept: 'application/json' } })
+            fetch(url + '?rol_id=' + encodeURIComponent(rolId), { headers: { Accept: 'application/json' } })
                 .then(function (r) { return r.json(); })
                 .then(function (data) {
-                    if (data.codigo) {
+                    if (data && data.codigo) {
                         codigoInput.value = data.codigo;
                     }
                 });

@@ -61,8 +61,8 @@ class Usuario extends Authenticatable
     public static function generarCodigoUnico(?string $rolCodigo = null): string
     {
         $prefijo = match ($rolCodigo) {
-            Constantes::ROL_DIRECTOR_CARRERA => 'DRC',
-            Constantes::ROL_DIRECTOR_AREA => 'DRA',
+            Constantes::ROL_DIRECTOR_CARRERA => 'DIRC',
+            Constantes::ROL_DIRECTOR_AREA => 'DIRA',
             Constantes::ROL_JEFATURA => 'JEF',
             default => 'DOC',
         };

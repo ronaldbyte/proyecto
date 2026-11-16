@@ -12,6 +12,7 @@
                     id="codigo_asignado"
                     name="codigo"
                     value="{{ old('codigo', $docente->usuario->codigo ?? $codigoGenerado ?? '') }}"
+                    placeholder="Se generará al seleccionar el rol"
                     data-url="{{ route('jefatura.docentes.codigo') }}"
                     @if($docente) data-fijo="1" @endif
                     readonly
@@ -83,6 +84,9 @@
             <div class="campo">
                 <label>Rol</label>
                 <select name="rol_id" id="rol_id" required>
+                    @if(!$docente)
+                        <option value="">Seleccione el rol</option>
+                    @endif
                     @foreach($roles as $rol)
                         <option value="{{ $rol->id }}" data-codigo="{{ $rol->codigo }}" @selected(old('rol_id', $docente->usuario->rol_id ?? '')==$rol->id)>{{ $rol->nombre }}</option>
                     @endforeach
