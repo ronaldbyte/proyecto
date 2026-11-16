@@ -27,7 +27,12 @@ class GuardarDocenteRequest extends FormRequest
             ],
             'nombres' => ['required', 'string', 'max:120'],
             'apellidos' => ['required', 'string', 'max:120'],
-            'email' => ['required', 'email', 'max:150'],
+            'email' => [
+                'required',
+                'email',
+                'max:150',
+                Rule::unique('usuarios', 'email')->ignore($usuarioId),
+            ],
             'telefono' => ['nullable', 'string', 'max:40'],
             'cargo' => ['required', 'string', 'max:120'],
             'tipo_contrato' => ['required', 'in:titular,contratado,interino,consultor'],
@@ -43,9 +48,11 @@ class GuardarDocenteRequest extends FormRequest
     {
         return [
             'ci.required' => 'El carnet de identidad (CI) es obligatorio.',
+            'ci.unique' => 'El carnet de identidad (CI) ya está registrado para otro usuario.',
             'nombres.required' => 'El nombre es obligatorio.',
             'apellidos.required' => 'El apellido es obligatorio.',
             'email.required' => 'El correo electrónico es obligatorio.',
+            'email.unique' => 'El correo electrónico ya está registrado para otro usuario.',
             'carrera_id.required' => 'Debe seleccionar una carrera.',
             'rol_id.required' => 'Debe seleccionar un rol.',
             'fecha_ingreso.required' => 'La fecha de ingreso es obligatoria.',

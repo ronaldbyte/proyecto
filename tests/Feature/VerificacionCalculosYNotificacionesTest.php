@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Carrera;
 use App\Models\Docente;
 use App\Models\Notificacion;
 use App\Models\Rol;
@@ -330,5 +331,50 @@ class VerificacionCalculosYNotificacionesTest extends TestCase
         $respuestaDoc = $this->actingAs($jefe)->getJson('/jefatura/docentes/codigo?rol_id='.$rolDocente->id)
             ->assertOk();
         $this->assertStringStartsWith('DOC', $respuestaDoc->json('codigo'));
+    }
+
+    public function test_seguridad_ci_email_y_codigo_no_se_pueden_duplicar(): void
+    {
+        $jefe = Usuario::where('codigo', 'JEF001')->firstOrFail();
+        $docenteExistente = Usuario::where('codigo', 'DOC001')->firstOrFail();
+        $carrera = Carrera::firstOrFail();
+        $rolDocente = Rol::where('codigo', Constantes::ROL_DOCENTE)->firstOrFail();
+
+        // 1. Intentar registrar un docente con el mismo CI que otro usuario existente
+        $respuestaCiDuplicado = $this->actingAs($jefe)->post('/jefatura/docentes', [
+            'ci' => $docenteExistente->ci,
+            'nombres' => 'Juan',
+            'apellidos' => 'Pérez',
+            'email' => 'juan.perez.nuevo@unsxx.bo',
+            'cargo' => 'Docente',
+            'tipo_contrato' => 'titular',
+            'carrera_id' => $carrera->id,
+            'rol_id' => $rolDocente->id,
+            'fecha_ingreso' => '2020-01-01',
+        ]);
+        $respuestaCiDuplicado->assertSessionHasErrors(['ci']);
+
+        // 2. Intentar registrar un docente con el mismo Correo electrónico que otro usuario existente
+        $respuestaEmailDuplicado = $this->actingAs($jefe)->post('/jefatura/docentes', [
+            'ci' => '123456789',
+            'nombres' => 'Juan',
+            'apellidos' => 'Pérez',
+            'email' => $docenteExistente->email,
+            'cargo' => 'Docente',
+            'tipo_contrato' => 'titular',
+            'carrera_id' => $carrera->id,
+            'rol_id' => $rolDocente->id,
+            'fecha_ingreso' => '2020-01-01',
+        ]);
+        $respuestaEmailDuplicado->assertSessionHasErrors(['email']);
+
+        // 3. Probar que los códigos generados son únicos en la base de datos
+        $codigos = [];
+        for ($i = 0; $i < 20; $i++) {
+            $nuevoCodigo = Usuario::generarCodigoUnico(Constantes::ROL_DOCENTE);
+            $this->assertFalse(in_array($nuevoCodigo, $codigos, true));
+            $this->assertFalse(Usuario::where('codigo', $nuevoCodigo)->exists());
+            $codigos[] = $nuevoCodigo;
+        }
     }
 }
