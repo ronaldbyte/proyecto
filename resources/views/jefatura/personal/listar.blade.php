@@ -24,8 +24,10 @@
                     <td>{{ $jefe->usuario->email }}</td>
                     <td>{{ $jefe->cargo }}</td>
                     <td>{{ $jefe->usuario->activo ? 'Activo' : 'Inactivo' }}</td>
-                    <td class="acciones">
-                        <a class="boton boton-suave" href="{{ route('jefatura.personal.editar', $jefe) }}">Editar</a>
+                    <td style="white-space: nowrap; width: 1%;">
+                        <div class="acciones-tabla">
+                            <a class="boton boton-suave" href="{{ route('jefatura.personal.editar', $jefe) }}">Editar</a>
+                        </div>
                     </td>
                 </tr>
             @empty

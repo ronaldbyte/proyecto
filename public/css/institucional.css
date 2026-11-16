@@ -344,6 +344,20 @@ img { max-width: 100%; }
 .metrica.excedida { background: #fff1f3; border: 1px solid #f5c2cc; }
 .metrica.excedida strong { color: var(--rojo-unsxx); }
 .acciones { display: flex; gap: 8px; flex-wrap: wrap; }
+.acciones-tabla {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: nowrap !important;
+    white-space: nowrap !important;
+}
+.acciones-tabla .boton {
+    padding: 6px 12px;
+    font-size: 13px;
+    border-radius: 8px;
+    white-space: nowrap;
+    line-height: 1.2;
+}
 .tabla { width: 100%; border-collapse: collapse; }
 .tabla th, .tabla td { padding: 10px 8px; border-bottom: 1px solid var(--borde); text-align: left; font-size: 13px; }
 .tabla th { color: var(--azul-marino); font-size: 12px; text-transform: uppercase; letter-spacing: .4px; }
