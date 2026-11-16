@@ -7,7 +7,7 @@
     <input name="buscar" value="{{ request('buscar') }}" placeholder="Docente o código">
     <select name="estado">
         <option value="">Estado</option>
-        <option value="pendiente" @selected(request('estado')==='pendiente')>Pendiente de Carrera</option>
+        <option value="pendiente" @selected(request('estado')==='pendiente')>Pendiente de Dirección</option>
         <option value="pendiente_area" @selected(request('estado')==='pendiente_area')>Pendiente de Área</option>
         <option value="pendiente_jefatura" @selected(request('estado')==='pendiente_jefatura')>Pendiente de Jefatura</option>
         <option value="aprobada" @selected(request('estado')==='aprobada')>Aprobada</option>

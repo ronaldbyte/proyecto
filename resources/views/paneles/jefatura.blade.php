@@ -6,7 +6,7 @@
 @endif
 <div class="rejilla rejilla-4">
     <div class="tarjeta metrica"><span>Docentes</span><strong>{{ $totales['docentes'] }}</strong></div>
-    <div class="tarjeta metrica"><span>Pendientes de carrera</span><strong>{{ $totales['pendientes'] }}</strong></div>
+    <div class="tarjeta metrica"><span>Pendientes de Dirección</span><strong>{{ $totales['pendientes'] }}</strong></div>
     <div class="tarjeta metrica"><span>Pendientes de área</span><strong>{{ $totales['pendiente_area'] }}</strong></div>
     <div class="tarjeta metrica"><span>Pendientes de decisión final</span><strong>{{ $totales['pendiente_jefatura'] }}</strong></div>
     <div class="tarjeta metrica"><span>Aprobadas</span><strong>{{ $totales['aprobadas'] }}</strong></div>

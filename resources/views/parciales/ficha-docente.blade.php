@@ -2,6 +2,7 @@
     <div class="datos-fijos">
         <div><small>Código</small><strong>{{ $docente->usuario->codigo }}</strong></div>
         <div><small>Nombre completo</small><strong>{{ $docente->nombre_completo }}</strong></div>
+        <div><small>Carnet de Identidad (CI)</small><strong>{{ $docente->usuario->ci ?: '—' }}</strong></div>
         <div><small>Correo</small><strong>{{ $docente->usuario->email }}</strong></div>
         <div><small>Teléfono</small><strong>{{ $docente->telefono ?: '—' }}</strong></div>
         <div><small>Carrera</small><strong>{{ $docente->carrera->nombre }}</strong></div>

@@ -96,8 +96,8 @@ class PanelController extends Controller
             'pendiente_jefatura' => Solicitud::where('estado', Constantes::ESTADO_PENDIENTE_JEFATURA)->count(),
             'aprobadas' => Solicitud::where('estado', Constantes::ESTADO_APROBADA)->count(),
             'rechazadas' => Solicitud::where('estado', Constantes::ESTADO_RECHAZADA)->count(),
-            'dias_utilizados' => (int) (clone $consultaDocentes)->sum('dias_utilizados'),
-            'dias_disponibles' => (int) (clone $consultaDocentes)->selectRaw('SUM(CASE WHEN dias_asignados > dias_utilizados THEN dias_asignados - dias_utilizados ELSE 0 END) as total')->value('total'),
+            'dias_utilizados' => round((float) (clone $consultaDocentes)->sum('dias_utilizados'), 1),
+            'dias_disponibles' => round((float) (clone $consultaDocentes)->selectRaw('SUM(CASE WHEN dias_asignados > dias_utilizados THEN dias_asignados - dias_utilizados ELSE 0 END) as total')->value('total'), 1),
             'excedidos' => (clone $consultaDocentes)->whereColumn('dias_utilizados', '>', 'dias_asignados')->count(),
         ];
 
