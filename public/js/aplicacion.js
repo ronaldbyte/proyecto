@@ -59,7 +59,8 @@ document.addEventListener('DOMContentLoaded', function () {
             if (fin) {
                 fin.value = inicio.value;
             }
-            dias.value = 'Medio día';
+            var textoMedio = jornadaElegida() === 'manana' ? 'Medio día (mañana)' : 'Medio día (tarde)';
+            dias.value = textoMedio;
             if (aviso) {
                 aviso.hidden = 0.5 <= disponibles;
             }
@@ -88,7 +89,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (inicio && fin) {
         inicio.addEventListener('change', calcular);
+        inicio.addEventListener('input', calcular);
         fin.addEventListener('change', calcular);
+        fin.addEventListener('input', calcular);
     }
 
     document.querySelectorAll('input[name="jornada"]').forEach(function (opcion) {

@@ -26,7 +26,7 @@
     <thead>
         <tr style="background: #f1f5f9; color: #0b2a5b;">
             <th style="padding: 7px 6px; text-align: center; width: 32px; border: 1px solid #cbd5e1;">N°</th>
-            <th style="padding: 7px 8px; text-align: center; width: 155px; border: 1px solid #cbd5e1;">Periodo de Licencia</th>
+            <th style="padding: 7px 8px; text-align: center; width: 170px; border: 1px solid #cbd5e1;">Periodo (Inicio a Conclusión)</th>
             <th style="padding: 7px 6px; text-align: center; width: 80px; border: 1px solid #cbd5e1;">Días</th>
             <th style="padding: 7px 10px; border: 1px solid #cbd5e1;">Motivo</th>
             <th style="padding: 7px 6px; text-align: center; width: 90px; border: 1px solid #cbd5e1;">Estado</th>

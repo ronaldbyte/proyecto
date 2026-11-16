@@ -8,7 +8,7 @@
         <div><small>Carrera</small><strong>{{ $solicitud->docente->carrera->nombre }}</strong></div>
         <div><small>Área</small><strong>{{ $solicitud->docente->area->nombre }}</strong></div>
         <div><small>Inicio</small><strong>{{ $solicitud->fecha_inicio->format('d/m/Y') }}</strong></div>
-        <div><small>Finalización</small><strong>{{ $solicitud->fecha_fin->format('d/m/Y') }}</strong></div>
+        <div><small>Conclusión</small><strong>{{ $solicitud->fecha_fin->format('d/m/Y') }}</strong></div>
         <div><small>Jornada</small><strong>{{ $solicitud->etiquetaJornada() }}</strong></div>
         <div><small>Días</small><strong>{{ $solicitud->textoDias() }}</strong></div>
         <div><small>Estado</small><strong><span class="estado {{ $solicitud->claseEstado() }}">{{ $solicitud->etiquetaEstado() }}</span></strong></div>

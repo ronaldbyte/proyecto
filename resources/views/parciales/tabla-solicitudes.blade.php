@@ -6,7 +6,7 @@
                 <th>Docente</th>
             @endif
             <th>Inicio</th>
-            <th>Fin</th>
+            <th>Conclusión</th>
             <th>Días</th>
             <th>Estado</th>
             <th></th>

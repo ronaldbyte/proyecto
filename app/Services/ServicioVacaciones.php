@@ -85,16 +85,12 @@ class ServicioVacaciones
 
     public function diasUtilizadosEnPeriodo(Docente $docente): float
     {
-        if (! $docente->id || ! $docente->fecha_ingreso) {
-            return 0;
+        if (! $docente->id) {
+            return 0.0;
         }
-
-        [$inicio, $fin] = $this->periodoContrato($docente->fecha_ingreso->toDateString());
 
         return (float) $docente->solicitudes()
             ->where('estado', Constantes::ESTADO_APROBADA)
-            ->whereDate('fecha_inicio', '>=', $inicio)
-            ->whereDate('fecha_inicio', '<', $fin)
             ->sum('dias_solicitados');
     }
 

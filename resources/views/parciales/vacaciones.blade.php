@@ -123,10 +123,16 @@
                         <td style="font-weight: bold; border-bottom: 1px dotted #888; padding: 2px 3px;">Antigüedad:</td>
                         <td style="border-bottom: 1px dotted #888; padding: 2px 3px; font-weight: bold;">{{ $docente->antiguedad_anios }} años</td>
                     </tr>
+                    <tr>
+                        <td style="font-weight: bold; border-bottom: 1px dotted #888; padding: 2px 3px;">F. Conclusión:</td>
+                        <td style="border-bottom: 1px dotted #888; padding: 2px 3px; font-weight: bold; color: #0b2a5b;" class="boleta-fecha-conclusion">--/--/----</td>
+                        <td style="font-weight: bold; border-bottom: 1px dotted #888; padding: 2px 3px;">F. Retorno:</td>
+                        <td style="border-bottom: 1px dotted #888; padding: 2px 3px; font-weight: bold; color: #0b2a5b;" class="boleta-fecha-retorno">--/--/----</td>
+                    </tr>
                 </table>
 
                 <div class="parrafo-vacaciones" id="parrafo-vacaciones" style="font-size: 9px; text-align: justify; line-height: 1.35; margin-top: 5px; padding: 4px 6px; border: 1px solid #cbd5e1; background-color: #f8fafc; -webkit-print-color-adjust: exact; print-color-adjust: exact;">
-                    El/la docente hará uso de sus descansos y vacaciones <strong>a partir del <span class="boleta-fecha-inicio">{{ date('d/m/Y') }}</span></strong>, debiendo retornar a sus funciones el <strong><span class="boleta-fecha-retorno">--/--/----</span></strong> en modalidad de <strong><span class="boleta-jornada">Jornada Completa</span></strong>.
+                    El/la docente hará uso de sus descansos y vacaciones <strong>a partir del <span class="boleta-fecha-inicio">{{ date('d/m/Y') }}</span></strong> hasta su <strong>conclusión el <span class="boleta-fecha-conclusion">--/--/----</span></strong>, debiendo retornar a sus funciones el <strong><span class="boleta-fecha-retorno">--/--/----</span></strong> en modalidad de <strong><span class="boleta-jornada">Jornada Completa</span></strong>.
                 </div>
                 <div class="parrafo-no-vacaciones" id="parrafo-no-vacaciones" style="font-size: 9px; text-align: center; line-height: 1.3; color: #b91c1c; font-weight: bold; display: none; margin-top: 5px; padding: 4px 6px; border: 1px solid #fca5a5; background-color: #fef2f2; -webkit-print-color-adjust: exact; print-color-adjust: exact;">
                     EL DOCENTE NO GOZA DE VACACIONES POR TENER SALDO EN CONTRA (DEUDOR) O SALDO CERO.
@@ -358,7 +364,7 @@
     }
 
     function calcularRangoVacacionesBolivia(fechaStr, dias) {
-        if (!fechaStr) return { inicio: null, retorno: null };
+        if (!fechaStr || dias <= 0) return { inicio: null, conclusion: null, retorno: null };
         let [y, m, d] = fechaStr.split('-').map(Number);
         let cursor = new Date(y, m - 1, d);
 
@@ -369,17 +375,22 @@
 
         let fechaInicio = new Date(cursor.getTime());
         let diasEnteros = Math.floor(dias);
+        let tieneMedioDia = (dias - diasEnteros) > 0;
+        let totalDiasHabiles = tieneMedioDia ? (diasEnteros + 1) : diasEnteros;
 
-        if (diasEnteros <= 0) {
-            return { inicio: fechaInicio, retorno: fechaInicio };
+        if (totalDiasHabiles <= 0) {
+            return { inicio: fechaInicio, conclusion: fechaInicio, retorno: fechaInicio };
         }
 
         // Consumir únicamente los días hábiles laborales de vacación
         let diasConsumidos = 0;
-        while (diasConsumidos < diasEnteros) {
+        let fechaConclusion = new Date(cursor.getTime());
+
+        while (diasConsumidos < totalDiasHabiles) {
             if (esDiaHabilBolivia(cursor)) {
                 diasConsumidos++;
-                if (diasConsumidos === diasEnteros) {
+                fechaConclusion = new Date(cursor.getTime());
+                if (diasConsumidos === totalDiasHabiles) {
                     break;
                 }
             }
@@ -394,6 +405,7 @@
 
         return {
             inicio: fechaInicio,
+            conclusion: fechaConclusion,
             retorno: new Date(cursor.getTime())
         };
     }
@@ -476,10 +488,20 @@
         if (totalAusenta > 0) {
             let rango = calcularRangoVacacionesBolivia(fechaInicioStr, totalAusenta);
             actualizarClases('boleta-fecha-inicio', formatearFecha(rango.inicio));
+            actualizarClases('boleta-fecha-conclusion', formatearFecha(rango.conclusion));
             actualizarClases('boleta-fecha-retorno', formatearFecha(rango.retorno));
             
             let tieneMedioDia = (totalAusenta - Math.floor(totalAusenta)) > 0;
-            actualizarClases('boleta-jornada', tieneMedioDia ? 'Medio Día (Tarde)' : 'Jornada Completa');
+            let etiquetaJornada = 'Jornada Completa';
+            if (tieneMedioDia) {
+                etiquetaJornada = totalAusenta === 0.5
+                    ? 'Medio Día (Tarde)'
+                    : (Math.floor(totalAusenta) + ' días y Medio Día');
+            }
+            actualizarClases('boleta-jornada', etiquetaJornada);
+        } else {
+            actualizarClases('boleta-fecha-conclusion', '--/--/----');
+            actualizarClases('boleta-fecha-retorno', '--/--/----');
         }
     }
 
