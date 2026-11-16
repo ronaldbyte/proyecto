@@ -46,12 +46,6 @@ class ServicioNotificaciones
                 ->unique('id')
                 ->values();
 
-            if ($destinatarios->isEmpty()) {
-                $destinatarios = Usuario::where('activo', true)
-                    ->whereHas('rol', fn ($q) => $q->where('codigo', Constantes::ROL_JEFATURA))
-                    ->get();
-            }
-
             $this->avisar($destinatarios, 'nueva_solicitud', $titulo, $mensaje, $solicitud);
         } elseif ($solicitud->estado === Constantes::ESTADO_PENDIENTE_AREA) {
             $this->notificarPendienteArea($solicitud);

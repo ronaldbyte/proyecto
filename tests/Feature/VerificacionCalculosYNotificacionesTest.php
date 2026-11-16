@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Docente;
+use App\Models\Notificacion;
 use App\Models\Rol;
 use App\Models\Solicitud;
 use App\Models\Usuario;
@@ -219,5 +220,87 @@ class VerificacionCalculosYNotificacionesTest extends TestCase
         $respuestaImpresion = $this->actingAs($jefatura)->get('/jefatura/imprimir/docente/'.$docente->id);
         $respuestaImpresion->assertOk();
         $respuestaImpresion->assertSee('Periodo (Inicio a Conclusión)');
+    }
+
+    public function test_flujo_estricto_docente_notifica_a_director_carrera_y_area_simultaneamente_y_luego_a_jefatura(): void
+    {
+        $docenteUsuario = Usuario::where('codigo', 'DOC001')->firstOrFail();
+        $dirCarrera = Usuario::where('codigo', 'DIRC01')->firstOrFail();
+        $dirArea = Usuario::where('codigo', 'DIRA01')->firstOrFail();
+        $jefe = Usuario::where('codigo', 'JEF001')->firstOrFail();
+
+        // Limpiar notificaciones previas del seeder para una prueba limpia
+        Notificacion::truncate();
+
+        // 1. El docente envía la solicitud
+        $this->actingAs($docenteUsuario)->post('/solicitudes', [
+            'fecha_inicio' => now()->addDays(20)->toDateString(),
+            'fecha_fin' => now()->addDays(22)->toDateString(),
+            'jornada' => Constantes::JORNADA_COMPLETA,
+            'motivo' => 'Solicitud para probar el flujo estricto docente -> directores -> jefatura.',
+        ])->assertRedirect('/solicitudes');
+
+        $solicitud = Solicitud::latest('id')->firstOrFail();
+
+        // La solicitud debe iniciar en ESTADO_PENDIENTE
+        $this->assertSame(Constantes::ESTADO_PENDIENTE, $solicitud->estado);
+
+        // Debe llegar la notificación al Director de Carrera Y al Director de Área simultáneamente
+        $this->assertDatabaseHas('notificaciones', [
+            'usuario_id' => $dirCarrera->id,
+            'solicitud_id' => $solicitud->id,
+            'tipo' => 'nueva_solicitud',
+        ]);
+        $this->assertDatabaseHas('notificaciones', [
+            'usuario_id' => $dirArea->id,
+            'solicitud_id' => $solicitud->id,
+            'tipo' => 'nueva_solicitud',
+        ]);
+
+        // Jefatura NO debe recibir notificación en este momento
+        $this->assertDatabaseMissing('notificaciones', [
+            'usuario_id' => $jefe->id,
+            'solicitud_id' => $solicitud->id,
+        ]);
+
+        // Jefatura NO puede decidir la solicitud mientras esté en ESTADO_PENDIENTE
+        $this->actingAs($jefe)->post('/jefatura/solicitudes/'.$solicitud->id.'/decidir', [
+            'decision' => 'aprobada',
+        ])->assertSessionHasErrors('general');
+
+        $this->assertSame(Constantes::ESTADO_PENDIENTE, $solicitud->fresh()->estado);
+
+        // 2. Uno de los dos directores (ej. Director de Carrera) aprueba la solicitud
+        $this->actingAs($dirCarrera)->post('/direccion/solicitudes/'.$solicitud->id.'/decidir', [
+            'decision' => 'aprobada',
+        ])->assertRedirect('/direccion/pendientes');
+
+        // El estado ahora pasa a PENDIENTE_JEFATURA
+        $this->assertSame(Constantes::ESTADO_PENDIENTE_JEFATURA, $solicitud->fresh()->estado);
+
+        // RECIÉN ahora la Jefatura recibe la notificación de aprobación pendiente
+        $this->assertDatabaseHas('notificaciones', [
+            'usuario_id' => $jefe->id,
+            'solicitud_id' => $solicitud->id,
+            'tipo' => 'pendiente_jefatura',
+        ]);
+
+        // 3. Jefatura de Personal toma la decisión final
+        $this->actingAs($jefe)->post('/jefatura/solicitudes/'.$solicitud->id.'/decidir', [
+            'decision' => 'aprobada',
+        ])->assertRedirect('/jefatura/solicitudes/pendientes');
+
+        $solicitudActualizada = $solicitud->fresh();
+        $this->assertSame(Constantes::ESTADO_APROBADA, $solicitudActualizada->estado);
+
+        // Se descuentan los 3 días de vacaciones en tiempo real
+        $this->assertEquals(3.0, $docenteUsuario->docente->fresh()->dias_utilizados);
+
+        // El docente recibe la notificación de que su solicitud fue aprobada
+        $this->assertDatabaseHas('notificaciones', [
+            'usuario_id' => $docenteUsuario->id,
+            'solicitud_id' => $solicitud->id,
+            'tipo' => 'aprobada',
+        ]);
     }
 }
