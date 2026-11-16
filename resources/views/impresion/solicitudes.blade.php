@@ -10,7 +10,7 @@
             <th>Código</th>
             <th>Carrera</th>
             <th>Inicio</th>
-            <th>Fin</th>
+            <th>Conclusión</th>
             <th>Días</th>
             <th>Estado</th>
         </tr>
