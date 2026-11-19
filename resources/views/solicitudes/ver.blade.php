@@ -61,7 +61,15 @@
     @endif
 
     @if($usuario->esJefatura() && $solicitud->estaPendienteJefatura())
-        @include('parciales.formulario-decision-jefatura', ['ruta' => route('jefatura.decidir', $solicitud)])
+        @if($usuario->codigo === 'JEF001')
+            @include('parciales.formulario-decision-jefatura', ['ruta' => route('jefatura.decidir', $solicitud)])
+        @else
+            <div class="tarjeta" style="margin-top: 1.5rem; background: #eff6ff; border-left: 4px solid #3b82f6; padding: 1rem; border-radius: 6px;">
+                <p style="margin: 0; color: #1e40af; font-weight: 500;">
+                    <strong>Información:</strong> La decisión final de aprobación o rechazo de esta solicitud está reservada exclusivamente para la Jefatura de Personal Titular (JEF001). Usted puede revisar los antecedentes y detalles de la solicitud con fines informativos.
+                </p>
+            </div>
+        @endif
     @endif
 </div>
 @endsection

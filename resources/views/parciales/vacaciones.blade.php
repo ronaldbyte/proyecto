@@ -26,7 +26,10 @@
 
 @if(Auth::user()->esJefatura())
 <div class="no-imprimir" style="margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--borde);">
-    <h3 style="margin-bottom: 12px; font-size: 16px;">Configuración para Boleta de Impresión</h3>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 12px; flex-wrap:wrap; gap:8px;">
+        <h3 style="margin: 0; font-size: 16px;">Configuración para Boleta de Impresión</h3>
+        <span id="alerta-guardado-boleta" style="font-size:12px; color:#16a34a; font-weight:600; display:none;"></span>
+    </div>
     <div class="rejilla rejilla-3" style="gap: 12px; margin-bottom: 12px;">
         <div class="tarjeta" style="display:flex; flex-direction:column; gap:4px; padding:12px;">
             <span style="font-size:12px; color:var(--gris);">Gestión</span>
@@ -41,10 +44,14 @@
             <input type="number" step="0.5" id="inp-acumulados" min="0" max="100" value="0" placeholder="0" onfocus="this.select()" oninput="limpiarCero(this); calcularVacaciones()" style="padding:6px; border:1px solid var(--borde); border-radius:6px; font-size:14px; text-align:center; font-weight:bold; color:var(--azul-marino);">
         </div>
     </div>
-    <div class="rejilla rejilla-3" style="gap: 12px;">
+    <div class="rejilla rejilla-4" style="gap: 12px; margin-bottom: 12px;">
         <div class="tarjeta" style="display:flex; flex-direction:column; gap:4px; padding:12px;">
             <span style="font-size:12px; color:var(--gris);">Licencias pasadas</span>
             <input type="number" step="1" id="inp-licencias-pasadas" min="0" max="100" value="0" placeholder="0" onfocus="this.select()" oninput="limpiarCero(this); calcularVacaciones()" style="padding:6px; border:1px solid var(--borde); border-radius:6px; font-size:14px; text-align:center; font-weight:bold; color:var(--azul-marino);">
+        </div>
+        <div class="tarjeta" style="display:flex; flex-direction:column; gap:4px; padding:12px;">
+            <span style="font-size:12px; color:var(--gris);">Días pendientes / sobrantes</span>
+            <input type="number" step="1" id="inp-pendientes" min="0" max="100" value="0" placeholder="0" onfocus="this.select()" oninput="limpiarCero(this); calcularVacaciones()" style="padding:6px; border:1px solid var(--borde); border-radius:6px; font-size:14px; text-align:center; font-weight:bold; color:var(--azul-marino);" title="Días sobrantes o pendientes fuera del cálculo automático">
         </div>
         <div class="tarjeta" style="display:flex; flex-direction:column; gap:4px; padding:12px;">
             <span style="font-size:12px; color:var(--gris);">Descanso Pedagógico</span>
@@ -55,7 +62,20 @@
             <input type="number" step="0.5" id="inp-receso" min="0" max="60" value="3" placeholder="0" onfocus="this.select()" oninput="limpiarCero(this); calcularVacaciones()" style="padding:6px; border:1px solid var(--borde); border-radius:6px; font-size:14px; text-align:center; font-weight:bold; color:var(--azul-marino);">
         </div>
     </div>
-    <div style="margin-top: 16px; display:flex; justify-content:flex-end; gap:10px; flex-wrap:wrap;">
+    <div class="tarjeta" style="padding: 10px 14px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; background: #f8fafc; border: 1px solid var(--borde);">
+        <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:13px; font-weight:600; color:var(--texto-oscuro);">Modalidad de Retorno:</span>
+            <select id="inp-modalidad" onchange="calcularVacaciones()" style="padding:6px 10px; border:1px solid var(--borde); border-radius:6px; font-size:13px; font-weight:500; background:#fff;">
+                <option value="completa" selected>Jornada Completa (retorna día hábil siguiente a horas 08:00 a.m.)</option>
+                <option value="media">Media Jornada (retorna misma fecha de conclusión a horas 14:00 p.m.)</option>
+            </select>
+        </div>
+    </div>
+    <div style="margin-top: 16px; display:flex; justify-content:flex-end; gap:10px; flex-wrap:wrap; align-items:center;">
+        <button class="boton boton-secundario" type="button" id="btn-restaurar-boleta" onclick="recuperarConfiguracionBoleta(true)" style="display:inline-flex; align-items:center; gap:6px;" title="Recupera las modificaciones anteriores guardadas para este docente">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+            Restaurar valores anteriores
+        </button>
         <button class="boton boton-azul" type="button" id="btn-descargar-img" onclick="descargarImagenBoleta()" style="display:inline-flex; align-items:center; gap:6px;">
             <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
             Descargar en imagen (3 copias)
@@ -127,12 +147,15 @@
                         <td style="font-weight: bold; border-bottom: 1px dotted #888; padding: 2px 3px;">F. Conclusión:</td>
                         <td style="border-bottom: 1px dotted #888; padding: 2px 3px; font-weight: bold; color: #0b2a5b;" class="boleta-fecha-conclusion">--/--/----</td>
                         <td style="font-weight: bold; border-bottom: 1px dotted #888; padding: 2px 3px;">F. Retorno:</td>
-                        <td style="border-bottom: 1px dotted #888; padding: 2px 3px; font-weight: bold; color: #0b2a5b;" class="boleta-fecha-retorno">--/--/----</td>
+                        <td style="border-bottom: 1px dotted #888; padding: 2px 3px; font-weight: bold; color: #0b2a5b;">
+                            <span class="boleta-fecha-retorno">--/--/----</span>
+                            <span style="font-size: 8px; font-weight: normal; color: #334155;">(<span class="boleta-hora-retorno">08:00 a.m.</span>)</span>
+                        </td>
                     </tr>
                 </table>
 
                 <div class="parrafo-vacaciones" id="parrafo-vacaciones" style="font-size: 9px; text-align: justify; line-height: 1.35; margin-top: 5px; padding: 4px 6px; border: 1px solid #cbd5e1; background-color: #f8fafc; -webkit-print-color-adjust: exact; print-color-adjust: exact;">
-                    El/la docente hará uso de sus descansos y vacaciones <strong>a partir del <span class="boleta-fecha-inicio">{{ date('d/m/Y') }}</span></strong> hasta su <strong>conclusión el <span class="boleta-fecha-conclusion">--/--/----</span></strong>, debiendo retornar a sus funciones el <strong><span class="boleta-fecha-retorno">--/--/----</span></strong> en modalidad de <strong><span class="boleta-jornada">Jornada Completa</span></strong>.
+                    El/la docente hará uso de sus descansos y vacaciones <strong>a partir del <span class="boleta-fecha-inicio">{{ date('d/m/Y') }}</span></strong> hasta su <strong>conclusión el <span class="boleta-fecha-conclusion">--/--/----</span></strong>, debiendo retornar a sus funciones el <strong><span class="boleta-fecha-retorno">--/--/----</span> a horas <span class="boleta-hora-retorno">08:00 a.m.</span></strong> en modalidad de <strong><span class="boleta-jornada">Jornada Completa</span></strong>.
                 </div>
                 <div class="parrafo-no-vacaciones" id="parrafo-no-vacaciones" style="font-size: 9px; text-align: center; line-height: 1.3; color: #b91c1c; font-weight: bold; display: none; margin-top: 5px; padding: 4px 6px; border: 1px solid #fca5a5; background-color: #fef2f2; -webkit-print-color-adjust: exact; print-color-adjust: exact;">
                     EL DOCENTE NO GOZA DE VACACIONES POR TENER SALDO EN CONTRA (DEUDOR) O SALDO CERO.
@@ -165,6 +188,10 @@
                         <tr>
                             <td style="border: 1px solid #000; padding: 2px 4px;">Licencias pasadas:</td>
                             <td style="border: 1px solid #000; padding: 2px 4px; text-align: right;"><span class="boleta-licencias-pasadas">0</span> d</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000; padding: 2px 4px;">Días pendientes / sobrantes:</td>
+                            <td style="border: 1px solid #000; padding: 2px 4px; text-align: right; font-weight: bold; color: #0b2a5b;"><span class="boleta-pendientes">0</span> d</td>
                         </tr>
                         <tr>
                             <td style="border: 1px solid #000; padding: 2px 4px;">Descanso Pedag. / Receso:</td>
@@ -363,8 +390,87 @@
         return true;
     }
 
-    function calcularRangoVacacionesBolivia(fechaStr, dias) {
-        if (!fechaStr || dias <= 0) return { inicio: null, conclusion: null, retorno: null };
+    const storageKeyBoleta = 'boleta_config_docente_{{ $docente->id }}';
+
+    function guardarConfiguracionBoleta() {
+        try {
+            let config = {
+                gestion: document.getElementById('inp-gestion') ? document.getElementById('inp-gestion').value : '',
+                fechaInicio: document.getElementById('inp-fecha-inicio') ? document.getElementById('inp-fecha-inicio').value : '',
+                acumulados: document.getElementById('inp-acumulados') ? document.getElementById('inp-acumulados').value : '0',
+                licenciasPasadas: document.getElementById('inp-licencias-pasadas') ? document.getElementById('inp-licencias-pasadas').value : '0',
+                pendientes: document.getElementById('inp-pendientes') ? document.getElementById('inp-pendientes').value : '0',
+                descanso: document.getElementById('inp-descanso') ? document.getElementById('inp-descanso').value : '5',
+                receso: document.getElementById('inp-receso') ? document.getElementById('inp-receso').value : '3',
+                modalidad: document.getElementById('inp-modalidad') ? document.getElementById('inp-modalidad').value : 'completa'
+            };
+            localStorage.setItem(storageKeyBoleta, JSON.stringify(config));
+        } catch (e) {
+            console.error('Error guardando configuración:', e);
+        }
+    }
+
+    function recuperarConfiguracionBoleta(notificar = true) {
+        try {
+            let guardado = localStorage.getItem(storageKeyBoleta);
+            if (!guardado) {
+                if (notificar) {
+                    alert('No hay modificaciones o configuraciones anteriores guardadas para este docente.');
+                }
+                return false;
+            }
+            let config = JSON.parse(guardado);
+            if (config.gestion !== undefined && document.getElementById('inp-gestion')) {
+                document.getElementById('inp-gestion').value = config.gestion;
+            }
+            if (config.fechaInicio !== undefined && document.getElementById('inp-fecha-inicio')) {
+                document.getElementById('inp-fecha-inicio').value = config.fechaInicio;
+            }
+            if (config.acumulados !== undefined && document.getElementById('inp-acumulados')) {
+                document.getElementById('inp-acumulados').value = config.acumulados;
+            }
+            if (config.licenciasPasadas !== undefined && document.getElementById('inp-licencias-pasadas')) {
+                document.getElementById('inp-licencias-pasadas').value = config.licenciasPasadas;
+            }
+            if (config.pendientes !== undefined && document.getElementById('inp-pendientes')) {
+                document.getElementById('inp-pendientes').value = config.pendientes;
+            }
+            if (config.descanso !== undefined && document.getElementById('inp-descanso')) {
+                document.getElementById('inp-descanso').value = config.descanso;
+            }
+            if (config.receso !== undefined && document.getElementById('inp-receso')) {
+                document.getElementById('inp-receso').value = config.receso;
+            }
+            if (config.modalidad !== undefined && document.getElementById('inp-modalidad')) {
+                document.getElementById('inp-modalidad').value = config.modalidad;
+            }
+            calcularVacaciones(false);
+            if (notificar) {
+                let aviso = document.getElementById('alerta-guardado-boleta');
+                if (aviso) {
+                    aviso.textContent = 'Valores anteriores recuperados correctamente';
+                    aviso.style.color = '#16a34a';
+                    aviso.style.display = 'inline-block';
+                    setTimeout(function() { aviso.style.display = 'none'; }, 3500);
+                }
+            }
+            return true;
+        } catch (e) {
+            console.error('Error recuperando configuración:', e);
+            return false;
+        }
+    }
+
+    function calcularRangoVacacionesBolivia(fechaStr, dias, modalidad) {
+        if (!fechaStr || dias <= 0) {
+            return {
+                inicio: null,
+                conclusion: null,
+                retorno: null,
+                horaRetorno: modalidad === 'media' ? '14:00 p.m.' : '08:00 a.m.',
+                etiquetaJornada: modalidad === 'media' ? 'Media Jornada' : 'Jornada Completa'
+            };
+        }
         let [y, m, d] = fechaStr.split('-').map(Number);
         let cursor = new Date(y, m - 1, d);
 
@@ -379,7 +485,13 @@
         let totalDiasHabiles = tieneMedioDia ? (diasEnteros + 1) : diasEnteros;
 
         if (totalDiasHabiles <= 0) {
-            return { inicio: fechaInicio, conclusion: fechaInicio, retorno: fechaInicio };
+            return {
+                inicio: fechaInicio,
+                conclusion: fechaInicio,
+                retorno: fechaInicio,
+                horaRetorno: modalidad === 'media' ? '14:00 p.m.' : '08:00 a.m.',
+                etiquetaJornada: modalidad === 'media' ? 'Media Jornada' : 'Jornada Completa'
+            };
         }
 
         // Consumir únicamente los días hábiles laborales de vacación
@@ -397,17 +509,29 @@
             cursor.setDate(cursor.getDate() + 1);
         }
 
-        // La fecha de retorno laboral es el primer día hábil siguiente
-        cursor.setDate(cursor.getDate() + 1);
-        while (!esDiaHabilBolivia(cursor)) {
+        if (modalidad === 'media') {
+            // Media Jornada: retorna ESA MISMA FECHA DE CONCLUSIÓN a las 14:00 p.m.
+            return {
+                inicio: fechaInicio,
+                conclusion: fechaConclusion,
+                retorno: new Date(fechaConclusion.getTime()),
+                horaRetorno: '14:00 p.m.',
+                etiquetaJornada: 'Media Jornada'
+            };
+        } else {
+            // Jornada Completa: retorna al DÍA HÁBIL SIGUIENTE a las 08:00 a.m.
             cursor.setDate(cursor.getDate() + 1);
+            while (!esDiaHabilBolivia(cursor)) {
+                cursor.setDate(cursor.getDate() + 1);
+            }
+            return {
+                inicio: fechaInicio,
+                conclusion: fechaConclusion,
+                retorno: new Date(cursor.getTime()),
+                horaRetorno: '08:00 a.m.',
+                etiquetaJornada: 'Jornada Completa'
+            };
         }
-
-        return {
-            inicio: fechaInicio,
-            conclusion: fechaConclusion,
-            retorno: new Date(cursor.getTime())
-        };
     }
 
     function formatearFecha(fecha) {
@@ -422,12 +546,18 @@
         document.querySelectorAll('.' + clase).forEach(el => el.textContent = valor);
     }
 
-    function calcularVacaciones() {
+    function calcularVacaciones(autoGuardar = true) {
         let gestion = document.getElementById('inp-gestion') ? document.getElementById('inp-gestion').value : '';
         let acumulados = document.getElementById('inp-acumulados') ? (parseFloat(document.getElementById('inp-acumulados').value) || 0) : 0;
         let licenciasPasadas = document.getElementById('inp-licencias-pasadas') ? (parseInt(document.getElementById('inp-licencias-pasadas').value) || 0) : 0;
         if (licenciasPasadas < 0) licenciasPasadas = 0;
         if (licenciasPasadas > 100) licenciasPasadas = 100;
+
+        let pendientes = document.getElementById('inp-pendientes') ? (parseInt(document.getElementById('inp-pendientes').value) || 0) : 0;
+        if (pendientes < 0) pendientes = 0;
+
+        let modalidad = document.getElementById('inp-modalidad') ? document.getElementById('inp-modalidad').value : 'completa';
+
         let utilizados = diasUtilizadosOriginal;
         let descanso = document.getElementById('inp-descanso') ? (parseFloat(document.getElementById('inp-descanso').value) || 0) : 0;
         let receso = document.getElementById('inp-receso') ? (parseFloat(document.getElementById('inp-receso').value) || 0) : 0;
@@ -438,6 +568,7 @@
         actualizarClases('boleta-acumulados', acumulados);
         actualizarClases('boleta-utilizados', utilizados);
         actualizarClases('boleta-licencias-pasadas', licenciasPasadas);
+        actualizarClases('boleta-pendientes', pendientes);
         actualizarClases('boleta-descanso', descanso);
         actualizarClases('boleta-receso', receso);
         
@@ -486,27 +617,37 @@
         
         // Calcular fechas hábiles (excluyendo sábados, domingos y feriados oficiales de Bolivia)
         if (totalAusenta > 0) {
-            let rango = calcularRangoVacacionesBolivia(fechaInicioStr, totalAusenta);
+            let rango = calcularRangoVacacionesBolivia(fechaInicioStr, totalAusenta, modalidad);
             actualizarClases('boleta-fecha-inicio', formatearFecha(rango.inicio));
             actualizarClases('boleta-fecha-conclusion', formatearFecha(rango.conclusion));
             actualizarClases('boleta-fecha-retorno', formatearFecha(rango.retorno));
-            
-            let tieneMedioDia = (totalAusenta - Math.floor(totalAusenta)) > 0;
-            let etiquetaJornada = 'Jornada Completa';
-            if (tieneMedioDia) {
-                etiquetaJornada = totalAusenta === 0.5
-                    ? 'Medio Día (Tarde)'
-                    : (Math.floor(totalAusenta) + ' días y Medio Día');
-            }
-            actualizarClases('boleta-jornada', etiquetaJornada);
+            actualizarClases('boleta-hora-retorno', rango.horaRetorno);
+            actualizarClases('boleta-jornada', rango.etiquetaJornada);
         } else {
             actualizarClases('boleta-fecha-conclusion', '--/--/----');
             actualizarClases('boleta-fecha-retorno', '--/--/----');
+            actualizarClases('boleta-hora-retorno', '--:--');
+            actualizarClases('boleta-jornada', 'Jornada Completa');
+        }
+
+        if (autoGuardar) {
+            guardarConfiguracionBoleta();
         }
     }
 
-    // Inicializar cálculo al cargar
-    document.addEventListener('DOMContentLoaded', calcularVacaciones);
+    // Inicializar cálculo al cargar y verificar si hay datos guardados
+    document.addEventListener('DOMContentLoaded', function() {
+        calcularVacaciones(false);
+        try {
+            if (localStorage.getItem(storageKeyBoleta)) {
+                let btnRestaurar = document.getElementById('btn-restaurar-boleta');
+                if (btnRestaurar) {
+                    btnRestaurar.style.borderColor = 'var(--azul-marino)';
+                    btnRestaurar.setAttribute('title', 'Hay modificaciones anteriores guardadas para este docente. Haga clic para cargarlas.');
+                }
+            }
+        } catch(e) {}
+    });
 
     function actualizarFechaImpresion() {
         var ahora = new Date();
@@ -520,6 +661,7 @@
     }
 
     function imprimirBoleta() {
+        guardarConfiguracionBoleta();
         var tituloOriginal = document.title;
         document.title = ' ';
         actualizarFechaImpresion();
@@ -540,6 +682,7 @@
     });
 
     function descargarImagenBoleta() {
+        guardarConfiguracionBoleta();
         if (typeof html2canvas === 'undefined') {
             alert('Cargando componente de imagen, intente de nuevo en un segundo.');
             return;

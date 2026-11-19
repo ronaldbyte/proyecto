@@ -115,8 +115,8 @@ class ServicioAprobaciones
 
     public function decidirComoJefatura(Solicitud $solicitud, Usuario $usuario, string $decision, string $observacion = ''): void
     {
-        if (! $usuario->esJefatura()) {
-            throw new InvalidArgumentException('Solo Jefatura de Personal puede tomar la decisión final.');
+        if (! $usuario->esJefatura() || $usuario->codigo !== 'JEF001') {
+            throw new InvalidArgumentException('Solo la Jefatura de Personal titular (JEF001) tiene atribución para emitir la decisión final.');
         }
 
         if (! $solicitud->estaPendienteJefatura()) {

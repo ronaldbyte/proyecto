@@ -81,7 +81,7 @@ class ServicioNotificaciones
             .' espera la decisión de Jefatura de Personal.';
 
         $jefaturas = Usuario::where('activo', true)
-            ->whereHas('rol', fn ($q) => $q->where('codigo', Constantes::ROL_JEFATURA))
+            ->where('codigo', 'JEF001')
             ->get();
 
         $this->avisar($jefaturas, 'pendiente_jefatura', $titulo, $mensaje, $solicitud);

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\DecidirSolicitudRequest;
+use App\Models\Area;
+use App\Models\Carrera;
 use App\Models\Solicitud;
 use App\Services\ServicioAprobaciones;
 use App\Soporte\Constantes;
@@ -107,13 +109,15 @@ class AprobacionController extends Controller
 
         return view('jefatura.solicitudes.listar', [
             'solicitudes' => $solicitudes,
-            'carreras' => \App\Models\Carrera::orderBy('nombre')->get(),
-            'areas' => \App\Models\Area::with(['carreras' => fn ($q) => $q->orderBy('nombre')])->orderBy('nombre')->get(),
+            'carreras' => Carrera::orderBy('nombre')->get(),
+            'areas' => Area::with(['carreras' => fn ($q) => $q->orderBy('nombre')])->orderBy('nombre')->get(),
         ]);
     }
 
     public function decidirJefatura(DecidirSolicitudRequest $request, Solicitud $solicitud)
     {
+        abort_unless(Auth::user()?->esJefatura() && Auth::user()?->codigo === 'JEF001', 403, 'Solo la Jefatura de Personal titular (JEF001) tiene atribución para emitir la decisión final.');
+
         try {
             $this->servicio->decidirComoJefatura(
                 $solicitud,

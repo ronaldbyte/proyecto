@@ -144,7 +144,7 @@ class VerificacionCalculosYNotificacionesTest extends TestCase
         $this->assertEquals($docente->fresh()->dias_asignados - 5.0, $docente->fresh()->dias_disponibles);
     }
 
-    public function test_notificacion_a_multiples_jefes_de_personal_llega_a_todos_al_mismo_tiempo(): void
+    public function test_notificacion_y_decision_final_exclusiva_de_jef001_titular(): void
     {
         $rolJefatura = Rol::where('codigo', Constantes::ROL_JEFATURA)->firstOrFail();
 
@@ -169,7 +169,7 @@ class VerificacionCalculosYNotificacionesTest extends TestCase
             'fecha_fin' => now()->addDays(11)->toDateString(),
             'jornada' => Constantes::JORNADA_COMPLETA,
             'dias_solicitados' => 2,
-            'motivo' => 'Solicitud que debe alertar a todos los jefes de personal.',
+            'motivo' => 'Solicitud que debe alertar exclusivamente al jefe titular JEF001.',
             'estado' => Constantes::ESTADO_PENDIENTE,
         ]);
 
@@ -181,18 +181,34 @@ class VerificacionCalculosYNotificacionesTest extends TestCase
 
         $this->assertSame(Constantes::ESTADO_PENDIENTE_JEFATURA, $solicitud->fresh()->estado);
 
-        // Verificar que AMBOS jefes de personal recibieron la notificación al mismo tiempo
+        // 1. Verificar que SOLO el Jefe Titular JEF001 recibió la notificación de decisión
         $this->assertDatabaseHas('notificaciones', [
             'usuario_id' => $jefe1->id,
             'solicitud_id' => $solicitud->id,
             'tipo' => 'pendiente_jefatura',
         ]);
 
-        $this->assertDatabaseHas('notificaciones', [
+        // 2. El segundo jefe JEF002 NO debe recibir dicha notificación
+        $this->assertDatabaseMissing('notificaciones', [
             'usuario_id' => $jefe2->id,
             'solicitud_id' => $solicitud->id,
             'tipo' => 'pendiente_jefatura',
         ]);
+
+        // 3. El segundo jefe puede VER la solicitud
+        $this->actingAs($jefe2)->get('/solicitudes/'.$solicitud->id)->assertOk();
+
+        // 4. El segundo jefe NO puede emitir decisión (debe recibir 403)
+        $this->actingAs($jefe2)->post('/jefatura/solicitudes/'.$solicitud->id.'/decidir', [
+            'decision' => 'aprobada',
+        ])->assertForbidden();
+
+        // 5. El jefe titular JEF001 SÍ puede emitir decisión
+        $this->actingAs($jefe1)->post('/jefatura/solicitudes/'.$solicitud->id.'/decidir', [
+            'decision' => 'aprobada',
+        ])->assertRedirect('/jefatura/solicitudes/pendientes');
+
+        $this->assertSame(Constantes::ESTADO_APROBADA, $solicitud->fresh()->estado);
     }
 
     public function test_vista_de_boleta_e_impresion_incluyen_fecha_de_conclusion(): void
@@ -206,6 +222,11 @@ class VerificacionCalculosYNotificacionesTest extends TestCase
         $respuestaFicha->assertSee('boleta-fecha-conclusion');
         $respuestaFicha->assertSee('F. Conclusión:');
         $respuestaFicha->assertSee('conclusión el');
+        $respuestaFicha->assertSee('Días pendientes / sobrantes');
+        $respuestaFicha->assertSee('boleta-pendientes');
+        $respuestaFicha->assertSee('Modalidad de Retorno:');
+        $respuestaFicha->assertSee('Restaurar valores anteriores');
+        $respuestaFicha->assertSee('boleta-hora-retorno');
 
         // 2. Crear una solicitud aprobada para que aparezca la tabla de historial
         Solicitud::create([
