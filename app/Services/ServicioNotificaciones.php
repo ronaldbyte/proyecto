@@ -87,6 +87,20 @@ class ServicioNotificaciones
         $this->avisar($jefaturas, 'pendiente_jefatura', $titulo, $mensaje, $solicitud);
     }
 
+    public function notificarRecordatorioJefatura(Solicitud $solicitud, Usuario $remitente): void
+    {
+        $solicitud->loadMissing('docente');
+        $titulo = 'Recordatorio: Solicitud pendiente de decisión';
+        $mensaje = 'Recordatorio enviado por '.$remitente->nombre_completo.' ('.$remitente->codigo.'): La solicitud de '
+            .$solicitud->docente->nombre_completo.' espera su decisión final.';
+
+        $jefaturas = Usuario::where('activo', true)
+            ->where('codigo', 'JEF001')
+            ->get();
+
+        $this->avisar($jefaturas, 'recordatorio_jefatura', $titulo, $mensaje, $solicitud);
+    }
+
     public function notificarAprobada(Solicitud $solicitud): void
     {
         $usuario = $solicitud->docente->usuario;

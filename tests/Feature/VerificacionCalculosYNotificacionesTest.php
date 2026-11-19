@@ -195,8 +195,20 @@ class VerificacionCalculosYNotificacionesTest extends TestCase
             'tipo' => 'pendiente_jefatura',
         ]);
 
-        // 3. El segundo jefe puede VER la solicitud
-        $this->actingAs($jefe2)->get('/solicitudes/'.$solicitud->id)->assertOk();
+        // 3. El segundo jefe puede VER la solicitud y el botón para recordar al titular
+        $respuestaVer = $this->actingAs($jefe2)->get('/solicitudes/'.$solicitud->id);
+        $respuestaVer->assertOk();
+        $respuestaVer->assertSee('Recordar notificación al Jefe');
+
+        // 3.1. El segundo jefe puede enviar un recordatorio al titular JEF001
+        $this->actingAs($jefe2)->post('/jefatura/solicitudes/'.$solicitud->id.'/recordar')
+            ->assertSessionHas('exito');
+
+        $this->assertDatabaseHas('notificaciones', [
+            'usuario_id' => $jefe1->id,
+            'solicitud_id' => $solicitud->id,
+            'tipo' => 'recordatorio_jefatura',
+        ]);
 
         // 4. El segundo jefe NO puede emitir decisión (debe recibir 403)
         $this->actingAs($jefe2)->post('/jefatura/solicitudes/'.$solicitud->id.'/decidir', [
@@ -222,7 +234,7 @@ class VerificacionCalculosYNotificacionesTest extends TestCase
         $respuestaFicha->assertSee('boleta-fecha-conclusion');
         $respuestaFicha->assertSee('F. Conclusión:');
         $respuestaFicha->assertSee('conclusión el');
-        $respuestaFicha->assertSee('Días pendientes / sobrantes');
+        $respuestaFicha->assertSee('Días pendientes');
         $respuestaFicha->assertSee('boleta-pendientes');
         $respuestaFicha->assertSee('Modalidad de Retorno:');
         $respuestaFicha->assertSee('Restaurar valores anteriores');

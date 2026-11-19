@@ -7,6 +7,7 @@ use App\Models\Area;
 use App\Models\Carrera;
 use App\Models\Solicitud;
 use App\Services\ServicioAprobaciones;
+use App\Services\ServicioNotificaciones;
 use App\Soporte\Constantes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -134,6 +135,17 @@ class AprobacionController extends Controller
             : 'Solicitud rechazada. No se descontaron días.';
 
         return redirect()->route('jefatura.solicitudes.pendientes')->with('exito', $texto);
+    }
+
+    public function recordarJefatura(Solicitud $solicitud, ServicioNotificaciones $notificaciones)
+    {
+        $usuario = Auth::user();
+        abort_unless($usuario?->esJefatura(), 403);
+        abort_unless($solicitud->estaPendienteJefatura(), 400);
+
+        $notificaciones->notificarRecordatorioJefatura($solicitud, $usuario);
+
+        return back()->with('exito', 'Se envió un recordatorio exitosamente a la Jefatura Titular (JEF001) sobre esta solicitud pendiente.');
     }
 
     private function consultaDirector($usuario)

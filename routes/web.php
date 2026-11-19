@@ -71,6 +71,7 @@ Route::middleware(['auth', 'cambiar.contrasena'])->group(function () {
         Route::get('/solicitudes', [AprobacionController::class, 'listarJefatura'])->name('jefatura.solicitudes.listar');
         Route::get('/solicitudes/pendientes', [AprobacionController::class, 'pendientesJefatura'])->name('jefatura.solicitudes.pendientes');
         Route::post('/solicitudes/{solicitud}/decidir', [AprobacionController::class, 'decidirJefatura'])->name('jefatura.decidir');
+        Route::post('/solicitudes/{solicitud}/recordar', [AprobacionController::class, 'recordarJefatura'])->name('jefatura.recordar');
 
         Route::get('/historial/{docente}', [HistorialController::class, 'docente'])->name('jefatura.historial.docente');
         Route::get('/roles', [RolController::class, 'listar'])->name('jefatura.roles');

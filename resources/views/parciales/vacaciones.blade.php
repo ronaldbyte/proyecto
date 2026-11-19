@@ -50,8 +50,8 @@
             <input type="number" step="1" id="inp-licencias-pasadas" min="0" max="100" value="0" placeholder="0" onfocus="this.select()" oninput="limpiarCero(this); calcularVacaciones()" style="padding:6px; border:1px solid var(--borde); border-radius:6px; font-size:14px; text-align:center; font-weight:bold; color:var(--azul-marino);">
         </div>
         <div class="tarjeta" style="display:flex; flex-direction:column; gap:4px; padding:12px;">
-            <span style="font-size:12px; color:var(--gris);">Días pendientes / sobrantes</span>
-            <input type="number" step="1" id="inp-pendientes" min="0" max="100" value="0" placeholder="0" onfocus="this.select()" oninput="limpiarCero(this); calcularVacaciones()" style="padding:6px; border:1px solid var(--borde); border-radius:6px; font-size:14px; text-align:center; font-weight:bold; color:var(--azul-marino);" title="Días sobrantes o pendientes fuera del cálculo automático">
+            <span style="font-size:12px; color:var(--gris);">Días pendientes</span>
+            <input type="number" step="1" id="inp-pendientes" min="0" max="100" value="0" placeholder="0" onfocus="this.select()" oninput="limpiarCero(this); calcularVacaciones()" style="padding:6px; border:1px solid var(--borde); border-radius:6px; font-size:14px; text-align:center; font-weight:bold; color:var(--azul-marino);" title="Días pendientes fuera del cálculo automático">
         </div>
         <div class="tarjeta" style="display:flex; flex-direction:column; gap:4px; padding:12px;">
             <span style="font-size:12px; color:var(--gris);">Descanso Pedagógico</span>
@@ -190,7 +190,7 @@
                             <td style="border: 1px solid #000; padding: 2px 4px; text-align: right;"><span class="boleta-licencias-pasadas">0</span> d</td>
                         </tr>
                         <tr>
-                            <td style="border: 1px solid #000; padding: 2px 4px;">Días pendientes / sobrantes:</td>
+                            <td style="border: 1px solid #000; padding: 2px 4px;">Días pendientes:</td>
                             <td style="border: 1px solid #000; padding: 2px 4px; text-align: right; font-weight: bold; color: #0b2a5b;"><span class="boleta-pendientes">0</span> d</td>
                         </tr>
                         <tr>
