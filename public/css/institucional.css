@@ -393,6 +393,11 @@ img { max-width: 100%; }
 .datos-fijos > div { min-width: 0; overflow-wrap: anywhere; }
 .datos-fijos small { margin-bottom: 4px; }
 .tarjeta + .tarjeta { margin-top: 24px; }
+.rejilla > .tarjeta,
+.rejilla > div,
+.rejilla > * { margin: 0 !important; margin-top: 0 !important; margin-bottom: 0 !important; }
+.rejilla .tarjeta + .tarjeta,
+.rejilla > .tarjeta + .tarjeta { margin-top: 0 !important; }
 @media screen {
     .pagina > .rejilla + .rejilla,
     .pagina > .rejilla + .tarjeta,

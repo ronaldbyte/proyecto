@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('titulo', 'Panel') — UNSXX</title>
     <link rel="icon" href="{{ asset('favicon.ico') }}">
-    <link rel="stylesheet" href="{{ asset('css/institucional.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/institucional.css') }}?v={{ file_exists(public_path('css/institucional.css')) ? filemtime(public_path('css/institucional.css')) : time() }}">
 </head>
 <body>
 <div class="cuerpo-app">

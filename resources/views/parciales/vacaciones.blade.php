@@ -1,24 +1,37 @@
 @php
     $docente = $docente ?? null;
 @endphp
+<style>
+    .rejilla > .tarjeta,
+    .rejilla > div,
+    .rejilla > * {
+        margin: 0 !important;
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+    }
+    .rejilla .tarjeta + .tarjeta,
+    .rejilla > .tarjeta + .tarjeta {
+        margin-top: 0 !important;
+    }
+</style>
 @if($docente)
     @if(! $docente->gozaVacaciones())
         <div class="alerta">No goza de vacaciones.</div>
     @else
-<div class="rejilla rejilla-4">
-    <div class="tarjeta metrica">
+<div class="rejilla rejilla-4" style="margin-bottom: 0;">
+    <div class="tarjeta metrica" style="margin: 0 !important;">
         <span>Días asignados</span>
         <strong>{{ $docente->dias_asignados }}</strong>
     </div>
-    <div class="tarjeta metrica">
+    <div class="tarjeta metrica" style="margin: 0 !important;">
         <span>Licencias</span>
         <strong id="lbl-dias-licencias">{{ $docente->dias_utilizados }}</strong>
     </div>
-    <div class="tarjeta metrica">
+    <div class="tarjeta metrica" style="margin: 0 !important;">
         <span>Días disponibles</span>
         <strong id="lbl-dias-disponibles">{{ $docente->dias_disponibles }}</strong>
     </div>
-    <div class="tarjeta metrica" id="caja-excedidos">
+    <div class="tarjeta metrica" id="caja-excedidos" style="margin: 0 !important;">
         <span>Días excedidos</span>
         <strong id="lbl-dias-excedidos">{{ $docente->dias_excedidos }}</strong>
     </div>
@@ -31,33 +44,33 @@
         <span id="alerta-guardado-boleta" style="font-size:12px; color:#16a34a; font-weight:600; display:none;"></span>
     </div>
     <div class="rejilla rejilla-3" style="gap: 12px; margin-bottom: 12px;">
-        <div class="tarjeta" style="display:flex; flex-direction:column; justify-content:space-between; padding:8px 12px; height:64px; max-height:64px; box-sizing:border-box;">
+        <div class="tarjeta" style="margin: 0 !important; display:flex; flex-direction:column; justify-content:space-between; padding:8px 12px; height:64px; max-height:64px; box-sizing:border-box;">
             <span style="font-size:12px; color:var(--gris); font-weight:500; height:16px; line-height:16px; margin:0;">Gestión</span>
             <input type="text" id="inp-gestion" value="{{ (int) date('Y') - 1 }}-{{ date('Y') }}" onfocus="this.select()" style="padding:2px 8px; border:1px solid var(--borde); border-radius:6px; font-size:13px; text-align:center; height:30px; min-height:30px; max-height:30px; box-sizing:border-box; width:100%;" oninput="calcularVacaciones()">
         </div>
-        <div class="tarjeta" style="display:flex; flex-direction:column; justify-content:space-between; padding:8px 12px; height:64px; max-height:64px; box-sizing:border-box;">
+        <div class="tarjeta" style="margin: 0 !important; display:flex; flex-direction:column; justify-content:space-between; padding:8px 12px; height:64px; max-height:64px; box-sizing:border-box;">
             <span style="font-size:12px; color:var(--gris); font-weight:500; height:16px; line-height:16px; margin:0;">A partir de</span>
             <input type="date" id="inp-fecha-inicio" value="{{ (int) date('Y') + 1 }}-01-01" style="padding:2px 8px; border:1px solid var(--borde); border-radius:6px; font-size:13px; text-align:center; height:30px; min-height:30px; max-height:30px; box-sizing:border-box; width:100%;" oninput="calcularVacaciones()">
         </div>
-        <div class="tarjeta" style="display:flex; flex-direction:column; justify-content:space-between; padding:8px 12px; height:64px; max-height:64px; box-sizing:border-box;">
+        <div class="tarjeta" style="margin: 0 !important; display:flex; flex-direction:column; justify-content:space-between; padding:8px 12px; height:64px; max-height:64px; box-sizing:border-box;">
             <span style="font-size:12px; color:var(--gris); font-weight:500; height:16px; line-height:16px; margin:0;">Días Acumulados</span>
             <input type="number" step="0.5" id="inp-acumulados" min="0" max="100" value="0" placeholder="0" onfocus="this.select()" oninput="limpiarCero(this); calcularVacaciones()" style="padding:2px 8px; border:1px solid var(--borde); border-radius:6px; font-size:13px; text-align:center; font-weight:bold; color:var(--azul-marino); height:30px; min-height:30px; max-height:30px; box-sizing:border-box; width:100%;">
         </div>
     </div>
     <div class="rejilla rejilla-4" style="gap: 12px; margin-bottom: 12px;">
-        <div class="tarjeta" style="display:flex; flex-direction:column; justify-content:space-between; padding:8px 12px; height:64px; max-height:64px; box-sizing:border-box;">
+        <div class="tarjeta" style="margin: 0 !important; display:flex; flex-direction:column; justify-content:space-between; padding:8px 12px; height:64px; max-height:64px; box-sizing:border-box;">
             <span style="font-size:12px; color:var(--gris); font-weight:500; height:16px; line-height:16px; margin:0;">Licencias pasadas</span>
             <input type="number" step="1" id="inp-licencias-pasadas" min="0" max="100" value="0" placeholder="0" onfocus="this.select()" oninput="limpiarCero(this); calcularVacaciones()" style="padding:2px 8px; border:1px solid var(--borde); border-radius:6px; font-size:13px; text-align:center; font-weight:bold; color:var(--azul-marino); height:30px; min-height:30px; max-height:30px; box-sizing:border-box; width:100%;">
         </div>
-        <div class="tarjeta" style="display:flex; flex-direction:column; justify-content:space-between; padding:8px 12px; height:64px; max-height:64px; box-sizing:border-box;">
+        <div class="tarjeta" style="margin: 0 !important; display:flex; flex-direction:column; justify-content:space-between; padding:8px 12px; height:64px; max-height:64px; box-sizing:border-box;">
             <span style="font-size:12px; color:var(--gris); font-weight:500; height:16px; line-height:16px; margin:0;">Días pendientes</span>
             <input type="number" step="1" id="inp-pendientes" min="0" max="100" value="0" placeholder="0" onfocus="this.select()" oninput="limpiarCero(this); calcularVacaciones()" style="padding:2px 8px; border:1px solid var(--borde); border-radius:6px; font-size:13px; text-align:center; font-weight:bold; color:var(--azul-marino); height:30px; min-height:30px; max-height:30px; box-sizing:border-box; width:100%;" title="Días pendientes fuera del cálculo automático">
         </div>
-        <div class="tarjeta" style="display:flex; flex-direction:column; justify-content:space-between; padding:8px 12px; height:64px; max-height:64px; box-sizing:border-box;">
+        <div class="tarjeta" style="margin: 0 !important; display:flex; flex-direction:column; justify-content:space-between; padding:8px 12px; height:64px; max-height:64px; box-sizing:border-box;">
             <span style="font-size:12px; color:var(--gris); font-weight:500; height:16px; line-height:16px; margin:0;">Descanso Pedagógico</span>
             <input type="number" step="0.5" id="inp-descanso" min="0" max="60" value="5" placeholder="0" onfocus="this.select()" oninput="limpiarCero(this); calcularVacaciones()" style="padding:2px 8px; border:1px solid var(--borde); border-radius:6px; font-size:13px; text-align:center; font-weight:bold; color:var(--azul-marino); height:30px; min-height:30px; max-height:30px; box-sizing:border-box; width:100%;">
         </div>
-        <div class="tarjeta" style="display:flex; flex-direction:column; justify-content:space-between; padding:8px 12px; height:64px; max-height:64px; box-sizing:border-box;">
+        <div class="tarjeta" style="margin: 0 !important; display:flex; flex-direction:column; justify-content:space-between; padding:8px 12px; height:64px; max-height:64px; box-sizing:border-box;">
             <span style="font-size:12px; color:var(--gris); font-weight:500; height:16px; line-height:16px; margin:0;">Receso Fin de Año</span>
             <input type="number" step="0.5" id="inp-receso" min="0" max="60" value="3" placeholder="0" onfocus="this.select()" oninput="limpiarCero(this); calcularVacaciones()" style="padding:2px 8px; border:1px solid var(--borde); border-radius:6px; font-size:13px; text-align:center; font-weight:bold; color:var(--azul-marino); height:30px; min-height:30px; max-height:30px; box-sizing:border-box; width:100%;">
         </div>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>@yield('titulo') — UNSXX</title>
-    <link rel="stylesheet" href="{{ asset('css/institucional.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/institucional.css') }}?v={{ file_exists(public_path('css/institucional.css')) ? filemtime(public_path('css/institucional.css')) : time() }}">
     <style>
         body { background: #fff; }
         .membrete { display:flex; gap:16px; align-items:center; border-bottom:4px solid #c41e3a; padding-bottom:12px; margin-bottom:18px; }
