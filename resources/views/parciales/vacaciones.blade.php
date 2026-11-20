@@ -30,38 +30,36 @@
         <h3 style="margin: 0; font-size: 16px;">Configuración para Boleta de Impresión</h3>
         <span id="alerta-guardado-boleta" style="font-size:12px; color:#16a34a; font-weight:600; display:none;"></span>
     </div>
-    <div class="rejilla rejilla-4" style="gap: 12px; margin-bottom: 16px;">
-        <div class="tarjeta" style="display:flex; flex-direction:column; gap:4px; padding:12px; height:100%; box-sizing:border-box;">
-            <span style="font-size:12px; color:var(--gris); font-weight:500;">Gestión</span>
-            <input type="text" id="inp-gestion" value="{{ (int) date('Y') - 1 }}-{{ date('Y') }}" onfocus="this.select()" style="padding:6px; border:1px solid var(--borde); border-radius:6px; font-size:14px; text-align:center; height:36px; box-sizing:border-box;" oninput="calcularVacaciones()">
+    <div class="rejilla rejilla-3" style="gap: 12px; margin-bottom: 12px;">
+        <div class="tarjeta" style="display:flex; flex-direction:column; justify-content:space-between; padding:8px 12px; height:64px; max-height:64px; box-sizing:border-box;">
+            <span style="font-size:12px; color:var(--gris); font-weight:500; height:16px; line-height:16px; margin:0;">Gestión</span>
+            <input type="text" id="inp-gestion" value="{{ (int) date('Y') - 1 }}-{{ date('Y') }}" onfocus="this.select()" style="padding:2px 8px; border:1px solid var(--borde); border-radius:6px; font-size:13px; text-align:center; height:30px; min-height:30px; max-height:30px; box-sizing:border-box; width:100%;" oninput="calcularVacaciones()">
         </div>
-        <div class="tarjeta" style="display:flex; flex-direction:column; gap:4px; padding:12px; height:100%; box-sizing:border-box;">
-            <span style="font-size:12px; color:var(--gris); font-weight:500;">A partir de</span>
-            <input type="date" id="inp-fecha-inicio" value="{{ (int) date('Y') + 1 }}-01-01" style="padding:6px; border:1px solid var(--borde); border-radius:6px; font-size:14px; text-align:center; height:36px; box-sizing:border-box;" oninput="calcularVacaciones()">
+        <div class="tarjeta" style="display:flex; flex-direction:column; justify-content:space-between; padding:8px 12px; height:64px; max-height:64px; box-sizing:border-box;">
+            <span style="font-size:12px; color:var(--gris); font-weight:500; height:16px; line-height:16px; margin:0;">A partir de</span>
+            <input type="date" id="inp-fecha-inicio" value="{{ (int) date('Y') + 1 }}-01-01" style="padding:2px 8px; border:1px solid var(--borde); border-radius:6px; font-size:13px; text-align:center; height:30px; min-height:30px; max-height:30px; box-sizing:border-box; width:100%;" oninput="calcularVacaciones()">
         </div>
-        <div class="tarjeta" style="display:flex; flex-direction:column; gap:4px; padding:12px; height:100%; box-sizing:border-box;">
-            <span style="font-size:12px; color:var(--gris); font-weight:500;">Días asignados</span>
-            <input type="number" step="0.5" id="inp-asignados" min="0" max="60" value="{{ $docente->dias_asignados }}" onfocus="this.select()" oninput="limpiarCero(this); calcularVacaciones()" style="padding:6px; border:1px solid var(--borde); border-radius:6px; font-size:14px; text-align:center; font-weight:bold; color:var(--azul-marino); height:36px; box-sizing:border-box;" title="Días asignados por antigüedad">
+        <div class="tarjeta" style="display:flex; flex-direction:column; justify-content:space-between; padding:8px 12px; height:64px; max-height:64px; box-sizing:border-box;">
+            <span style="font-size:12px; color:var(--gris); font-weight:500; height:16px; line-height:16px; margin:0;">Días Acumulados</span>
+            <input type="number" step="0.5" id="inp-acumulados" min="0" max="100" value="0" placeholder="0" onfocus="this.select()" oninput="limpiarCero(this); calcularVacaciones()" style="padding:2px 8px; border:1px solid var(--borde); border-radius:6px; font-size:13px; text-align:center; font-weight:bold; color:var(--azul-marino); height:30px; min-height:30px; max-height:30px; box-sizing:border-box; width:100%;">
         </div>
-        <div class="tarjeta" style="display:flex; flex-direction:column; gap:4px; padding:12px; height:100%; box-sizing:border-box;">
-            <span style="font-size:12px; color:var(--gris); font-weight:500;">Días Acumulados</span>
-            <input type="number" step="0.5" id="inp-acumulados" min="0" max="100" value="0" placeholder="0" onfocus="this.select()" oninput="limpiarCero(this); calcularVacaciones()" style="padding:6px; border:1px solid var(--borde); border-radius:6px; font-size:14px; text-align:center; font-weight:bold; color:var(--azul-marino); height:36px; box-sizing:border-box;">
+    </div>
+    <div class="rejilla rejilla-4" style="gap: 12px; margin-bottom: 12px;">
+        <div class="tarjeta" style="display:flex; flex-direction:column; justify-content:space-between; padding:8px 12px; height:64px; max-height:64px; box-sizing:border-box;">
+            <span style="font-size:12px; color:var(--gris); font-weight:500; height:16px; line-height:16px; margin:0;">Licencias pasadas</span>
+            <input type="number" step="1" id="inp-licencias-pasadas" min="0" max="100" value="0" placeholder="0" onfocus="this.select()" oninput="limpiarCero(this); calcularVacaciones()" style="padding:2px 8px; border:1px solid var(--borde); border-radius:6px; font-size:13px; text-align:center; font-weight:bold; color:var(--azul-marino); height:30px; min-height:30px; max-height:30px; box-sizing:border-box; width:100%;">
         </div>
-        <div class="tarjeta" style="display:flex; flex-direction:column; gap:4px; padding:12px; height:100%; box-sizing:border-box;">
-            <span style="font-size:12px; color:var(--gris); font-weight:500;">Licencias pasadas</span>
-            <input type="number" step="1" id="inp-licencias-pasadas" min="0" max="100" value="0" placeholder="0" onfocus="this.select()" oninput="limpiarCero(this); calcularVacaciones()" style="padding:6px; border:1px solid var(--borde); border-radius:6px; font-size:14px; text-align:center; font-weight:bold; color:var(--azul-marino); height:36px; box-sizing:border-box;">
+        <div class="tarjeta" style="display:flex; flex-direction:column; justify-content:space-between; padding:8px 12px; height:64px; max-height:64px; box-sizing:border-box;">
+            <span style="font-size:12px; color:var(--gris); font-weight:500; height:16px; line-height:16px; margin:0;">Días pendientes</span>
+            <input type="number" step="1" id="inp-pendientes" min="0" max="100" value="0" placeholder="0" onfocus="this.select()" oninput="limpiarCero(this); calcularVacaciones()" style="padding:2px 8px; border:1px solid var(--borde); border-radius:6px; font-size:13px; text-align:center; font-weight:bold; color:var(--azul-marino); height:30px; min-height:30px; max-height:30px; box-sizing:border-box; width:100%;" title="Días pendientes fuera del cálculo automático">
         </div>
-        <div class="tarjeta" style="display:flex; flex-direction:column; gap:4px; padding:12px; height:100%; box-sizing:border-box;">
-            <span style="font-size:12px; color:var(--gris); font-weight:500;">Días pendientes</span>
-            <input type="number" step="1" id="inp-pendientes" min="0" max="100" value="0" placeholder="0" onfocus="this.select()" oninput="limpiarCero(this); calcularVacaciones()" style="padding:6px; border:1px solid var(--borde); border-radius:6px; font-size:14px; text-align:center; font-weight:bold; color:var(--azul-marino); height:36px; box-sizing:border-box;" title="Días pendientes fuera del cálculo automático">
+        <div class="tarjeta" style="display:flex; flex-direction:column; justify-content:space-between; padding:8px 12px; height:64px; max-height:64px; box-sizing:border-box;">
+            <span style="font-size:12px; color:var(--gris); font-weight:500; height:16px; line-height:16px; margin:0;">Descanso Pedagógico</span>
+            <input type="number" step="0.5" id="inp-descanso" min="0" max="60" value="5" placeholder="0" onfocus="this.select()" oninput="limpiarCero(this); calcularVacaciones()" style="padding:2px 8px; border:1px solid var(--borde); border-radius:6px; font-size:13px; text-align:center; font-weight:bold; color:var(--azul-marino); height:30px; min-height:30px; max-height:30px; box-sizing:border-box; width:100%;">
         </div>
-        <div class="tarjeta" style="display:flex; flex-direction:column; gap:4px; padding:12px; height:100%; box-sizing:border-box;">
-            <span style="font-size:12px; color:var(--gris); font-weight:500;">Descanso Pedagógico</span>
-            <input type="number" step="0.5" id="inp-descanso" min="0" max="60" value="5" placeholder="0" onfocus="this.select()" oninput="limpiarCero(this); calcularVacaciones()" style="padding:6px; border:1px solid var(--borde); border-radius:6px; font-size:14px; text-align:center; font-weight:bold; color:var(--azul-marino); height:36px; box-sizing:border-box;">
-        </div>
-        <div class="tarjeta" style="display:flex; flex-direction:column; gap:4px; padding:12px; height:100%; box-sizing:border-box;">
-            <span style="font-size:12px; color:var(--gris); font-weight:500;">Receso Fin de Año</span>
-            <input type="number" step="0.5" id="inp-receso" min="0" max="60" value="3" placeholder="0" onfocus="this.select()" oninput="limpiarCero(this); calcularVacaciones()" style="padding:6px; border:1px solid var(--borde); border-radius:6px; font-size:14px; text-align:center; font-weight:bold; color:var(--azul-marino); height:36px; box-sizing:border-box;">
+        <div class="tarjeta" style="display:flex; flex-direction:column; justify-content:space-between; padding:8px 12px; height:64px; max-height:64px; box-sizing:border-box;">
+            <span style="font-size:12px; color:var(--gris); font-weight:500; height:16px; line-height:16px; margin:0;">Receso Fin de Año</span>
+            <input type="number" step="0.5" id="inp-receso" min="0" max="60" value="3" placeholder="0" onfocus="this.select()" oninput="limpiarCero(this); calcularVacaciones()" style="padding:2px 8px; border:1px solid var(--borde); border-radius:6px; font-size:13px; text-align:center; font-weight:bold; color:var(--azul-marino); height:30px; min-height:30px; max-height:30px; box-sizing:border-box; width:100%;">
         </div>
     </div>
     <div style="margin-top: 16px; display:flex; justify-content:flex-end; gap:10px; flex-wrap:wrap; align-items:center;">
@@ -390,7 +388,6 @@
             let config = {
                 gestion: document.getElementById('inp-gestion') ? document.getElementById('inp-gestion').value : '',
                 fechaInicio: document.getElementById('inp-fecha-inicio') ? document.getElementById('inp-fecha-inicio').value : '',
-                asignados: document.getElementById('inp-asignados') ? document.getElementById('inp-asignados').value : diasAsignadosOriginal,
                 acumulados: document.getElementById('inp-acumulados') ? document.getElementById('inp-acumulados').value : '0',
                 licenciasPasadas: document.getElementById('inp-licencias-pasadas') ? document.getElementById('inp-licencias-pasadas').value : '0',
                 pendientes: document.getElementById('inp-pendientes') ? document.getElementById('inp-pendientes').value : '0',
@@ -418,9 +415,6 @@
             }
             if (config.fechaInicio !== undefined && document.getElementById('inp-fecha-inicio')) {
                 document.getElementById('inp-fecha-inicio').value = config.fechaInicio;
-            }
-            if (config.asignados !== undefined && document.getElementById('inp-asignados')) {
-                document.getElementById('inp-asignados').value = config.asignados;
             }
             if (config.acumulados !== undefined && document.getElementById('inp-acumulados')) {
                 document.getElementById('inp-acumulados').value = config.acumulados;
@@ -541,7 +535,6 @@
 
     function calcularVacaciones(autoGuardar = true) {
         let gestion = document.getElementById('inp-gestion') ? document.getElementById('inp-gestion').value : '';
-        let asignados = document.getElementById('inp-asignados') ? (parseFloat(document.getElementById('inp-asignados').value) || diasAsignadosOriginal) : diasAsignadosOriginal;
         let acumulados = document.getElementById('inp-acumulados') ? (parseFloat(document.getElementById('inp-acumulados').value) || 0) : 0;
         let licenciasPasadas = document.getElementById('inp-licencias-pasadas') ? (parseInt(document.getElementById('inp-licencias-pasadas').value) || 0) : 0;
         if (licenciasPasadas < 0) licenciasPasadas = 0;
@@ -557,7 +550,6 @@
         
         // Actualizar UI general de datos impresos
         actualizarClases('boleta-gestion', gestion);
-        actualizarClases('boleta-dias-asignados', asignados);
         actualizarClases('boleta-acumulados', acumulados);
         actualizarClases('boleta-utilizados', utilizados);
         actualizarClases('boleta-licencias-pasadas', licenciasPasadas);
@@ -566,7 +558,7 @@
         actualizarClases('boleta-receso', receso);
         
         let totalLicencias = utilizados + licenciasPasadas;
-        let balance = (asignados + acumulados) - totalLicencias - descanso - receso;
+        let balance = (diasAsignadosOriginal + acumulados) - totalLicencias - descanso - receso;
         
         let elemLicencias = document.getElementById('lbl-dias-licencias');
         if (elemLicencias) {
