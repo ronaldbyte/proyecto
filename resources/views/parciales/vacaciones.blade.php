@@ -633,22 +633,6 @@
             guardarConfiguracionBoleta();
         }
     }
-            actualizarClases('boleta-fecha-inicio', formatearFecha(rango.inicio));
-            actualizarClases('boleta-fecha-conclusion', formatearFecha(rango.conclusion));
-            actualizarClases('boleta-fecha-retorno', formatearFecha(rango.retorno));
-            actualizarClases('boleta-hora-retorno', rango.horaRetorno);
-            actualizarClases('boleta-jornada', rango.etiquetaJornada);
-        } else {
-            actualizarClases('boleta-fecha-conclusion', '--/--/----');
-            actualizarClases('boleta-fecha-retorno', '--/--/----');
-            actualizarClases('boleta-hora-retorno', '--:--');
-            actualizarClases('boleta-jornada', 'Jornada Completa');
-        }
-
-        if (autoGuardar) {
-            guardarConfiguracionBoleta();
-        }
-    }
 
     // Inicializar cálculo al cargar y verificar si hay datos guardados
     document.addEventListener('DOMContentLoaded', function() {
