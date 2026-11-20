@@ -236,7 +236,7 @@ class VerificacionCalculosYNotificacionesTest extends TestCase
         $respuestaFicha->assertSee('conclusión el');
         $respuestaFicha->assertSee('Días pendientes');
         $respuestaFicha->assertSee('boleta-pendientes');
-        $respuestaFicha->assertSee('Modalidad de Retorno:');
+        $respuestaFicha->assertSee('inp-asignados');
         $respuestaFicha->assertSee('Restaurar valores anteriores');
         $respuestaFicha->assertSee('boleta-hora-retorno');
 
