@@ -1,24 +1,11 @@
 @php
     $docente = $docente ?? null;
 @endphp
-<style>
-    .rejilla > .tarjeta,
-    .rejilla > div,
-    .rejilla > * {
-        margin: 0 !important;
-        margin-top: 0 !important;
-        margin-bottom: 0 !important;
-    }
-    .rejilla .tarjeta + .tarjeta,
-    .rejilla > .tarjeta + .tarjeta {
-        margin-top: 0 !important;
-    }
-</style>
 @if($docente)
     @if(! $docente->gozaVacaciones())
         <div class="alerta">No goza de vacaciones.</div>
     @else
-<div class="rejilla rejilla-4" style="margin-bottom: 0;">
+<div class="rejilla rejilla-4" style="gap: 12px; margin-bottom: 16px;">
     <div class="tarjeta metrica" style="margin: 0 !important;">
         <span>Días asignados</span>
         <strong>{{ $docente->dias_asignados }}</strong>

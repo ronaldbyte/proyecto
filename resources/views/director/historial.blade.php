@@ -1,7 +1,7 @@
 @extends('layouts.principal')
 @section('titulo', 'Historial de revisión')
 @section('contenido')
-<form class="filtros" method="GET">
+<form class="filtros" method="GET" style="gap: 12px; margin-bottom: 16px;">
     <select name="estado">
         <option value="">Todos</option>
         <option value="pendiente" @selected(request('estado')==='pendiente')>Pendiente de Dirección</option>
@@ -12,7 +12,7 @@
     </select>
     <button class="boton boton-azul" type="submit">Filtrar</button>
 </form>
-<div class="tarjeta">
+<div class="tarjeta" style="margin-top: 16px;">
     @include('parciales.tabla-solicitudes', ['solicitudes' => $solicitudes, 'mostrarDocente' => true])
     <div class="paginacion">{{ $solicitudes->links() }}</div>
 </div>

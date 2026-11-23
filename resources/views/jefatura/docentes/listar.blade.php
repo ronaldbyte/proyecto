@@ -1,7 +1,7 @@
 @extends('layouts.principal')
 @section('titulo', 'Docentes')
 @section('contenido')
-<form class="filtros" method="GET">
+<form class="filtros" method="GET" style="gap: 12px; margin-bottom: 16px;">
     <input name="buscar" value="{{ request('buscar') }}" placeholder="Código o nombre">
     <select name="carrera_id">
         @include('parciales.opciones-carreras', [
@@ -34,7 +34,7 @@
     <button class="boton boton-azul" type="submit">Buscar</button>
     <a class="boton boton-principal" href="{{ route('jefatura.docentes.crear') }}">Registrar docente</a>
 </form>
-<div class="tarjeta">
+<div class="tarjeta" style="margin-top: 16px;">
     <table class="tabla">
         <thead>
             <tr>

@@ -3,7 +3,7 @@
 @section('subtitulo', 'Historial general de solicitudes')
 @section('contenido')
 @include('parciales.pestanas-solicitudes-jefatura')
-<form class="filtros" method="GET">
+<form class="filtros" method="GET" style="gap: 12px; margin-bottom: 16px;">
     <input name="buscar" value="{{ request('buscar') }}" placeholder="Docente o código">
     <select name="estado">
         <option value="">Estado</option>
@@ -30,7 +30,7 @@
     <button class="boton boton-azul" type="submit">Filtrar</button>
     <a class="boton boton-suave" href="{{ route('jefatura.imprimir.solicitudes') }}" target="_blank">Imprimir</a>
 </form>
-<div class="tarjeta">
+<div class="tarjeta" style="margin-top: 16px;">
     @include('parciales.tabla-solicitudes', ['solicitudes' => $solicitudes, 'mostrarDocente' => true])
     <div class="paginacion">{{ $solicitudes->links() }}</div>
 </div>

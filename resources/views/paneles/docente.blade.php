@@ -24,10 +24,10 @@
 @if($usuario->puedeSolicitarLicencia())
     @include('parciales.vacaciones', ['docente' => $docente])
 
-    <div class="rejilla rejilla-3" style="margin-top:16px;">
-        <div class="tarjeta metrica"><span>Pendientes</span><strong>{{ $resumen['pendientes'] }}</strong></div>
-        <div class="tarjeta metrica"><span>Aprobadas</span><strong>{{ $resumen['aprobadas'] }}</strong></div>
-        <div class="tarjeta metrica"><span>Rechazadas</span><strong>{{ $resumen['rechazadas'] }}</strong></div>
+    <div class="rejilla rejilla-3" style="gap: 12px; margin-top: 16px; margin-bottom: 16px;">
+        <div class="tarjeta metrica" style="margin: 0 !important;"><span>Pendientes</span><strong>{{ $resumen['pendientes'] }}</strong></div>
+        <div class="tarjeta metrica" style="margin: 0 !important;"><span>Aprobadas</span><strong>{{ $resumen['aprobadas'] }}</strong></div>
+        <div class="tarjeta metrica" style="margin: 0 !important;"><span>Rechazadas</span><strong>{{ $resumen['rechazadas'] }}</strong></div>
     </div>
 
     <div class="tarjeta" style="margin-top:16px;">
