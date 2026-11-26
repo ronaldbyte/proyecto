@@ -70,7 +70,7 @@
         </button>
         <button class="boton boton-azul" type="button" id="btn-descargar-img" onclick="descargarImagenBoleta()" style="display:inline-flex; align-items:center; gap:6px;">
             <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-            Descargar en imagen (3 copias)
+            Descargar en PDF
         </button>
         <button class="boton boton-principal" type="button" onclick="imprimirBoleta()" style="display:inline-flex; align-items:center; gap:6px;">
             <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4H7v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
@@ -214,17 +214,9 @@
             </div>
         </div>
 
-        @php
-            $destinatariosCopias = [
-                'ORIGINAL: JEFATURA DE PERSONAL',
-                '1ra. COPIA: DIRECCIÓN DE ÁREA / CARRERA',
-                '2da. COPIA: INTERESADO(A)'
-            ];
-        @endphp
         <!-- Pie de Boleta con Fecha de Impresión -->
         <div style="display: flex; justify-content: space-between; align-items: center; font-size: 8px; color: #475569; margin-top: 6px; padding-top: 2px;">
-            <span>Llallagua · Potosí · Bolivia &nbsp;·&nbsp; <strong style="color: #0f172a; letter-spacing: 0.3px;">{{ $destinatariosCopias[$i] ?? '' }}</strong></span>
-            <span>Fecha de impresión: <strong class="boleta-fecha-impresion">{{ now()->format('d/m/Y H:i') }}</strong></span>
+            <span>Llallagua · Potosí · Bolivia &nbsp;·&nbsp; Fecha de impresión: <strong style="color: #0f172a; letter-spacing: 0.3px;" class="boleta-fecha-impresion">{{ now()->format('d/m/Y H:i') }}</strong></span>
         </div>
     </div>
     @endfor
@@ -691,29 +683,97 @@
         document.title = tituloPrevioImpresion;
     });
 
+    function crearPdfDesdeCanvas(canvas) {
+        var base64 = canvas.toDataURL('image/jpeg', 0.95).split(',')[1];
+        var binario = atob(base64);
+        var imagen = new Uint8Array(binario.length);
+        for (var i = 0; i < binario.length; i++) {
+            imagen[i] = binario.charCodeAt(i);
+        }
+
+        var paginaAncho = 612;
+        var paginaAlto = 792;
+        var margen = 28;
+        var anchoImg = paginaAncho - margen * 2;
+        var altoImg = anchoImg * canvas.height / canvas.width;
+        if (altoImg > paginaAlto - margen * 2) {
+            altoImg = paginaAlto - margen * 2;
+            anchoImg = altoImg * canvas.width / canvas.height;
+        }
+        var posX = (paginaAncho - anchoImg) / 2;
+        var posY = paginaAlto - margen - altoImg;
+        var contenido = 'q ' + anchoImg.toFixed(2) + ' 0 0 ' + altoImg.toFixed(2) + ' ' + posX.toFixed(2) + ' ' + posY.toFixed(2) + ' cm /Im0 Do Q';
+
+        var partes = [];
+        var longitud = 0;
+        var posiciones = [];
+        function aBytes(texto) {
+            var bytes = new Uint8Array(texto.length);
+            for (var k = 0; k < texto.length; k++) {
+                bytes[k] = texto.charCodeAt(k) & 255;
+            }
+            return bytes;
+        }
+        function agregar(dato) {
+            var bytes = typeof dato === 'string' ? aBytes(dato) : dato;
+            partes.push(bytes);
+            longitud += bytes.length;
+        }
+        function objeto(numero, cuerpo) {
+            posiciones[numero] = longitud;
+            agregar(numero + ' 0 obj\n');
+            cuerpo();
+            agregar('\nendobj\n');
+        }
+
+        agregar('%PDF-1.4\n');
+        objeto(1, function () { agregar('<< /Type /Catalog /Pages 2 0 R >>'); });
+        objeto(2, function () { agregar('<< /Type /Pages /Kids [3 0 R] /Count 1 >>'); });
+        objeto(3, function () {
+            agregar('<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ' + paginaAncho + ' ' + paginaAlto + '] /Resources << /XObject << /Im0 4 0 R >> >> /Contents 5 0 R >>');
+        });
+        objeto(4, function () {
+            agregar('<< /Type /XObject /Subtype /Image /Width ' + canvas.width + ' /Height ' + canvas.height + ' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ' + imagen.length + ' >>\nstream\n');
+            agregar(imagen);
+            agregar('\nendstream');
+        });
+        objeto(5, function () {
+            agregar('<< /Length ' + contenido.length + ' >>\nstream\n' + contenido + '\nendstream');
+        });
+
+        var inicioXref = longitud;
+        var xref = 'xref\n0 6\n0000000000 65535 f \n';
+        for (var n = 1; n <= 5; n++) {
+            xref += ('0000000000' + posiciones[n]).slice(-10) + ' 00000 n \n';
+        }
+        agregar(xref + 'trailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n' + inicioXref + '\n%%EOF');
+
+        return new Blob(partes, { type: 'application/pdf' });
+    }
+
     function descargarImagenBoleta() {
         guardarConfiguracionBoleta();
         if (typeof html2canvas === 'undefined') {
-            alert('Cargando componente de imagen, intente de nuevo en un segundo.');
+            alert('Cargando componente de descarga, intente de nuevo en un segundo.');
             return;
         }
 
         var btn = document.getElementById('btn-descargar-img');
         var textoOriginal = btn.innerHTML;
         btn.disabled = true;
-        btn.innerHTML = 'Generando imagen (3 copias)...';
+        btn.innerHTML = 'Generando PDF...';
 
         actualizarFechaImpresion();
 
-        var copias = document.querySelectorAll('#boleta-impresion .copia-boleta');
-        if (!copias || copias.length === 0) {
+        var copiaOriginal = document.querySelector('#boleta-impresion .copia-boleta');
+        if (!copiaOriginal) {
             btn.disabled = false;
             btn.innerHTML = textoOriginal;
             return;
         }
 
         var contenedorClon = document.createElement('div');
-        contenedorClon.id = 'hoja-descarga-3copias-temp';
+        contenedorClon.id = 'hoja-descarga-pdf-temp';
         contenedorClon.style.position = 'fixed';
         contenedorClon.style.left = '-9999px';
         contenedorClon.style.top = '0';
@@ -725,21 +785,14 @@
         contenedorClon.style.fontFamily = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif';
         contenedorClon.style.color = '#000000';
 
-        copias.forEach(function (copiaOriginal, index) {
-            var clon = copiaOriginal.cloneNode(true);
-            clon.style.height = 'auto';
-            clon.style.display = 'block';
-            clon.style.boxSizing = 'border-box';
-            clon.style.padding = '8px 4px 12px 4px';
-            if (index < copias.length - 1) {
-                clon.style.borderBottom = '1.8px dashed #475569';
-                clon.style.marginBottom = '14px';
-            } else {
-                clon.style.borderBottom = 'none';
-                clon.style.marginBottom = '0';
-            }
-            contenedorClon.appendChild(clon);
-        });
+        var clon = copiaOriginal.cloneNode(true);
+        clon.style.height = 'auto';
+        clon.style.display = 'block';
+        clon.style.boxSizing = 'border-box';
+        clon.style.padding = '8px 4px 12px 4px';
+        clon.style.borderBottom = 'none';
+        clon.style.marginBottom = '0';
+        contenedorClon.appendChild(clon);
 
         document.body.appendChild(contenedorClon);
 
@@ -750,12 +803,16 @@
         }).then(function (canvas) {
             var enlace = document.createElement('a');
             var nombreDocente = '{{ Str::slug($docente->nombre_completo ?? "docente") }}';
-            enlace.download = 'boleta_vacaciones_3copias_' + nombreDocente + '.png';
-            enlace.href = canvas.toDataURL('image/png');
+            var urlPdf = URL.createObjectURL(crearPdfDesdeCanvas(canvas));
+            enlace.download = 'boleta_vacaciones_' + nombreDocente + '.pdf';
+            enlace.href = urlPdf;
+            document.body.appendChild(enlace);
             enlace.click();
+            document.body.removeChild(enlace);
+            setTimeout(function () { URL.revokeObjectURL(urlPdf); }, 4000);
         }).catch(function (err) {
             console.error(err);
-            alert('No se pudo generar la imagen con las 3 copias.');
+            alert('No se pudo generar el PDF de la boleta.');
         }).finally(function () {
             if (document.body.contains(contenedorClon)) {
                 document.body.removeChild(contenedorClon);
