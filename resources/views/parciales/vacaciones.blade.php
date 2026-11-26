@@ -1,5 +1,6 @@
 @php
     $docente = $docente ?? null;
+    $diasPendientesDocente = $docente ? (float) $docente->dias_pendientes : 0.0;
 @endphp
 @if($docente)
     @if(! $docente->gozaVacaciones())
@@ -9,18 +10,32 @@
     <div class="tarjeta metrica" style="margin: 0 !important;">
         <span>Días asignados</span>
         <strong>{{ $docente->dias_asignados }}</strong>
+        <small style="font-size: 11px; font-weight: 500; color: #64748b; display: block; margin-top: 2px;">{{ $docente->textoDias((float) $docente->dias_asignados) }}</small>
     </div>
     <div class="tarjeta metrica" style="margin: 0 !important;">
         <span>Licencias</span>
         <strong id="lbl-dias-licencias">{{ $docente->dias_utilizados }}</strong>
+        <small id="lbl-texto-licencias" style="font-size: 11px; font-weight: 500; color: #64748b; display: block; margin-top: 2px;">
+            @if($diasPendientesDocente > 0)
+                {{ $docente->textoDias((float) $docente->dias_utilizados) }} (+ {{ $docente->textoDias($diasPendientesDocente) }} en trámite)
+            @else
+                {{ $docente->textoDias((float) $docente->dias_utilizados) }}
+            @endif
+        </small>
     </div>
     <div class="tarjeta metrica" style="margin: 0 !important;">
         <span>Días disponibles</span>
         <strong id="lbl-dias-disponibles">{{ $docente->dias_disponibles }}</strong>
+        <small id="lbl-texto-disponibles" style="font-size: 11px; font-weight: 500; color: #64748b; display: block; margin-top: 2px;">
+            {{ $docente->textoDias((float) $docente->dias_disponibles) }}
+        </small>
     </div>
     <div class="tarjeta metrica" id="caja-excedidos" style="margin: 0 !important;">
         <span>Días excedidos</span>
         <strong id="lbl-dias-excedidos">{{ $docente->dias_excedidos }}</strong>
+        <small id="lbl-texto-excedidos" style="font-size: 11px; font-weight: 500; color: #64748b; display: block; margin-top: 2px;">
+            {{ $docente->textoDias((float) $docente->dias_excedidos) }}
+        </small>
     </div>
 </div>
 
@@ -47,11 +62,11 @@
     <div class="rejilla rejilla-4" style="gap: 12px; margin-bottom: 12px;">
         <div class="tarjeta" style="margin: 0 !important; display:flex; flex-direction:column; justify-content:space-between; padding:8px 12px; height:64px; max-height:64px; box-sizing:border-box;">
             <span style="font-size:12px; color:var(--gris); font-weight:500; height:16px; line-height:16px; margin:0;">Licencias pasadas</span>
-            <input type="number" step="1" id="inp-licencias-pasadas" min="0" max="100" value="0" placeholder="0" onfocus="this.select()" oninput="limpiarCero(this); calcularVacaciones()" style="padding:2px 8px; border:1px solid var(--borde); border-radius:6px; font-size:13px; text-align:center; font-weight:bold; color:var(--azul-marino); height:30px; min-height:30px; max-height:30px; box-sizing:border-box; width:100%;">
+            <input type="number" step="0.5" id="inp-licencias-pasadas" min="0" max="100" value="0" placeholder="0" onfocus="this.select()" oninput="limpiarCero(this); calcularVacaciones()" style="padding:2px 8px; border:1px solid var(--borde); border-radius:6px; font-size:13px; text-align:center; font-weight:bold; color:var(--azul-marino); height:30px; min-height:30px; max-height:30px; box-sizing:border-box; width:100%;">
         </div>
         <div class="tarjeta" style="margin: 0 !important; display:flex; flex-direction:column; justify-content:space-between; padding:8px 12px; height:64px; max-height:64px; box-sizing:border-box;">
             <span style="font-size:12px; color:var(--gris); font-weight:500; height:16px; line-height:16px; margin:0;">Días pendientes</span>
-            <input type="number" step="1" id="inp-pendientes" min="0" max="100" value="0" placeholder="0" onfocus="this.select()" oninput="limpiarCero(this); calcularVacaciones()" style="padding:2px 8px; border:1px solid var(--borde); border-radius:6px; font-size:13px; text-align:center; font-weight:bold; color:var(--azul-marino); height:30px; min-height:30px; max-height:30px; box-sizing:border-box; width:100%;" title="Días pendientes fuera del cálculo automático">
+            <input type="number" step="0.5" id="inp-pendientes" min="0" max="100" value="{{ $diasPendientesDocente }}" placeholder="0" onfocus="this.select()" oninput="limpiarCero(this); calcularVacaciones()" style="padding:2px 8px; border:1px solid var(--borde); border-radius:6px; font-size:13px; text-align:center; font-weight:bold; color:var(--azul-marino); height:30px; min-height:30px; max-height:30px; box-sizing:border-box; width:100%;" title="Días pendientes en trámite o fuera del cálculo automático">
         </div>
         <div class="tarjeta" style="margin: 0 !important; display:flex; flex-direction:column; justify-content:space-between; padding:8px 12px; height:64px; max-height:64px; box-sizing:border-box;">
             <span style="font-size:12px; color:var(--gris); font-weight:500; height:16px; line-height:16px; margin:0;">Descanso Pedagógico</span>
@@ -146,7 +161,7 @@
                 </table>
 
                 <div class="parrafo-vacaciones" id="parrafo-vacaciones" style="font-size: 9px; text-align: justify; line-height: 1.35; margin-top: 5px; padding: 4px 6px; border: 1px solid #cbd5e1; background-color: #f8fafc; -webkit-print-color-adjust: exact; print-color-adjust: exact;">
-                    El/la docente hará uso de sus descansos y vacaciones <strong>a partir del <span class="boleta-fecha-inicio">{{ date('d/m/Y') }}</span></strong> hasta su <strong>conclusión el <span class="boleta-fecha-conclusion">--/--/----</span></strong>, debiendo retornar a sus funciones el <strong><span class="boleta-fecha-retorno">--/--/----</span> a horas <span class="boleta-hora-retorno">08:00 a.m.</span></strong> en modalidad de <strong><span class="boleta-jornada">Jornada Completa</span></strong>.
+                    El/la docente hará uso de sus descansos y vacaciones por un total de <strong><span class="boleta-total-texto">0 días</span></strong> (<span class="boleta-total">0</span> d) <strong>a partir del <span class="boleta-fecha-inicio">{{ date('d/m/Y') }}</span></strong> hasta su <strong>conclusión el <span class="boleta-fecha-conclusion">--/--/----</span></strong>, debiendo retornar a sus funciones el <strong><span class="boleta-fecha-retorno">--/--/----</span> a horas <span class="boleta-hora-retorno">08:00 a.m.</span></strong> en modalidad de <strong><span class="boleta-jornada">Jornada Completa</span></strong>.
                 </div>
                 <div class="parrafo-no-vacaciones" id="parrafo-no-vacaciones" style="font-size: 9px; text-align: center; line-height: 1.3; color: #b91c1c; font-weight: bold; display: none; margin-top: 5px; padding: 4px 6px; border: 1px solid #fca5a5; background-color: #fef2f2; -webkit-print-color-adjust: exact; print-color-adjust: exact;">
                     EL DOCENTE NO GOZA DE VACACIONES POR TENER SALDO EN CONTRA (DEUDOR) O SALDO CERO.
@@ -283,6 +298,7 @@
 <script>
     const diasAsignadosOriginal = {{ $docente->dias_asignados }};
     const diasUtilizadosOriginal = {{ $docente->dias_utilizados }};
+    const diasPendientesDocenteOriginal = {{ $diasPendientesDocente }};
     
     function limpiarCero(input) {
         if (!input) return;
@@ -529,6 +545,27 @@
         return `${d}/${m}/${y}`;
     }
 
+    function formatearDiasTexto(dias) {
+        dias = Math.round((parseFloat(dias) || 0) * 10) / 10;
+        if (dias <= 0) return '0 días';
+        let enteros = Math.floor(dias);
+        let tieneMedio = Math.abs(dias - enteros - 0.5) < 0.05;
+        
+        if (enteros === 0 && tieneMedio) {
+            return 'medio día';
+        }
+        if (enteros === 1 && !tieneMedio) {
+            return '1 día';
+        }
+        if (enteros === 1 && tieneMedio) {
+            return '1 día y medio';
+        }
+        if (!tieneMedio) {
+            return enteros + ' días';
+        }
+        return enteros + ' días y medio';
+    }
+
     function actualizarClases(clase, valor) {
         document.querySelectorAll('.' + clase).forEach(el => el.textContent = valor);
     }
@@ -536,11 +573,11 @@
     function calcularVacaciones(autoGuardar = true) {
         let gestion = document.getElementById('inp-gestion') ? document.getElementById('inp-gestion').value : '';
         let acumulados = document.getElementById('inp-acumulados') ? (parseFloat(document.getElementById('inp-acumulados').value) || 0) : 0;
-        let licenciasPasadas = document.getElementById('inp-licencias-pasadas') ? (parseInt(document.getElementById('inp-licencias-pasadas').value) || 0) : 0;
+        let licenciasPasadas = document.getElementById('inp-licencias-pasadas') ? (parseFloat(document.getElementById('inp-licencias-pasadas').value) || 0) : 0;
         if (licenciasPasadas < 0) licenciasPasadas = 0;
         if (licenciasPasadas > 100) licenciasPasadas = 100;
 
-        let pendientes = document.getElementById('inp-pendientes') ? (parseInt(document.getElementById('inp-pendientes').value) || 0) : 0;
+        let pendientes = document.getElementById('inp-pendientes') ? (parseFloat(document.getElementById('inp-pendientes').value) || 0) : 0;
         if (pendientes < 0) pendientes = 0;
 
         let utilizados = diasUtilizadosOriginal;
@@ -557,12 +594,20 @@
         actualizarClases('boleta-descanso', descanso);
         actualizarClases('boleta-receso', receso);
         
-        let totalLicencias = utilizados + licenciasPasadas;
-        let balance = (diasAsignadosOriginal + acumulados) - totalLicencias - descanso - receso;
+        let totalLicencias = Math.round((utilizados + licenciasPasadas) * 10) / 10;
+        let balance = Math.round(((diasAsignadosOriginal + acumulados) - totalLicencias - descanso - receso) * 10) / 10;
         
         let elemLicencias = document.getElementById('lbl-dias-licencias');
         if (elemLicencias) {
             elemLicencias.textContent = totalLicencias;
+        }
+        let elemTextoLicencias = document.getElementById('lbl-texto-licencias');
+        if (elemTextoLicencias) {
+            let textoBase = formatearDiasTexto(totalLicencias);
+            if (diasPendientesDocenteOriginal > 0 && licenciasPasadas === 0) {
+                textoBase += ' (+ ' + formatearDiasTexto(diasPendientesDocenteOriginal) + ' en trámite)';
+            }
+            elemTextoLicencias.textContent = textoBase;
         }
         let totalAusenta = 0;
         
@@ -571,7 +616,15 @@
             actualizarClases('boleta-sobrantes', balance);
             
             document.getElementById('lbl-dias-disponibles').textContent = balance;
+            let elemTextoDisponibles = document.getElementById('lbl-texto-disponibles');
+            if (elemTextoDisponibles) {
+                elemTextoDisponibles.textContent = formatearDiasTexto(balance);
+            }
             document.getElementById('lbl-dias-excedidos').textContent = 0;
+            let elemTextoExc = document.getElementById('lbl-texto-excedidos');
+            if (elemTextoExc) {
+                elemTextoExc.textContent = '0 días';
+            }
             document.getElementById('caja-excedidos').classList.remove('excedida');
             
             totalAusenta = balance;
@@ -579,12 +632,20 @@
             document.querySelectorAll('.parrafo-vacaciones, #parrafo-vacaciones').forEach(el => el.style.display = 'block');
             document.querySelectorAll('.parrafo-no-vacaciones, #parrafo-no-vacaciones').forEach(el => el.style.display = 'none');
         } else {
-            let excedidos = Math.abs(balance);
+            let excedidos = Math.round(Math.abs(balance) * 10) / 10;
             actualizarClases('boleta-etiqueta-saldo', 'DÍAS EXCEDIDOS:');
             actualizarClases('boleta-sobrantes', excedidos);
             
             document.getElementById('lbl-dias-disponibles').textContent = 0;
+            let elemTextoDisponibles = document.getElementById('lbl-texto-disponibles');
+            if (elemTextoDisponibles) {
+                elemTextoDisponibles.textContent = '0 días';
+            }
             document.getElementById('lbl-dias-excedidos').textContent = excedidos;
+            let elemTextoExc = document.getElementById('lbl-texto-excedidos');
+            if (elemTextoExc) {
+                elemTextoExc.textContent = formatearDiasTexto(excedidos);
+            }
             if (excedidos > 0) {
                 document.getElementById('caja-excedidos').classList.add('excedida');
             } else {
@@ -599,6 +660,7 @@
         
         // El total de días que el docente se ausenta es exactamente su saldo a favor
         actualizarClases('boleta-total', totalAusenta);
+        actualizarClases('boleta-total-texto', formatearDiasTexto(totalAusenta));
         
         // Calcular fechas hábiles (excluyendo sábados, domingos y feriados oficiales de Bolivia)
         // La modalidad y hora se calculan automáticamente: si termina en 0.5 es Media Jornada (retorna misma fecha 14:00 p.m.); si es entero es Jornada Completa (retorna día hábil siguiente 08:00 a.m.)

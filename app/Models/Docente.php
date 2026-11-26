@@ -132,4 +132,50 @@ class Docente extends Model
     {
         return $this->dias_excedidos > 0;
     }
+
+    public function getDiasPendientesAttribute(): float
+    {
+        return (float) $this->solicitudes()
+            ->whereIn('estado', [
+                Constantes::ESTADO_PENDIENTE,
+                Constantes::ESTADO_PENDIENTE_AREA,
+                Constantes::ESTADO_PENDIENTE_JEFATURA,
+            ])
+            ->sum('dias_solicitados');
+    }
+
+    public function textoDias(float $dias): string
+    {
+        $dias = round($dias, 1);
+        if ($dias <= 0) {
+            return '0 días';
+        }
+        $enteros = (int) floor($dias);
+        $tieneMedio = abs($dias - $enteros - 0.5) < 0.05;
+
+        if ($enteros === 0 && $tieneMedio) {
+            return 'medio día';
+        }
+        if ($enteros === 1 && ! $tieneMedio) {
+            return '1 día';
+        }
+        if ($enteros === 1 && $tieneMedio) {
+            return '1 día y medio';
+        }
+        if (! $tieneMedio) {
+            return $enteros.' días';
+        }
+
+        return $enteros.' días y medio';
+    }
+
+    public function getTextoDiasUtilizadosAttribute(): string
+    {
+        return $this->textoDias((float) $this->dias_utilizados);
+    }
+
+    public function getTextoDiasDisponiblesAttribute(): string
+    {
+        return $this->textoDias((float) $this->dias_disponibles);
+    }
 }

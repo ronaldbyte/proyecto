@@ -410,4 +410,18 @@ class VerificacionCalculosYNotificacionesTest extends TestCase
             $codigos[] = $nuevoCodigo;
         }
     }
+
+    public function test_formato_texto_dias_con_medios_dias_y_pendientes(): void
+    {
+        $docente = Docente::firstOrFail();
+
+        $this->assertSame('0 días', $docente->textoDias(0));
+        $this->assertSame('medio día', $docente->textoDias(0.5));
+        $this->assertSame('1 día', $docente->textoDias(1));
+        $this->assertSame('1 día y medio', $docente->textoDias(1.5));
+        $this->assertSame('2 días', $docente->textoDias(2));
+        $this->assertSame('2 días y medio', $docente->textoDias(2.5));
+        $this->assertSame('28 días y medio', $docente->textoDias(28.5));
+        $this->assertSame('30 días', $docente->textoDias(30));
+    }
 }
