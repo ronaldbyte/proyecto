@@ -587,11 +587,8 @@
         }
         actualizarClases('boleta-fecha-inicio', formatearFecha(fechaInicioObj));
         
-        // Conteo matemático exacto: (Asignados + Acumulados) - (Utilizados + Pasadas + Pendientes + Descanso + Receso)
         let totalLicencias = Math.round((utilizados + licenciasPasadas) * 10) / 10;
-        let totalDeducciones = Math.round((totalLicencias + pendientes + descanso + receso) * 10) / 10;
-        let totalAsignado = Math.round((diasAsignadosOriginal + acumulados) * 10) / 10;
-        let balance = Math.round((totalAsignado - totalDeducciones) * 10) / 10;
+        let balance = Math.round(((diasAsignadosOriginal + acumulados) - totalLicencias - descanso - receso) * 10) / 10;
         
         let elemLicencias = document.getElementById('lbl-dias-licencias');
         if (elemLicencias) {
