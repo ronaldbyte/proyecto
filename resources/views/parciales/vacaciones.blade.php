@@ -10,32 +10,18 @@
     <div class="tarjeta metrica" style="margin: 0 !important;">
         <span>Días asignados</span>
         <strong>{{ $docente->dias_asignados }}</strong>
-        <small style="font-size: 11px; font-weight: 500; color: #64748b; display: block; margin-top: 2px;">{{ $docente->textoDias((float) $docente->dias_asignados) }}</small>
     </div>
     <div class="tarjeta metrica" style="margin: 0 !important;">
         <span>Licencias</span>
         <strong id="lbl-dias-licencias">{{ $docente->dias_utilizados }}</strong>
-        <small id="lbl-texto-licencias" style="font-size: 11px; font-weight: 500; color: #64748b; display: block; margin-top: 2px;">
-            @if($diasPendientesDocente > 0)
-                {{ $docente->textoDias((float) $docente->dias_utilizados) }} (+ {{ $docente->textoDias($diasPendientesDocente) }} en trámite)
-            @else
-                {{ $docente->textoDias((float) $docente->dias_utilizados) }}
-            @endif
-        </small>
     </div>
     <div class="tarjeta metrica" style="margin: 0 !important;">
         <span>Días disponibles</span>
         <strong id="lbl-dias-disponibles">{{ $docente->dias_disponibles }}</strong>
-        <small id="lbl-texto-disponibles" style="font-size: 11px; font-weight: 500; color: #64748b; display: block; margin-top: 2px;">
-            {{ $docente->textoDias((float) $docente->dias_disponibles) }}
-        </small>
     </div>
     <div class="tarjeta metrica" id="caja-excedidos" style="margin: 0 !important;">
         <span>Días excedidos</span>
         <strong id="lbl-dias-excedidos">{{ $docente->dias_excedidos }}</strong>
-        <small id="lbl-texto-excedidos" style="font-size: 11px; font-weight: 500; color: #64748b; display: block; margin-top: 2px;">
-            {{ $docente->textoDias((float) $docente->dias_excedidos) }}
-        </small>
     </div>
 </div>
 
@@ -601,14 +587,6 @@
         if (elemLicencias) {
             elemLicencias.textContent = totalLicencias;
         }
-        let elemTextoLicencias = document.getElementById('lbl-texto-licencias');
-        if (elemTextoLicencias) {
-            let textoBase = formatearDiasTexto(totalLicencias);
-            if (diasPendientesDocenteOriginal > 0 && licenciasPasadas === 0) {
-                textoBase += ' (+ ' + formatearDiasTexto(diasPendientesDocenteOriginal) + ' en trámite)';
-            }
-            elemTextoLicencias.textContent = textoBase;
-        }
         let totalAusenta = 0;
         
         if (balance > 0) {
@@ -616,15 +594,7 @@
             actualizarClases('boleta-sobrantes', balance);
             
             document.getElementById('lbl-dias-disponibles').textContent = balance;
-            let elemTextoDisponibles = document.getElementById('lbl-texto-disponibles');
-            if (elemTextoDisponibles) {
-                elemTextoDisponibles.textContent = formatearDiasTexto(balance);
-            }
             document.getElementById('lbl-dias-excedidos').textContent = 0;
-            let elemTextoExc = document.getElementById('lbl-texto-excedidos');
-            if (elemTextoExc) {
-                elemTextoExc.textContent = '0 días';
-            }
             document.getElementById('caja-excedidos').classList.remove('excedida');
             
             totalAusenta = balance;
@@ -637,15 +607,7 @@
             actualizarClases('boleta-sobrantes', excedidos);
             
             document.getElementById('lbl-dias-disponibles').textContent = 0;
-            let elemTextoDisponibles = document.getElementById('lbl-texto-disponibles');
-            if (elemTextoDisponibles) {
-                elemTextoDisponibles.textContent = '0 días';
-            }
             document.getElementById('lbl-dias-excedidos').textContent = excedidos;
-            let elemTextoExc = document.getElementById('lbl-texto-excedidos');
-            if (elemTextoExc) {
-                elemTextoExc.textContent = formatearDiasTexto(excedidos);
-            }
             if (excedidos > 0) {
                 document.getElementById('caja-excedidos').classList.add('excedida');
             } else {
