@@ -34,33 +34,33 @@
     <div class="rejilla rejilla-3" style="gap: 12px; margin-bottom: 12px;">
         <div class="tarjeta" style="margin: 0 !important; display:flex; flex-direction:column; justify-content:space-between; padding:8px 12px; height:64px; max-height:64px; box-sizing:border-box;">
             <span style="font-size:12px; color:var(--gris); font-weight:500; height:16px; line-height:16px; margin:0;">Gestión</span>
-            <input type="text" id="inp-gestion" value="{{ (int) date('Y') - 1 }}-{{ date('Y') }}" onfocus="this.select()" style="padding:2px 8px; border:1px solid var(--borde); border-radius:6px; font-size:13px; text-align:center; height:30px; min-height:30px; max-height:30px; box-sizing:border-box; width:100%;" oninput="calcularVacaciones()">
+            <input type="text" id="inp-gestion" value="{{ (int) date('Y') - 1 }}-{{ date('Y') }}" onfocus="this.select()" style="padding:2px 8px; border:1px solid var(--borde); border-radius:6px; font-size:13px; text-align:center; height:30px; min-height:30px; max-height:30px; box-sizing:border-box; width:100%;" oninput="calcularVacaciones()" onchange="calcularVacaciones()">
         </div>
         <div class="tarjeta" style="margin: 0 !important; display:flex; flex-direction:column; justify-content:space-between; padding:8px 12px; height:64px; max-height:64px; box-sizing:border-box;">
             <span style="font-size:12px; color:var(--gris); font-weight:500; height:16px; line-height:16px; margin:0;">A partir de</span>
-            <input type="date" id="inp-fecha-inicio" value="{{ (int) date('Y') + 1 }}-01-01" style="padding:2px 8px; border:1px solid var(--borde); border-radius:6px; font-size:13px; text-align:center; height:30px; min-height:30px; max-height:30px; box-sizing:border-box; width:100%;" oninput="calcularVacaciones()">
+            <input type="date" id="inp-fecha-inicio" value="{{ (int) date('Y') + 1 }}-01-01" style="padding:2px 8px; border:1px solid var(--borde); border-radius:6px; font-size:13px; text-align:center; height:30px; min-height:30px; max-height:30px; box-sizing:border-box; width:100%;" oninput="calcularVacaciones()" onchange="calcularVacaciones()">
         </div>
         <div class="tarjeta" style="margin: 0 !important; display:flex; flex-direction:column; justify-content:space-between; padding:8px 12px; height:64px; max-height:64px; box-sizing:border-box;">
             <span style="font-size:12px; color:var(--gris); font-weight:500; height:16px; line-height:16px; margin:0;">Días Acumulados</span>
-            <input type="number" step="0.5" id="inp-acumulados" min="0" max="100" value="0" placeholder="0" onfocus="this.select()" oninput="limpiarCero(this); calcularVacaciones()" style="padding:2px 8px; border:1px solid var(--borde); border-radius:6px; font-size:13px; text-align:center; font-weight:bold; color:var(--azul-marino); height:30px; min-height:30px; max-height:30px; box-sizing:border-box; width:100%;">
+            <input type="number" step="0.5" id="inp-acumulados" min="0" max="100" value="0" placeholder="0" onfocus="this.select()" oninput="limpiarCero(this); calcularVacaciones()" onchange="calcularVacaciones()" style="padding:2px 8px; border:1px solid var(--borde); border-radius:6px; font-size:13px; text-align:center; font-weight:bold; color:var(--azul-marino); height:30px; min-height:30px; max-height:30px; box-sizing:border-box; width:100%;">
         </div>
     </div>
     <div class="rejilla rejilla-4" style="gap: 12px; margin-bottom: 12px;">
         <div class="tarjeta" style="margin: 0 !important; display:flex; flex-direction:column; justify-content:space-between; padding:8px 12px; height:64px; max-height:64px; box-sizing:border-box;">
             <span style="font-size:12px; color:var(--gris); font-weight:500; height:16px; line-height:16px; margin:0;">Licencias pasadas</span>
-            <input type="number" step="0.5" id="inp-licencias-pasadas" min="0" max="100" value="0" placeholder="0" onfocus="this.select()" oninput="limpiarCero(this); calcularVacaciones()" style="padding:2px 8px; border:1px solid var(--borde); border-radius:6px; font-size:13px; text-align:center; font-weight:bold; color:var(--azul-marino); height:30px; min-height:30px; max-height:30px; box-sizing:border-box; width:100%;">
+            <input type="number" step="0.5" id="inp-licencias-pasadas" min="0" max="100" value="0" placeholder="0" onfocus="this.select()" oninput="limpiarCero(this); calcularVacaciones()" onchange="calcularVacaciones()" style="padding:2px 8px; border:1px solid var(--borde); border-radius:6px; font-size:13px; text-align:center; font-weight:bold; color:var(--azul-marino); height:30px; min-height:30px; max-height:30px; box-sizing:border-box; width:100%;">
         </div>
         <div class="tarjeta" style="margin: 0 !important; display:flex; flex-direction:column; justify-content:space-between; padding:8px 12px; height:64px; max-height:64px; box-sizing:border-box;">
             <span style="font-size:12px; color:var(--gris); font-weight:500; height:16px; line-height:16px; margin:0;">Días pendientes</span>
-            <input type="number" step="0.5" id="inp-pendientes" min="0" max="100" value="{{ $diasPendientesDocente }}" placeholder="0" onfocus="this.select()" oninput="limpiarCero(this); calcularVacaciones()" style="padding:2px 8px; border:1px solid var(--borde); border-radius:6px; font-size:13px; text-align:center; font-weight:bold; color:var(--azul-marino); height:30px; min-height:30px; max-height:30px; box-sizing:border-box; width:100%;" title="Días pendientes en trámite o fuera del cálculo automático">
+            <input type="number" step="0.5" id="inp-pendientes" min="0" max="100" value="{{ $diasPendientesDocente }}" placeholder="0" onfocus="this.select()" oninput="limpiarCero(this); calcularVacaciones()" onchange="calcularVacaciones()" style="padding:2px 8px; border:1px solid var(--borde); border-radius:6px; font-size:13px; text-align:center; font-weight:bold; color:var(--azul-marino); height:30px; min-height:30px; max-height:30px; box-sizing:border-box; width:100%;" title="Días pendientes en trámite o fuera del cálculo automático">
         </div>
         <div class="tarjeta" style="margin: 0 !important; display:flex; flex-direction:column; justify-content:space-between; padding:8px 12px; height:64px; max-height:64px; box-sizing:border-box;">
             <span style="font-size:12px; color:var(--gris); font-weight:500; height:16px; line-height:16px; margin:0;">Descanso Pedagógico</span>
-            <input type="number" step="0.5" id="inp-descanso" min="0" max="60" value="5" placeholder="0" onfocus="this.select()" oninput="limpiarCero(this); calcularVacaciones()" style="padding:2px 8px; border:1px solid var(--borde); border-radius:6px; font-size:13px; text-align:center; font-weight:bold; color:var(--azul-marino); height:30px; min-height:30px; max-height:30px; box-sizing:border-box; width:100%;">
+            <input type="number" step="0.5" id="inp-descanso" min="0" max="60" value="5" placeholder="0" onfocus="this.select()" oninput="limpiarCero(this); calcularVacaciones()" onchange="calcularVacaciones()" style="padding:2px 8px; border:1px solid var(--borde); border-radius:6px; font-size:13px; text-align:center; font-weight:bold; color:var(--azul-marino); height:30px; min-height:30px; max-height:30px; box-sizing:border-box; width:100%;">
         </div>
         <div class="tarjeta" style="margin: 0 !important; display:flex; flex-direction:column; justify-content:space-between; padding:8px 12px; height:64px; max-height:64px; box-sizing:border-box;">
             <span style="font-size:12px; color:var(--gris); font-weight:500; height:16px; line-height:16px; margin:0;">Receso Fin de Año</span>
-            <input type="number" step="0.5" id="inp-receso" min="0" max="60" value="3" placeholder="0" onfocus="this.select()" oninput="limpiarCero(this); calcularVacaciones()" style="padding:2px 8px; border:1px solid var(--borde); border-radius:6px; font-size:13px; text-align:center; font-weight:bold; color:var(--azul-marino); height:30px; min-height:30px; max-height:30px; box-sizing:border-box; width:100%;">
+            <input type="number" step="0.5" id="inp-receso" min="0" max="60" value="3" placeholder="0" onfocus="this.select()" oninput="limpiarCero(this); calcularVacaciones()" onchange="calcularVacaciones()" style="padding:2px 8px; border:1px solid var(--borde); border-radius:6px; font-size:13px; text-align:center; font-weight:bold; color:var(--azul-marino); height:30px; min-height:30px; max-height:30px; box-sizing:border-box; width:100%;">
         </div>
     </div>
     <div style="margin-top: 16px; display:flex; justify-content:flex-end; gap:10px; flex-wrap:wrap; align-items:center;">
@@ -136,18 +136,22 @@
                         <td style="border-bottom: 1px dotted #888; padding: 2px 3px; font-weight: bold;">{{ $docente->antiguedad_anios }} años</td>
                     </tr>
                     <tr>
+                        <td style="font-weight: bold; border-bottom: 1px dotted #888; padding: 2px 3px;">F. Inicio:</td>
+                        <td style="border-bottom: 1px dotted #888; padding: 2px 3px; font-weight: bold; color: #0b2a5b;" class="boleta-fecha-inicio">--/--/----</td>
                         <td style="font-weight: bold; border-bottom: 1px dotted #888; padding: 2px 3px;">F. Conclusión:</td>
                         <td style="border-bottom: 1px dotted #888; padding: 2px 3px; font-weight: bold; color: #0b2a5b;" class="boleta-fecha-conclusion">--/--/----</td>
+                    </tr>
+                    <tr>
                         <td style="font-weight: bold; border-bottom: 1px dotted #888; padding: 2px 3px;">F. Retorno:</td>
-                        <td style="border-bottom: 1px dotted #888; padding: 2px 3px; font-weight: bold; color: #0b2a5b;">
+                        <td style="border-bottom: 1px dotted #888; padding: 2px 3px; font-weight: bold; color: #0b2a5b;" colspan="3">
                             <span class="boleta-fecha-retorno">--/--/----</span>
-                            <span style="font-size: 8px; font-weight: normal; color: #334155;">(<span class="boleta-hora-retorno">08:00 a.m.</span>)</span>
+                            <span style="font-size: 8.5px; font-weight: normal; color: #334155;">(<span class="boleta-hora-retorno">08:00 a.m.</span> &bull; <span class="boleta-jornada">Jornada Completa</span>)</span>
                         </td>
                     </tr>
                 </table>
 
                 <div class="parrafo-vacaciones" id="parrafo-vacaciones" style="font-size: 9px; text-align: justify; line-height: 1.35; margin-top: 5px; padding: 4px 6px; border: 1px solid #cbd5e1; background-color: #f8fafc; -webkit-print-color-adjust: exact; print-color-adjust: exact;">
-                    El/la docente hará uso de sus descansos y vacaciones por un total de <strong><span class="boleta-total-texto">0 días</span></strong> (<span class="boleta-total">0</span> d) <strong>a partir del <span class="boleta-fecha-inicio">{{ date('d/m/Y') }}</span></strong> hasta su <strong>conclusión el <span class="boleta-fecha-conclusion">--/--/----</span></strong>, debiendo retornar a sus funciones el <strong><span class="boleta-fecha-retorno">--/--/----</span> a horas <span class="boleta-hora-retorno">08:00 a.m.</span></strong> en modalidad de <strong><span class="boleta-jornada">Jornada Completa</span></strong>.
+                    El/la docente hará uso de sus descansos y vacaciones por un total de <strong><span class="boleta-total-texto">0 días</span></strong> (<span class="boleta-total">0</span> d) <strong>a partir del <span class="boleta-fecha-inicio">--/--/----</span></strong> hasta su <strong>conclusión el <span class="boleta-fecha-conclusion">--/--/----</span></strong>, debiendo retornar a sus funciones el <strong><span class="boleta-fecha-retorno">--/--/----</span> a horas <span class="boleta-hora-retorno">08:00 a.m.</span></strong> en modalidad de <strong><span class="boleta-jornada">Jornada Completa</span></strong>.
                 </div>
                 <div class="parrafo-no-vacaciones" id="parrafo-no-vacaciones" style="font-size: 9px; text-align: center; line-height: 1.3; color: #b91c1c; font-weight: bold; display: none; margin-top: 5px; padding: 4px 6px; border: 1px solid #fca5a5; background-color: #fef2f2; -webkit-print-color-adjust: exact; print-color-adjust: exact;">
                     EL DOCENTE NO GOZA DE VACACIONES POR TENER SALDO EN CONTRA (DEUDOR) O SALDO CERO.
@@ -442,40 +446,33 @@
         }
     }
 
-    function calcularRangoVacacionesBolivia(fechaStr, dias) {
-        if (!fechaStr || dias <= 0) {
+    function calcularRangoVacacionesBolivia(fechaInicioObj, dias) {
+        if (!fechaInicioObj || dias <= 0) {
             return {
-                inicio: null,
+                inicio: fechaInicioObj,
                 conclusion: null,
                 retorno: null,
                 horaRetorno: '08:00 a.m.',
                 etiquetaJornada: 'Jornada Completa'
             };
         }
-        let [y, m, d] = fechaStr.split('-').map(Number);
-        let cursor = new Date(y, m - 1, d);
 
-        // Si la fecha elegida cae fin de semana o feriado, avanzar al primer día hábil
-        while (!esDiaHabilBolivia(cursor)) {
-            cursor.setDate(cursor.getDate() + 1);
-        }
-
-        let fechaInicio = new Date(cursor.getTime());
+        let cursor = new Date(fechaInicioObj.getTime());
         let diasEnteros = Math.floor(dias);
-        let tieneMedioDia = (dias - diasEnteros) > 0;
+        let tieneMedioDia = Math.round((dias - diasEnteros) * 10) / 10 >= 0.5;
         let totalDiasHabiles = tieneMedioDia ? (diasEnteros + 1) : diasEnteros;
 
         if (totalDiasHabiles <= 0) {
             return {
-                inicio: fechaInicio,
-                conclusion: fechaInicio,
-                retorno: fechaInicio,
+                inicio: fechaInicioObj,
+                conclusion: fechaInicioObj,
+                retorno: fechaInicioObj,
                 horaRetorno: '08:00 a.m.',
                 etiquetaJornada: 'Jornada Completa'
             };
         }
 
-        // Consumir únicamente los días hábiles laborales de vacación
+        // Consumir únicamente los días hábiles laborales de vacación a partir de la fecha seleccionada
         let diasConsumidos = 0;
         let fechaConclusion = new Date(cursor.getTime());
 
@@ -493,7 +490,7 @@
         if (tieneMedioDia) {
             // Si termina en medio día (0.5): retorno automático es ESA MISMA FECHA DE CONCLUSIÓN en la tarde (14:00 p.m.)
             return {
-                inicio: fechaInicio,
+                inicio: fechaInicioObj,
                 conclusion: fechaConclusion,
                 retorno: new Date(fechaConclusion.getTime()),
                 horaRetorno: '14:00 p.m.',
@@ -501,12 +498,13 @@
             };
         } else {
             // Si termina en día entero: retorno automático es al DÍA HÁBIL SIGUIENTE en la mañana (08:00 a.m.)
+            cursor = new Date(fechaConclusion.getTime());
             cursor.setDate(cursor.getDate() + 1);
             while (!esDiaHabilBolivia(cursor)) {
                 cursor.setDate(cursor.getDate() + 1);
             }
             return {
-                inicio: fechaInicio,
+                inicio: fechaInicioObj,
                 conclusion: fechaConclusion,
                 retorno: new Date(cursor.getTime()),
                 horaRetorno: '08:00 a.m.',
@@ -516,7 +514,7 @@
     }
 
     function formatearFecha(fecha) {
-        if (!fecha) return '--/--/----';
+        if (!fecha || !(fecha instanceof Date) || isNaN(fecha.getTime())) return '--/--/----';
         let d = fecha.getDate().toString().padStart(2, '0');
         let m = (fecha.getMonth() + 1).toString().padStart(2, '0');
         let y = fecha.getFullYear();
@@ -560,10 +558,12 @@
 
         let utilizados = diasUtilizadosOriginal;
         let descanso = document.getElementById('inp-descanso') ? (parseFloat(document.getElementById('inp-descanso').value) || 0) : 0;
+        if (descanso < 0) descanso = 0;
         let receso = document.getElementById('inp-receso') ? (parseFloat(document.getElementById('inp-receso').value) || 0) : 0;
+        if (receso < 0) receso = 0;
         let fechaInicioStr = document.getElementById('inp-fecha-inicio') ? document.getElementById('inp-fecha-inicio').value : '';
         
-        // Actualizar UI general de datos impresos
+        // Actualizar UI general de datos impresos en todas las copias
         actualizarClases('boleta-gestion', gestion);
         actualizarClases('boleta-acumulados', acumulados);
         actualizarClases('boleta-utilizados', utilizados);
@@ -571,9 +571,27 @@
         actualizarClases('boleta-pendientes', pendientes);
         actualizarClases('boleta-descanso', descanso);
         actualizarClases('boleta-receso', receso);
+
+        // Convertir y actualizar fecha de inicio (A partir de) de inmediato en todas las copias
+        let fechaInicioObj = null;
+        if (fechaInicioStr) {
+            let partes = fechaInicioStr.split('-');
+            if (partes.length === 3) {
+                let y = parseInt(partes[0], 10);
+                let m = parseInt(partes[1], 10);
+                let d = parseInt(partes[2], 10);
+                if (!isNaN(y) && !isNaN(m) && !isNaN(d)) {
+                    fechaInicioObj = new Date(y, m - 1, d);
+                }
+            }
+        }
+        actualizarClases('boleta-fecha-inicio', formatearFecha(fechaInicioObj));
         
+        // Conteo matemático exacto: (Asignados + Acumulados) - (Utilizados + Pasadas + Pendientes + Descanso + Receso)
         let totalLicencias = Math.round((utilizados + licenciasPasadas) * 10) / 10;
-        let balance = Math.round(((diasAsignadosOriginal + acumulados) - totalLicencias - descanso - receso) * 10) / 10;
+        let totalDeducciones = Math.round((totalLicencias + pendientes + descanso + receso) * 10) / 10;
+        let totalAsignado = Math.round((diasAsignadosOriginal + acumulados) * 10) / 10;
+        let balance = Math.round((totalAsignado - totalDeducciones) * 10) / 10;
         
         let elemLicencias = document.getElementById('lbl-dias-licencias');
         if (elemLicencias) {
@@ -591,6 +609,13 @@
             
             totalAusenta = balance;
             
+            let rango = calcularRangoVacacionesBolivia(fechaInicioObj, totalAusenta);
+            actualizarClases('boleta-fecha-inicio', formatearFecha(rango.inicio));
+            actualizarClases('boleta-fecha-conclusion', formatearFecha(rango.conclusion));
+            actualizarClases('boleta-fecha-retorno', formatearFecha(rango.retorno));
+            actualizarClases('boleta-hora-retorno', rango.horaRetorno);
+            actualizarClases('boleta-jornada', rango.etiquetaJornada);
+
             document.querySelectorAll('.parrafo-vacaciones, #parrafo-vacaciones').forEach(el => el.style.display = 'block');
             document.querySelectorAll('.parrafo-no-vacaciones, #parrafo-no-vacaciones').forEach(el => el.style.display = 'none');
         } else {
@@ -608,6 +633,11 @@
             
             totalAusenta = 0;
             
+            actualizarClases('boleta-fecha-conclusion', '--/--/----');
+            actualizarClases('boleta-fecha-retorno', '--/--/----');
+            actualizarClases('boleta-hora-retorno', '--:--');
+            actualizarClases('boleta-jornada', 'Jornada Completa');
+
             document.querySelectorAll('.parrafo-vacaciones, #parrafo-vacaciones').forEach(el => el.style.display = 'none');
             document.querySelectorAll('.parrafo-no-vacaciones, #parrafo-no-vacaciones').forEach(el => el.style.display = 'block');
         }
@@ -615,22 +645,6 @@
         // El total de días que el docente se ausenta es exactamente su saldo a favor
         actualizarClases('boleta-total', totalAusenta);
         actualizarClases('boleta-total-texto', formatearDiasTexto(totalAusenta));
-        
-        // Calcular fechas hábiles (excluyendo sábados, domingos y feriados oficiales de Bolivia)
-        // La modalidad y hora se calculan automáticamente: si termina en 0.5 es Media Jornada (retorna misma fecha 14:00 p.m.); si es entero es Jornada Completa (retorna día hábil siguiente 08:00 a.m.)
-        if (totalAusenta > 0) {
-            let rango = calcularRangoVacacionesBolivia(fechaInicioStr, totalAusenta);
-            actualizarClases('boleta-fecha-inicio', formatearFecha(rango.inicio));
-            actualizarClases('boleta-fecha-conclusion', formatearFecha(rango.conclusion));
-            actualizarClases('boleta-fecha-retorno', formatearFecha(rango.retorno));
-            actualizarClases('boleta-hora-retorno', rango.horaRetorno);
-            actualizarClases('boleta-jornada', rango.etiquetaJornada);
-        } else {
-            actualizarClases('boleta-fecha-conclusion', '--/--/----');
-            actualizarClases('boleta-fecha-retorno', '--/--/----');
-            actualizarClases('boleta-hora-retorno', '--:--');
-            actualizarClases('boleta-jornada', 'Jornada Completa');
-        }
 
         if (autoGuardar) {
             guardarConfiguracionBoleta();
@@ -641,6 +655,15 @@
     document.addEventListener('DOMContentLoaded', function() {
         calcularVacaciones(false);
         try {
+            ['inp-gestion', 'inp-fecha-inicio', 'inp-acumulados', 'inp-licencias-pasadas', 'inp-pendientes', 'inp-descanso', 'inp-receso'].forEach(function(id) {
+                var el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener('input', function() { calcularVacaciones(true); });
+                    el.addEventListener('change', function() { calcularVacaciones(true); });
+                    el.addEventListener('blur', function() { calcularVacaciones(true); });
+                }
+            });
+
             if (localStorage.getItem(storageKeyBoleta)) {
                 let btnRestaurar = document.getElementById('btn-restaurar-boleta');
                 if (btnRestaurar) {
@@ -663,6 +686,7 @@
     }
 
     function imprimirBoleta() {
+        calcularVacaciones(true);
         guardarConfiguracionBoleta();
         var tituloOriginal = document.title;
         document.title = ' ';
@@ -675,6 +699,7 @@
 
     var tituloPrevioImpresion = document.title;
     window.addEventListener('beforeprint', function () {
+        calcularVacaciones(true);
         tituloPrevioImpresion = document.title;
         document.title = ' ';
         actualizarFechaImpresion();
@@ -752,6 +777,7 @@
     }
 
     function descargarImagenBoleta() {
+        calcularVacaciones(true);
         guardarConfiguracionBoleta();
         if (typeof html2canvas === 'undefined') {
             alert('Cargando componente de descarga, intente de nuevo en un segundo.');
